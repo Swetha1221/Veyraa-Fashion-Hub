@@ -1,0 +1,1358 @@
+/* =========================================================
+   VEYRAA — NEW ARRIVALS
+   ========================================================= */
+
+.new-arrivals-page {
+  min-height: 100vh;
+  background: #f8f3ef;
+  color: #302525;
+  overflow-x: hidden;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.new-arrivals-hero {
+  width: min(94%, 1280px);
+  min-height: 420px;
+  margin: 18px auto 0;
+  border-radius: 28px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  position: relative;
+  background:
+    linear-gradient(90deg, rgba(24, 18, 17, 0.8), rgba(24, 18, 17, 0.45), rgba(24, 18, 17, 0.12)),
+    url("https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=1800&q=85") center/cover no-repeat;
+}
+
+.new-arrivals-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0));
+}
+
+.new-arrivals-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  padding: 48px 52px;
+  color: #fff;
+}
+
+.new-arrivals-eyebrow {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  font-size: 11px;
+  letter-spacing: 3px;
+  font-weight: 700;
+}
+
+.new-arrivals-hero h1 {
+  margin: 0 0 14px;
+  font-size: clamp(42px, 5vw, 68px);
+  line-height: 0.98;
+  letter-spacing: -0.06em;
+}
+
+.new-arrivals-hero h1 em {
+  display: block;
+  margin-top: 6px;
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  color: #f6eae3;
+}
+
+.new-arrivals-hero p {
+  max-width: 540px;
+  margin: 0 0 26px;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.hero-primary-btn {
+  border: 0;
+  background: #fff;
+  color: #1d1717;
+  padding: 14px 24px;
+  border-radius: 999px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.hero-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.hero-count strong {
+  font-size: 26px;
+  letter-spacing: -0.04em;
+}
+
+.hero-count small {
+  font-size: 9px;
+  letter-spacing: 1.8px;
+}
+
+/* =========================================================
+   INTRO
+   ========================================================= */
+
+.new-arrivals-intro {
+  width: min(94%, 1280px);
+  margin: 0 auto;
+  padding: 18px 0 8px;
+  text-align: center;
+}
+
+.new-arrivals-intro span {
+  display: block;
+  color: #956e6e;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  margin-bottom: 8px;
+}
+
+.new-arrivals-intro h2 {
+  margin: 0 0 8px;
+  font-size: clamp(30px, 3vw, 40px);
+  letter-spacing: -0.04em;
+}
+
+.new-arrivals-intro p {
+  max-width: 720px;
+  margin: 0 auto;
+  color: #786d6d;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   COLLECTION
+   ========================================================= */
+
+.new-arrivals-collection {
+  width: min(94%, 1280px);
+  margin: 0 auto;
+  padding: 4px 0 60px;
+}
+
+.new-arrivals-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 0 16px;
+  border-bottom: 1px solid #e2d8d2;
+}
+
+.gender-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.gender-filters button {
+  border: 1px solid #d9ceca;
+  background: white;
+
+  padding: 10px 18px;
+  border-radius: 24px;
+
+  color: #302525;
+  font-size: 13px;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.gender-filters button:hover {
+  transform: translateY(-1px);
+}
+
+.gender-filters button.active {
+  background: #342525;
+  color: white;
+  border-color: #342525;
+}
+
+.new-arrivals-controls {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.price-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.price-control label,
+.sort-control label {
+  color: #766b6b;
+  font-size: 12px;
+}
+
+.price-control input {
+  width: 120px;
+  accent-color: #342525;
+}
+
+.sort-control {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.sort-control select {
+  min-width: 185px;
+
+  padding: 11px 13px;
+
+  border: 1px solid #d7cdc8;
+  border-radius: 8px;
+
+  background: white;
+
+  color: #302525;
+}
+
+/* =========================================================
+   SECTION HEADER
+   ========================================================= */
+
+.new-arrivals-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  margin: 22px 0 20px;
+}
+
+.new-arrivals-section-head span {
+  display: block;
+
+  color: #866f6f;
+
+  font-size: 10px;
+  letter-spacing: 3px;
+  font-weight: 700;
+}
+
+.new-arrivals-section-head h2 {
+  margin: 7px 0 5px;
+
+  font-size: 33px;
+}
+
+.new-arrivals-section-head p {
+  margin: 0;
+
+  color: #796e6e;
+  font-size: 14px;
+}
+
+.discount-note {
+  padding: 9px 14px;
+
+  border: 1px solid #ded2cb;
+  border-radius: 22px;
+
+  background: #fff;
+
+  color: #7a5f5f;
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   PRODUCT GRID
+   ========================================================= */
+
+.new-arrivals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.new-arrival-card {
+  overflow: hidden;
+  background: white;
+  border: 1px solid #efe4df;
+  border-radius: 20px;
+  box-shadow: 0 10px 22px rgba(48, 35, 35, 0.05);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.new-arrival-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(48, 35, 35, 0.12);
+}
+
+/* =========================================================
+   IMAGE
+   ========================================================= */
+
+.new-arrival-image {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  overflow: hidden;
+  background: #f2ece8;
+}
+
+.new-arrival-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.5s ease;
+}
+
+.new-arrival-card:hover .new-arrival-image img {
+  transform: scale(1.04);
+}
+
+.new-badge,
+.discount-badge {
+  position: absolute;
+
+  top: 15px;
+
+  padding: 7px 11px;
+
+  border-radius: 20px;
+
+  background: white;
+
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+}
+
+.new-badge {
+  left: 15px;
+}
+
+.discount-badge {
+  left: 63px;
+  color: #9a4c4c;
+}
+
+.arrival-heart {
+  position: absolute;
+
+  top: 13px;
+  right: 13px;
+
+  width: 42px;
+  height: 42px;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: white;
+
+  font-size: 21px;
+
+  color: #302525;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.arrival-heart.active {
+  background: #1f1313;
+  color: #fff;
+  box-shadow: 0 10px 20px rgba(31, 19, 19, 0.2);
+}
+
+/* =========================================================
+   INFO
+   ========================================================= */
+
+.new-arrival-info {
+  padding: 19px;
+}
+
+.arrival-category {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #9c8585;
+
+  font-size: 10px;
+
+  text-transform: uppercase;
+  letter-spacing: 1.8px;
+
+  font-weight: 700;
+}
+
+.new-arrival-info h3 {
+  margin: 0 0 8px;
+
+  font-size: 17px;
+
+  line-height: 1.4;
+}
+
+.arrival-rating {
+  margin-bottom: 10px;
+
+  color: #a86c00;
+
+  font-size: 13px;
+}
+
+.arrival-product-name {
+  display: block;
+  min-height: 48px;
+  margin: 0 0 8px;
+  color: #302525;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.arrival-product-name:hover {
+  color: #8b5b5b;
+}
+
+.arrival-price {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.arrival-price strong {
+  font-size: 19px;
+}
+
+.arrival-price del {
+  color: #999;
+  font-size: 13px;
+}
+
+.arrival-saved {
+  margin-top: 7px;
+
+  color: #8b5b5b;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.arrival-discount-line {
+  margin-top: 6px;
+  color: #9a4c4c;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.arrival-stock {
+  margin-top: 8px;
+  color: #7f5959;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.arrival-actions {
+  display: flex;
+  gap: 9px;
+  margin-top: 15px;
+}
+
+.arrival-cart,
+.arrival-buy {
+  flex: 1;
+
+  padding: 11px 10px;
+
+  border-radius: 8px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.arrival-cart {
+  border: 1px solid #342525;
+
+  background: #342525;
+
+  color: white;
+}
+
+.arrival-buy {
+  border: 1px solid #d6cbc6;
+
+  background: #fff;
+
+  color: #342525;
+}
+
+.arrival-tryon-wrap {
+  margin-top: 12px;
+}
+
+.arrival-tryon-wrap .virtual-try-on-button {
+  width: 100%;
+  margin-top: 0;
+  border-radius: 10px;
+  min-height: 42px;
+}
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.new-arrivals-empty {
+  padding: 75px 20px;
+
+  border-radius: 20px;
+
+  background: white;
+
+  text-align: center;
+}
+
+.new-arrivals-empty h3 {
+  margin: 0 0 8px;
+}
+
+.new-arrivals-empty p {
+  margin: 0;
+
+  color: #786d6d;
+}
+
+/* =========================================================
+   VIRTUAL TRY-ON
+   ========================================================= */
+
+.arrival-tryon-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(30, 22, 22, 0.65);
+}
+
+.arrival-tryon-modal {
+  position: relative;
+
+  width: min(920px, 100%);
+
+  max-height: 92vh;
+
+  overflow: auto;
+
+  padding: 35px;
+
+  border-radius: 24px;
+
+  background: #fffdfb;
+
+  box-shadow:
+    0 25px 80px rgba(20, 12, 12, 0.25);
+}
+
+.arrival-tryon-close {
+  position: absolute;
+
+  top: 15px;
+  right: 15px;
+
+  width: 38px;
+  height: 38px;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: #f3ece8;
+
+  font-size: 22px;
+
+  cursor: pointer;
+}
+
+.arrival-tryon-heading {
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.arrival-tryon-heading span {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #956e6e;
+
+  font-size: 10px;
+  letter-spacing: 3px;
+  font-weight: 700;
+}
+
+.arrival-tryon-heading h2 {
+  margin: 0 0 8px;
+  font-size: 31px;
+}
+
+.arrival-tryon-heading p {
+  margin: 0;
+
+  color: #766a6a;
+
+  font-size: 14px;
+}
+
+/* START */
+
+.arrival-tryon-start {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 25px;
+
+  align-items: center;
+}
+
+.arrival-tryon-product {
+  position: relative;
+
+  height: 410px;
+
+  overflow: hidden;
+
+  border-radius: 18px;
+
+  background: #f3eeea;
+}
+
+.arrival-tryon-product img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+.arrival-tryon-product span {
+  position: absolute;
+
+  left: 15px;
+  bottom: 15px;
+
+  padding: 8px 12px;
+
+  border-radius: 18px;
+
+  background: white;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* OPTIONS */
+
+.arrival-tryon-options {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.arrival-tryon-options button,
+.arrival-tryon-options label {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 52px;
+
+  border-radius: 10px;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.arrival-tryon-options button {
+  border: 0;
+
+  background: #342525;
+
+  color: white;
+}
+
+.arrival-tryon-options label {
+  border: 1px solid #d8ceca;
+
+  background: white;
+
+  color: #342525;
+}
+
+.arrival-tryon-options input {
+  display: none;
+}
+
+.arrival-tryon-note {
+  grid-column: 1 / -1;
+
+  margin: 0;
+
+  color: #776c6c;
+
+  font-size: 12px;
+
+  text-align: center;
+}
+
+/* CAMERA */
+
+.arrival-camera {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 15px;
+}
+
+.arrival-camera video {
+  width: 100%;
+
+  max-height: 560px;
+
+  border-radius: 18px;
+
+  background: #1d1717;
+}
+
+.arrival-camera-actions {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 10px;
+}
+
+.arrival-camera-actions button {
+  padding: 12px 20px;
+
+  border: 0;
+
+  border-radius: 24px;
+
+  background: #342525;
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.arrival-camera-actions button:last-child {
+  background: #eee6e1;
+
+  color: #342525;
+}
+
+/* RESULT */
+
+.arrival-tryon-result {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 25px;
+
+  align-items: center;
+}
+
+.arrival-preview {
+  height: 470px;
+
+  overflow: hidden;
+
+  border-radius: 18px;
+
+  background: #f3eeea;
+}
+
+.arrival-preview img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+.arrival-result-info > span {
+  color: #956e6e;
+
+  font-size: 10px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 2px;
+
+  font-weight: 700;
+}
+
+.arrival-result-info h3 {
+  margin: 8px 0;
+
+  font-size: 24px;
+}
+
+.arrival-result-info p {
+  color: #716565;
+
+  line-height: 1.6;
+}
+
+.arrival-result-buttons {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+.arrival-result-buttons button {
+  padding: 13px;
+
+  border: 0;
+
+  border-radius: 9px;
+
+  background: #342525;
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.arrival-result-buttons button:last-child {
+  background: white;
+
+  color: #342525;
+
+  border: 1px solid #d8ceca;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1050px) {
+  .new-arrivals-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .new-arrivals-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .new-arrivals-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 760px) {
+  .new-arrivals-hero {
+    width: calc(100% - 30px);
+    min-height: 390px;
+    margin: 15px;
+  }
+
+  .new-arrivals-hero-content {
+    padding: 35px;
+  }
+
+  .new-arrivals-hero h1 {
+    font-size: 42px;
+  }
+
+  .hero-actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .new-arrivals-intro,
+  .new-arrivals-collection {
+    width: calc(100% - 30px);
+  }
+
+  .new-arrivals-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .category-control,
+  .discount-control {
+    width: 100%;
+  }
+
+  .category-control select,
+  .discount-control select {
+    width: 100%;
+  }
+
+  .sort-control,
+  .price-control {
+    width: 100%;
+  }
+
+  .sort-control select {
+    flex: 1;
+  }
+
+  .new-arrivals-section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .new-arrivals-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .arrival-actions {
+    flex-direction: column;
+  }
+
+  .arrival-tryon-start,
+  .arrival-tryon-result {
+    grid-template-columns: 1fr;
+  }
+
+  .arrival-tryon-product,
+  .arrival-preview {
+    height: 380px;
+  }
+}
+
+@media (max-width: 500px) {
+  .new-arrival-image {
+    height: 400px;
+  }
+
+  .new-arrivals-hero h1 {
+    font-size: 36px;
+  }
+
+  .new-arrivals-intro h2 {
+    font-size: 30px;
+  }
+
+  .arrival-tryon-modal {
+    padding: 25px 18px 18px;
+  }
+}
+
+
+/* =========================================================
+   FINAL NEW ARRIVALS CARD IMPROVEMENTS
+   ========================================================= */
+
+.new-arrival-image {
+  height: 365px;
+  background: #f1ebe7;
+}
+
+.new-arrival-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.discount-badge {
+  z-index: 4;
+  white-space: nowrap;
+}
+
+.new-badge {
+  z-index: 4;
+}
+
+.arrival-heart {
+  z-index: 5;
+}
+
+.arrival-price {
+  margin-top: 8px;
+}
+
+.arrival-price strong {
+  font-size: 20px;
+}
+
+.arrival-price del {
+  font-size: 13px;
+}
+
+.arrival-saved {
+  min-height: 17px;
+}
+
+.arrival-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  margin-top: 15px;
+}
+
+.arrival-cart,
+.arrival-buy {
+  min-height: 42px;
+  border-radius: 9px;
+  padding: 10px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.arrival-cart {
+  border: 1px solid #342525;
+  background: #342525;
+  color: #fff;
+}
+
+.arrival-buy {
+  border: 1px solid #342525;
+  background: #fff;
+  color: #342525;
+}
+
+.arrival-cart:hover,
+.arrival-buy:hover {
+  transform: translateY(-1px);
+}
+
+.arrival-tryon-inline {
+  width: 100%;
+  margin-top: 9px;
+  min-height: 40px;
+  border: 1px solid #d7c9c3;
+  border-radius: 9px;
+  background: #fff9f6;
+  color: #a25769;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.arrival-tryon-inline:hover {
+  background: #f7ece7;
+}
+
+.new-arrivals-intro h2 {
+  margin-bottom: 6px;
+}
+
+.new-arrivals-intro p {
+  margin-bottom: 0;
+}
+
+@media (max-width: 760px) {
+  .new-arrival-image {
+    height: 400px;
+  }
+
+  .arrival-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================================
+   FINAL OVERRIDES — NEW ARRIVALS
+   ========================================================= */
+
+.new-arrivals-page {
+  background: #f8f3ef;
+  color: #302525;
+}
+
+.new-arrivals-hero {
+  width: 90%;
+  min-height: 390px;
+  margin: 20px auto 0;
+  border-radius: 28px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(42, 29, 29, 0.93),
+      rgba(42, 29, 29, 0.58),
+      rgba(42, 29, 29, 0.08)
+    ),
+    url("https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=1800&q=90");
+
+  background-size: cover;
+  background-position: center;
+}
+
+.new-arrivals-hero-content {
+  max-width: 700px;
+  padding: 55px;
+}
+
+.new-arrivals-intro {
+  width: 90%;
+  margin: 0 auto;
+  padding: 24px 0 10px;
+  text-align: center;
+}
+
+.new-arrivals-intro h2 {
+  margin: 0 0 7px;
+}
+
+.new-arrivals-intro p {
+  margin: 0;
+}
+
+.new-arrivals-collection {
+  width: 90%;
+  margin: 0 auto;
+  padding: 4px 0 70px;
+}
+
+.new-arrivals-toolbar {
+  border-bottom: 1px solid #e2d8d2;
+  padding: 14px 0 18px;
+}
+
+.new-arrivals-section-head {
+  margin: 22px 0 20px;
+}
+
+.new-arrivals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.new-arrival-card {
+  background: #fff;
+  border: 1px solid #eee4df;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 7px 22px rgba(48, 35, 35, 0.06);
+}
+
+.new-arrival-image {
+  position: relative;
+  height: 380px;
+  background: #f0eae7;
+  overflow: hidden;
+}
+
+.new-arrival-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  background: #f0eae7;
+}
+
+.new-badge,
+.discount-badge {
+  z-index: 4;
+}
+
+.arrival-heart {
+  z-index: 5;
+}
+
+.arrival-price strong {
+  font-size: 20px;
+}
+
+.arrival-price del {
+  color: #9b9290;
+}
+
+.arrival-saved {
+  min-height: 18px;
+  color: #9a4c5e;
+  font-weight: 800;
+}
+
+.arrival-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  margin-top: 15px;
+}
+
+.arrival-cart,
+.arrival-buy,
+.arrival-tryon-inline {
+  min-height: 42px;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.arrival-cart {
+  border: 1px solid #342525;
+  background: #342525;
+  color: white;
+}
+
+.arrival-buy {
+  border: 1px solid #342525;
+  background: white;
+  color: #342525;
+}
+
+.arrival-tryon-inline {
+  width: 100%;
+  margin-top: 9px;
+  border: 1px solid #d6c5c0;
+  background: #fff8f5;
+  color: #a25366;
+}
+
+.arrival-tryon-inline:hover {
+  background: #f5ebe7;
+}
+
+.discount-note {
+  white-space: nowrap;
+}
+
+/* Product card stays useful even on shorter laptop viewports. */
+.new-arrival-info {
+  padding: 17px;
+}
+
+.new-arrival-info h3 {
+  min-height: 46px;
+}
+
+.category-control,
+.discount-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.category-control label,
+.discount-control label {
+  color: #766b6b;
+  font-size: 12px;
+}
+
+.category-control select,
+.discount-control select {
+  min-width: 120px;
+  padding: 10px 11px;
+  border: 1px solid #d7cdc8;
+  border-radius: 8px;
+  background: #fff;
+  color: #302525;
+}
+
+.arrival-discount-line {
+  min-height: 16px;
+}
+
+@media (max-width: 1050px) {
+  .new-arrivals-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .new-arrivals-hero {
+    width: calc(100% - 30px);
+    min-height: 370px;
+    margin: 15px;
+  }
+
+  .new-arrivals-hero-content {
+    padding: 35px;
+  }
+
+  .new-arrivals-intro,
+  .new-arrivals-collection {
+    width: calc(100% - 30px);
+  }
+
+  .new-arrivals-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .arrival-actions {
+    grid-template-columns: 1fr;
+  }
+}

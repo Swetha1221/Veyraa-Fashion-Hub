@@ -1,0 +1,363 @@
+/* =========================================================
+   VEYRAA ACCOUNT SIDEBAR — COMPACT & PREMIUM
+   Clean, sequential priority with subtle badges and smooth transitions
+   ========================================================= */
+
+.account-sidebar-compact {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* 1. CUSTOMER PROFILE HEADER */
+.account-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #fdf8f9 0%, #f7eff2 100%);
+  border-radius: 16px;
+  border: 1px solid #ebd8df;
+  margin-bottom: 18px;
+}
+
+.account-profile-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #8f2448;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 19px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(143, 36, 72, 0.25);
+}
+
+.account-profile-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.account-profile-meta h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #24161b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.account-profile-status {
+  font-size: 11.5px;
+  color: #79666c;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.account-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #28a745;
+  display: inline-block;
+}
+
+/* 2. FIT PROFILE CARD (THE ONLY PROMINENT CARD) */
+.fit-card-prominent {
+  width: 100%;
+  text-align: left;
+  border: 1.5px solid #ebd1db;
+  border-radius: 16px;
+  background: radial-gradient(circle at 95% 15%, rgba(234, 185, 203, 0.25), transparent 45%), #fff9fb;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  box-shadow: 0 6px 18px rgba(143, 36, 72, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.fit-card-prominent:hover {
+  transform: translateY(-2px);
+  border-color: #8f2448;
+  box-shadow: 0 10px 24px rgba(143, 36, 72, 0.12);
+}
+
+.fit-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.fit-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #8f2448;
+  background: #fae8ee;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.fit-card-badge.completed {
+  color: #1b7340;
+  background: #e6f6ec;
+}
+
+.fit-card-arrow {
+  color: #8f2448;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.fit-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #2b1720;
+  margin-bottom: 4px;
+}
+
+.fit-card-desc {
+  font-size: 12px;
+  color: #6e5e64;
+  line-height: 1.45;
+  margin-bottom: 10px;
+}
+
+.fit-measurements-compact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  background: #ffffff;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #f0e2e7;
+  margin-bottom: 12px;
+}
+
+.measurement-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.measurement-cell span {
+  font-size: 9.5px;
+  color: #8f7f85;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.measurement-cell strong {
+  font-size: 12px;
+  color: #24161b;
+  font-weight: 700;
+}
+
+.fit-card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.fit-action-btn-sm {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.fit-action-btn-sm.primary {
+  background: #8f2448;
+  color: #ffffff;
+  border: none;
+}
+
+.fit-action-btn-sm.primary:hover {
+  background: #64152f;
+}
+
+.fit-action-btn-sm.secondary {
+  background: #ffffff;
+  color: #4a3a40;
+  border: 1px solid #ded3d7;
+}
+
+.fit-action-btn-sm.secondary:hover {
+  background: #f7eff2;
+}
+
+/* 3. COMPACT CLICKABLE NAVIGATION ROWS (Wishlist, Cart, My Orders, Account Settings) */
+.account-menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 22px;
+}
+
+.account-row-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 14px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-decoration: none;
+  color: inherit;
+  font-family: inherit;
+}
+
+.account-row-item:hover {
+  background: #faf4f6;
+  border-color: #ebdce1;
+  transform: translateX(3px);
+}
+
+.account-row-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.account-row-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #fbf5f7;
+  color: #8f2448;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+  border: 1px solid #f0e1e6;
+}
+
+.account-row-item:hover .account-row-icon {
+  background: #8f2448;
+  color: #ffffff;
+  border-color: #8f2448;
+}
+
+.account-row-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.account-row-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2b1c22;
+}
+
+.account-row-sub {
+  font-size: 11.5px;
+  color: #83747a;
+}
+
+.account-row-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.account-row-badge {
+  background: #8f2448;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+  min-width: 18px;
+  text-align: center;
+}
+
+.account-row-arrow {
+  color: #baa6ad;
+  font-size: 15px;
+  font-weight: 700;
+  transition: transform 0.18s ease;
+}
+
+.account-row-item:hover .account-row-arrow {
+  color: #8f2448;
+  transform: translateX(2px);
+}
+
+/* 7. LOGOUT BUTTON */
+.account-logout-btn {
+  margin-top: auto;
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ebd8df;
+  background: #ffffff;
+  color: #7b2940;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.account-logout-btn:hover {
+  background: #fff2f5;
+  border-color: #dca8b9;
+  color: #5c182b;
+}
+
+/* EMBEDDED MODAL / VIEW FOR FIT PROFILE DETAILS */
+.fit-profile-view-modal {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #ecdde2;
+  padding: 18px;
+  margin-bottom: 18px;
+  animation: fadeIn 0.2s ease;
+}
+
+.fit-view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f2e6ea;
+}
+
+.fit-view-header h4 {
+  margin: 0;
+  font-size: 15px;
+  color: #2b1720;
+  font-family: Georgia, serif;
+}
+
+.fit-view-close {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #8f7f85;
+  cursor: pointer;
+}
+

@@ -1,0 +1,1220 @@
+/* =========================================================
+   VEYRAA WOMEN — SAME CATALOG UI AS MEN
+   WOMEN PAGE ONLY
+========================================================= */
+
+.women-category-page {
+  min-height: 100vh;
+  padding: 0 0 80px;
+  background: #fcfaf9;
+  color: #211d1e;
+}
+
+/* =========================================================
+   WOMEN HERO
+========================================================= */
+
+.women-fashion-hero {
+  position: relative;
+  min-height: 430px;
+  margin: 4px 5% 38px;
+  border-radius: 28px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 18px 50px rgba(45, 25, 32, 0.12);
+}
+
+.women-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(55, 24, 38, 0.94),
+      rgba(55, 24, 38, 0.62),
+      rgba(55, 24, 38, 0.12)
+    );
+}
+
+.women-hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-height: 430px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 55px 7%;
+}
+
+.women-hero-label {
+  display: block;
+  margin-bottom: 13px;
+  color: #f8cedd;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+}
+
+.women-hero-content h1 {
+  margin: 0;
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: clamp(46px, 5vw, 64px);
+  line-height: 1.02;
+  font-weight: 800;
+  letter-spacing: -2px;
+}
+
+.women-hero-content h1 em {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+}
+
+.women-hero-content p {
+  max-width: 530px;
+  margin: 20px 0 25px;
+  color: rgba(255,255,255,.92);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.women-hero-button {
+  width: fit-content;
+  padding: 16px 27px;
+  border: none;
+  border-radius: 30px;
+  background: #fff;
+  color: #211d1e;
+  font-size: 14px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: .25s ease;
+}
+
+.women-hero-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0,0,0,.18);
+}
+
+.women-hero-count {
+  position: absolute;
+  right: 3.5%;
+  bottom: 42px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.women-hero-count strong {
+  color: #211d1e;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.women-hero-count span {
+  margin-top: 6px;
+  color: #5f5559;
+  font-size: 9px;
+  line-height: 1.35;
+  letter-spacing: 1px;
+}
+
+/* =========================================================
+   SHOP BY STYLE HEADER
+========================================================= */
+
+.women-catalog-header {
+  max-width: 1450px;
+  margin: 0 auto;
+  padding: 0 5%;
+}
+
+.women-catalog-heading-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 28px;
+}
+
+.women-catalog-heading-row > div {
+  min-width: 0;
+}
+
+.women-catalog-header span {
+  display: block;
+  margin-bottom: 8px;
+  color: #211d1e;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.women-catalog-header h1 {
+  margin: 0;
+  color: #211d1e;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 34px;
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -.5px;
+}
+
+.women-catalog-heading-row p {
+  max-width: 520px;
+  margin: 0 0 4px;
+  color: #7b7074;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: right;
+}
+
+/* =========================================================
+   CATEGORY PILLS
+========================================================= */
+
+.women-category-pills {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 0 0 8px;
+  scrollbar-width: none;
+}
+
+.women-category-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.women-category-pills button {
+  flex-shrink: 0;
+  padding: 12px 20px;
+  border: 1px solid #dfd4d7;
+  border-radius: 999px;
+  background: #fff;
+  color: #292326;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: .25s ease;
+}
+
+.women-category-pills button:hover {
+  border-color: #211d1e;
+  transform: translateY(-1px);
+}
+
+.women-category-pills button.active {
+  border-color: #211d1e;
+  background: #211d1e;
+  color: #fff;
+}
+
+/* =========================================================
+   SHOP AREA
+========================================================= */
+
+.women-shop-layout {
+  display: grid;
+  grid-template-columns: 258px minmax(0, 1fr);
+  gap: 38px;
+  max-width: 1450px;
+  margin: 48px auto 0;
+  padding: 0 5%;
+  align-items: start;
+}
+
+/* =========================================================
+   FILTER SIDEBAR
+========================================================= */
+
+.women-filters {
+  position: sticky;
+  top: 18px;
+  padding: 23px;
+  border: 1px solid #eadfe2;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 8px 25px rgba(42,26,31,.045);
+}
+
+.filter-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eee6e8;
+}
+
+.filter-title h2 {
+  margin: 0;
+  color: #211d1e;
+  font-size: 19px;
+  font-weight: 750;
+}
+
+.filter-title button {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #a45c67;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.filter-block {
+  padding: 17px 0;
+  border-bottom: 1px solid #f0e9eb;
+}
+
+.filter-block:last-child {
+  border-bottom: none;
+}
+
+.filter-block h3 {
+  margin: 0 0 11px;
+  color: #292325;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.filter-block label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+  color: #6d6367;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.filter-block label:hover {
+  color: #a45c67;
+}
+
+.filter-block input {
+  accent-color: #292323;
+}
+
+.filter-block select {
+  width: 100%;
+  padding: 10px 11px;
+  border: 1px solid #ded4d7;
+  border-radius: 9px;
+  background: #fff;
+  color: #40383b;
+  font-size: 12px;
+  outline: none;
+}
+
+.filter-block select:focus {
+  border-color: #292323;
+}
+
+.filter-block input[type="range"] {
+  width: 100%;
+  margin: 9px 0;
+  accent-color: #292323;
+}
+
+.price-range {
+  display: flex;
+  justify-content: space-between;
+  color: #817679;
+  font-size: 11px;
+}
+
+.price-range strong {
+  color: #292325;
+}
+
+.filter-link {
+  width: 100%;
+  display: block;
+  margin: 5px 0;
+  padding: 9px 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: #faf7f7;
+  color: #655b5f;
+  text-align: left;
+  font-size: 12px;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.filter-link:hover {
+  background: #f7eff1;
+  border-color: #e3d3d7;
+  color: #a45c67;
+  transform: translateX(3px);
+}
+
+/* =========================================================
+   PRODUCTS TOOLBAR
+========================================================= */
+
+.women-products-area {
+  min-width: 0;
+}
+
+.products-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+  padding: 0 1px;
+}
+
+.products-toolbar > div:first-child {
+  color: #a45c67;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.products-toolbar > div:first-child strong {
+  color: #a45c67;
+  font-size: 13px;
+}
+
+.products-toolbar h2 {
+  margin: 9px 0 0;
+  color: #211d1e;
+  font-size: 28px;
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+.women-sort-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.women-sort-control span {
+  color: #756b6e;
+  font-size: 13px;
+}
+
+.women-sort-control select {
+  min-width: 170px;
+  padding: 11px 13px;
+  border: 1px solid #ded4d7;
+  border-radius: 10px;
+  background: #fff;
+  color: #292326;
+  font-size: 13px;
+  outline: none;
+}
+
+/* =========================================================
+   PRODUCT GRID
+========================================================= */
+
+.women-products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+/* =========================================================
+   PRODUCT CARD
+========================================================= */
+
+.women-product-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #eadfe2;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 5px 18px rgba(42,26,31,.045);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.women-product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(42,26,31,.12);
+}
+
+.product-image-box {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  overflow: hidden;
+  background: #f3eeee;
+}
+
+.product-image-box img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .6s cubic-bezier(.2,.7,.2,1);
+}
+
+.women-product-card:hover .product-image-box img {
+  transform: scale(1.035);
+}
+
+.product-badge {
+  position: absolute;
+  top: 13px;
+  left: 13px;
+  z-index: 2;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #fff;
+  color: #292323;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1.1px;
+}
+
+.wishlist-button {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  z-index: 3;
+  width: 39px;
+  height: 39px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255,255,255,.96);
+  color: #554b4f;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 5px 18px rgba(0,0,0,.1);
+  transition: .25s ease;
+}
+
+.wishlist-button:hover {
+  color: #a45c67;
+  transform: scale(1.08);
+}
+
+.try-on-button {
+  position: absolute;
+  right: 13px;
+  bottom: 13px;
+  left: 13px;
+  z-index: 3;
+  padding: 10px;
+  border: none;
+  border-radius: 9px;
+  background: rgba(255,255,255,.95);
+  color: #a45c67;
+  font-size: 11px;
+  font-weight: 750;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: .25s ease;
+}
+
+.women-product-card:hover .try-on-button {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.try-on-button:hover {
+  background: #292323;
+  color: #fff;
+}
+
+/* =========================================================
+   PRODUCT INFORMATION
+========================================================= */
+
+.product-information {
+  padding: 16px 17px 17px;
+}
+
+.product-rating {
+  margin-bottom: 6px;
+  color: #ad7015;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.product-category {
+  display: block;
+  margin-bottom: 6px;
+  color: #a45c67;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.product-information h2 {
+  margin: 0 0 6px;
+  color: #211d1e;
+  font-size: 16px;
+  font-weight: 750;
+  line-height: 1.3;
+}
+
+.product-information > p {
+  margin: 0 0 9px;
+  color: #817679;
+  font-size: 11px;
+}
+
+.product-price {
+  color: #211d1e;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.product-price del {
+  margin-left: 7px;
+  color: #aaa2a5;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.product-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 13px;
+}
+
+.product-actions button {
+  flex: 1;
+  min-height: 40px;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.cart-button {
+  border: 1px solid #292323;
+  background: #fff;
+  color: #292323;
+}
+
+.cart-button:hover {
+  background: #f7f3f3;
+}
+
+.buy-button {
+  border: 1px solid #292323;
+  background: #292323;
+  color: #fff;
+}
+
+.buy-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(41,35,35,.2);
+}
+
+.quick-view-button {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 9px 0 0;
+  border: none;
+  border-top: 1px solid #f1e7e9;
+  background: transparent;
+  color: #817679;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.quick-view-button:hover {
+  color: #a45c67;
+}
+
+.no-products {
+  padding: 60px 20px;
+  border: 1px dashed #decdd2;
+  border-radius: 18px;
+  background: #fff;
+  text-align: center;
+}
+
+/* =========================================================
+   FLOATING CART
+========================================================= */
+
+.veyraa-cart-floating {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 1000;
+  padding: 12px 19px;
+  border-radius: 999px;
+  background: #292323;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 750;
+  box-shadow: 0 12px 30px rgba(33,29,30,.25);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1200px) {
+  .women-shop-layout {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 25px;
+  }
+
+  .product-image-box {
+    height: 330px;
+  }
+}
+
+@media (max-width: 900px) {
+  .women-fashion-hero {
+    min-height: 400px;
+    margin-left: 3%;
+    margin-right: 3%;
+  }
+
+  .women-hero-content {
+    min-height: 400px;
+  }
+
+  .women-shop-layout {
+    grid-template-columns: 1fr;
+    padding: 0 3%;
+  }
+
+  .women-filters {
+    position: static;
+  }
+
+  .women-products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .women-catalog-header {
+    padding: 0 3%;
+  }
+}
+
+@media (max-width: 650px) {
+  .women-fashion-hero {
+    min-height: 370px;
+    margin: 4px 16px 30px;
+    border-radius: 20px;
+  }
+
+  .women-hero-content {
+    min-height: 370px;
+    padding: 35px 8%;
+  }
+
+  .women-hero-content h1 {
+    font-size: 43px;
+  }
+
+  .women-hero-content p {
+    max-width: 360px;
+    font-size: 13px;
+  }
+
+  .women-hero-count {
+    right: 6%;
+    bottom: 25px;
+    width: 88px;
+    height: 88px;
+  }
+
+  .women-hero-count strong {
+    font-size: 23px;
+  }
+
+  .women-catalog-heading-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .women-catalog-heading-row p {
+    text-align: left;
+  }
+
+  .products-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .women-sort-control {
+    width: 100%;
+  }
+
+  .women-sort-control select {
+    flex: 1;
+  }
+}
+
+@media (max-width: 520px) {
+  .women-products-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-image-box {
+    height: 390px;
+  }
+
+  .women-category-pills {
+    gap: 8px;
+  }
+
+  .women-category-pills button {
+    padding: 10px 16px;
+  }
+
+  .women-hero-count {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   FINAL WOMEN UI POLISH
+   Keeps existing Women functionality/classes unchanged.
+   Matches the compact Men catalog layout.
+   ========================================================= */
+
+.women-category-page {
+  min-height: 100vh;
+  padding: 0 0 70px;
+  background: #f8f3ef;
+  color: #302525;
+}
+
+/* HERO — compact, premium and closer to the Men page */
+.women-fashion-hero {
+  min-height: 410px;
+  margin: 18px 5% 28px;
+  border-radius: 28px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 16px 45px rgba(45, 25, 32, 0.10);
+}
+
+.women-hero-content {
+  min-height: 410px;
+  padding: 52px 6%;
+}
+
+.women-hero-content h1 {
+  font-size: clamp(44px, 5vw, 60px);
+  letter-spacing: -1.5px;
+}
+
+.women-hero-content p {
+  max-width: 510px;
+  margin: 16px 0 22px;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.women-hero-button {
+  padding: 13px 25px;
+}
+
+/* Keep the count badge subtle */
+.women-hero-count {
+  right: 4%;
+  bottom: 30px;
+  width: 105px;
+  height: 105px;
+}
+
+.women-hero-count strong {
+  font-size: 27px;
+}
+
+/* =========================================================
+   CATALOG HEADER
+   ========================================================= */
+
+.women-catalog-header {
+  max-width: 1450px;
+  padding: 0 5%;
+  margin: 0 auto;
+}
+
+.women-catalog-heading-row {
+  margin-bottom: 18px;
+  align-items: center;
+}
+
+.women-catalog-header span {
+  margin-bottom: 6px;
+  color: #8a6969;
+  font-size: 10px;
+  letter-spacing: 3px;
+}
+
+.women-catalog-header h1 {
+  font-size: 32px;
+  line-height: 1.1;
+}
+
+.women-catalog-heading-row p {
+  max-width: 470px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* =========================================================
+   CATEGORY PILLS
+   ========================================================= */
+
+.women-category-pills {
+  gap: 9px;
+  padding: 0 0 5px;
+}
+
+.women-category-pills button {
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  background: #fff;
+}
+
+.women-category-pills button.active {
+  background: #342525;
+  border-color: #342525;
+}
+
+/* =========================================================
+   SHOP AREA
+   ========================================================= */
+
+.women-shop-layout {
+  max-width: 1450px;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 30px;
+  margin: 28px auto 0;
+  padding: 0 5%;
+}
+
+/* =========================================================
+   FILTERS
+   ========================================================= */
+
+.women-filters {
+  top: 20px;
+  padding: 22px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 5px 20px rgba(42, 26, 31, 0.045);
+}
+
+.filter-title {
+  padding-bottom: 14px;
+}
+
+.filter-title h2 {
+  font-size: 16px;
+}
+
+.filter-block {
+  padding: 16px 0;
+}
+
+.filter-block h3 {
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+.filter-block label {
+  margin: 9px 0;
+  font-size: 13px;
+}
+
+/* =========================================================
+   PRODUCT TOOLBAR
+   ========================================================= */
+
+.products-toolbar {
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.products-toolbar > div:first-child {
+  color: #8a6969;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.products-toolbar > div:first-child strong {
+  color: #8a6969;
+  font-size: 10px;
+}
+
+.products-toolbar h2 {
+  margin: 5px 0 0;
+  font-size: 29px;
+}
+
+.women-sort-control {
+  gap: 9px;
+}
+
+.women-sort-control span {
+  font-size: 12px;
+}
+
+.women-sort-control select {
+  min-width: 165px;
+  padding: 10px 12px;
+  border-radius: 9px;
+}
+
+/* =========================================================
+   PRODUCT GRID
+   ========================================================= */
+
+.women-products-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.women-product-card {
+  border-radius: 18px;
+  border: 1px solid #e9dfe0;
+  box-shadow: 0 4px 16px rgba(42, 26, 31, 0.045);
+}
+
+.women-product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(42, 26, 31, 0.10);
+}
+
+/* More balanced image height */
+.product-image-box {
+  height: 350px;
+}
+
+.product-image-box img {
+  object-position: center center;
+}
+
+.product-badge {
+  top: 12px;
+  left: 12px;
+  padding: 7px 10px;
+}
+
+.wishlist-button {
+  top: 11px;
+  right: 11px;
+  width: 37px;
+  height: 37px;
+}
+
+/* Try-on appears cleanly on hover */
+.try-on-button {
+  right: 11px;
+  bottom: 11px;
+  left: 11px;
+  padding: 9px;
+  border-radius: 9px;
+  font-size: 10px;
+}
+
+/* =========================================================
+   PRODUCT INFORMATION
+   ========================================================= */
+
+.product-information {
+  padding: 15px 16px 16px;
+}
+
+.product-rating {
+  margin-bottom: 5px;
+}
+
+.product-category {
+  margin-bottom: 5px;
+  font-size: 8px;
+  letter-spacing: 1.4px;
+}
+
+.product-information h2 {
+  margin-bottom: 5px;
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.product-information > p {
+  margin-bottom: 8px;
+  font-size: 10px;
+}
+
+.product-price {
+  font-size: 16px;
+}
+
+.product-actions {
+  gap: 7px;
+  margin-top: 11px;
+}
+
+.product-actions button {
+  min-height: 38px;
+  border-radius: 8px;
+  font-size: 10px;
+}
+
+/* =========================================================
+   FLOATING CART
+   ========================================================= */
+
+.veyraa-cart-floating {
+  right: 20px;
+  bottom: 20px;
+}
+
+/* =========================================================
+   RESPONSIVE — FINAL
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .women-shop-layout {
+    grid-template-columns: 210px minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .product-image-box {
+    height: 320px;
+  }
+}
+
+@media (max-width: 900px) {
+  .women-fashion-hero {
+    min-height: 390px;
+    margin: 15px 3% 25px;
+  }
+
+  .women-hero-content {
+    min-height: 390px;
+    padding: 45px 7%;
+  }
+
+  .women-catalog-header {
+    padding: 0 3%;
+  }
+
+  .women-catalog-heading-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .women-catalog-heading-row p {
+    text-align: left;
+  }
+
+  .women-shop-layout {
+    grid-template-columns: 1fr;
+    margin-top: 24px;
+    padding: 0 3%;
+  }
+
+  .women-filters {
+    position: static;
+  }
+
+  .women-products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .product-image-box {
+    height: 310px;
+  }
+}
+
+@media (max-width: 650px) {
+  .women-fashion-hero {
+    min-height: 350px;
+    margin: 10px 16px 24px;
+    border-radius: 20px;
+  }
+
+  .women-hero-content {
+    min-height: 350px;
+    padding: 35px 8%;
+  }
+
+  .women-hero-content h1 {
+    font-size: 42px;
+  }
+
+  .women-hero-content p {
+    font-size: 13px;
+  }
+
+  .women-hero-count {
+    display: none;
+  }
+
+  .women-catalog-header {
+    padding: 0 16px;
+  }
+
+  .women-catalog-header h1 {
+    font-size: 29px;
+  }
+
+  .women-category-pills {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 7px;
+  }
+
+  .women-category-pills button {
+    flex-shrink: 0;
+  }
+
+  .women-shop-layout {
+    padding: 0 16px;
+  }
+
+  .products-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .women-sort-control {
+    width: 100%;
+  }
+
+  .women-sort-control select {
+    flex: 1;
+    width: 100%;
+  }
+
+  .women-products-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-image-box {
+    height: 390px;
+  }
+}

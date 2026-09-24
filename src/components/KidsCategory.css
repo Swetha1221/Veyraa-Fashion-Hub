@@ -1,0 +1,814 @@
+/* =========================================================
+   VEYRAA KIDS CATEGORY PAGE
+   ========================================================= */
+
+.kids-page {
+  background: #f8f3ef;
+  min-height: 100vh;
+  color: #302525;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.kids-hero {
+  min-height: 420px;
+  margin: 20px 5%;
+  border-radius: 28px;
+  overflow: hidden;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+}
+
+.kids-hero-overlay {
+  padding: 55px;
+  max-width: 600px;
+  color: white;
+  position: relative;
+  z-index: 2;
+}
+
+.kids-label {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 3px;
+  font-weight: 700;
+}
+
+.kids-hero h1 {
+  font-size: 56px;
+  line-height: 1.04;
+  margin: 16px 0;
+  font-weight: 700;
+}
+
+.kids-hero p {
+  font-size: 16px;
+  line-height: 1.65;
+  margin: 0 0 24px;
+  max-width: 500px;
+}
+
+.kids-hero button {
+  border: none;
+  background: white;
+  color: #332525;
+  padding: 13px 25px;
+  border-radius: 30px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.kids-hero button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================================================
+   GENDER FILTER
+   ========================================================= */
+
+.gender-filter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 13px;
+  margin: 0 0 8px;
+}
+
+.gender-btn {
+  border: 1px solid #d8cbc5;
+  background: #ffffff;
+  color: #342525;
+  padding: 11px 32px;
+  border-radius: 30px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  min-width: 135px;
+}
+
+.gender-btn:hover {
+  transform: translateY(-2px);
+  border-color: #342525;
+}
+
+.gender-btn.active {
+  background: #342525;
+  color: white;
+  border-color: #342525;
+}
+
+/* =========================================================
+   PRODUCTS SECTION
+   ========================================================= */
+
+.kids-products-section {
+  padding: 18px 5% 65px;
+
+  padding: 8px 5% 65px;
+}
+
+.kids-category-pills {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 7px 0 18px;
+  scrollbar-width: thin;
+}
+
+.kids-category-pills::-webkit-scrollbar {
+  height: 4px;
+}
+
+.kids-category-pills::-webkit-scrollbar-thumb {
+  background: #cfc2bc;
+  border-radius: 10px;
+}
+
+.kids-category-pill {
+  white-space: nowrap;
+  border: 1px solid #d9cfca;
+  background: white;
+  color: #342525;
+  border-radius: 25px;
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.kids-category-pill:hover {
+  border-color: #342525;
+  transform: translateY(-1px);
+}
+
+.kids-category-pill.active {
+  background: #342525;
+  color: white;
+  border-color: #342525;
+}
+
+/* =========================================================
+   SHOP LAYOUT
+   ========================================================= */
+
+.kids-shop-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 35px;
+  align-items: start;
+}
+
+.kids-sidebar {
+  background: white;
+  border-radius: 18px;
+  padding: 24px;
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+  box-shadow: 0 4px 18px rgba(40, 25, 25, 0.04);
+}
+
+.sidebar-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+.sidebar-title h3 {
+  margin: 0;
+  font-size: 15px;
+  letter-spacing: 1px;
+}
+
+.sidebar-title button {
+  border: none;
+  background: none;
+  color: #6e5b5b;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.filter-group {
+  padding: 20px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.filter-group:last-child {
+  border-bottom: none;
+}
+
+.filter-group h4 {
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin: 0 0 14px;
+}
+
+.filter-group label {
+  display: block;
+  margin: 11px 0;
+  font-size: 14px;
+  color: #514545;
+  cursor: pointer;
+}
+
+.filter-group input[type="radio"] {
+  margin-right: 8px;
+  accent-color: #342525;
+}
+
+.filter-group input[type="range"] {
+  width: 100%;
+  accent-color: #342525;
+  cursor: pointer;
+}
+
+.price-range {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-top: 8px;
+  color: #756969;
+}
+
+/* =========================================================
+   PRODUCT GRID / CARD
+   ========================================================= */
+
+.kids-product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.kids-product-card {
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.kids-product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(40, 25, 25, 0.1);
+}
+
+.kids-product-image {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  overflow: hidden;
+  background: #f3eeee;
+}
+
+.kids-product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.kids-product-card:hover .kids-product-image img {
+  transform: scale(1.04);
+}
+
+.product-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: white;
+  color: #342525;
+  padding: 7px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  z-index: 2;
+}
+
+.kids-wishlist {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background: white;
+  color: #342525;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 3;
+  transition: all 0.2s ease;
+}
+
+.kids-wishlist:hover {
+  transform: scale(1.08);
+}
+
+.kids-wishlist.active {
+  color: #b33c4a;
+}
+
+.kids-product-info {
+  padding: 17px;
+}
+
+.product-gender {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #9b8585;
+  font-weight: 700;
+}
+
+.kids-product-info h3 {
+  font-size: 16px;
+  margin: 7px 0;
+  line-height: 1.4;
+  color: #342525;
+}
+
+.rating {
+  font-size: 13px;
+  margin-bottom: 9px;
+  color: #6d5b5b;
+}
+
+.price-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.price-row strong {
+  font-size: 18px;
+  color: #342525;
+}
+
+.price-row span {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 13px;
+}
+
+/* =========================================================
+   CART + VIRTUAL TRY-ON BUTTONS
+   ========================================================= */
+
+.add-cart-btn,
+.kids-tryon-btn {
+  width: 100%;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-cart-btn {
+  margin-top: 14px;
+  background: #342525;
+  color: white;
+}
+
+.add-cart-btn:hover {
+  background: #4a3636;
+  transform: translateY(-1px);
+}
+
+.kids-tryon-btn {
+  margin-top: 9px;
+  background: #f5ece7;
+  color: #342525;
+  border: 1px solid #ded0c9;
+  font-size: 11px;
+  letter-spacing: 0.7px;
+}
+
+.kids-tryon-btn:hover {
+  background: #342525;
+  color: white;
+  border-color: #342525;
+}
+
+/* =========================================================
+   VIRTUAL TRY-ON OVERLAY
+   ========================================================= */
+
+.kids-tryon-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(27, 20, 20, 0.72);
+  backdrop-filter: blur(7px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.kids-tryon-modal {
+  width: min(920px, 96vw);
+  max-height: 92vh;
+  overflow-y: auto;
+  background: #fffaf7;
+  border-radius: 26px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+}
+
+.kids-tryon-close {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background: #f2e9e4;
+  color: #342525;
+  font-size: 25px;
+  cursor: pointer;
+  z-index: 5;
+}
+
+.kids-tryon-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.kids-tryon-header span {
+  font-size: 10px;
+  letter-spacing: 3px;
+  font-weight: 700;
+  color: #8b7474;
+}
+
+.kids-tryon-header h2 {
+  font-size: 32px;
+  margin: 7px 0;
+}
+
+.kids-tryon-header p {
+  color: #776969;
+  margin: 0;
+}
+
+.kids-tryon-header strong {
+  color: #342525;
+}
+
+/* =========================================================
+   TRY-ON START
+   ========================================================= */
+
+.kids-tryon-start {
+  text-align: center;
+}
+
+.kids-tryon-product-preview {
+  width: 240px;
+  height: 290px;
+  margin: 0 auto 22px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #f1e8e3;
+}
+
+.kids-tryon-product-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.kids-tryon-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.kids-camera-btn,
+.kids-upload-btn {
+  min-width: 190px;
+  padding: 13px 22px;
+  border-radius: 30px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.kids-camera-btn {
+  background: #342525;
+  color: white;
+}
+
+.kids-camera-btn:hover {
+  background: #4a3636;
+}
+
+.kids-upload-btn {
+  background: white;
+  color: #342525;
+  border: 1px solid #d7c8c0;
+}
+
+.kids-upload-btn:hover {
+  background: #f4ebe6;
+}
+
+.kids-upload-btn input {
+  display: none;
+}
+
+.kids-tryon-note {
+  color: #897979;
+  font-size: 13px;
+  margin-top: 17px;
+}
+
+/* =========================================================
+   CAMERA
+   ========================================================= */
+
+.kids-camera-area {
+  max-width: 680px;
+  margin: auto;
+  text-align: center;
+}
+
+.kids-camera-area video {
+  width: 100%;
+  max-height: 500px;
+  object-fit: cover;
+  border-radius: 20px;
+  background: #1d1717;
+  display: block;
+}
+
+.kids-camera-controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.kids-camera-capture,
+.kids-camera-cancel {
+  border: none;
+  padding: 12px 22px;
+  border-radius: 25px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.kids-camera-capture {
+  background: #342525;
+  color: white;
+}
+
+.kids-camera-cancel {
+  background: #eee4df;
+  color: #342525;
+}
+
+/* =========================================================
+   TRY-ON RESULT
+   ========================================================= */
+
+.kids-tryon-result {
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 22px;
+  align-items: start;
+}
+
+.kids-tryon-photo {
+  min-height: 430px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #f1e8e3;
+}
+
+.kids-tryon-photo img {
+  width: 100%;
+  height: 100%;
+  min-height: 430px;
+  object-fit: contain;
+  display: block;
+}
+
+.kids-tryon-product {
+  background: white;
+  border-radius: 18px;
+  padding: 15px;
+}
+
+.kids-tryon-product > span {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #8b7474;
+  font-weight: 700;
+}
+
+.kids-tryon-product img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 13px;
+  margin: 10px 0;
+}
+
+.kids-tryon-product h3 {
+  font-size: 15px;
+  margin: 3px 0 8px;
+}
+
+.kids-tryon-product strong {
+  font-size: 18px;
+}
+
+.kids-tryon-result-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.kids-tryon-result-actions button {
+  border: none;
+  padding: 12px 22px;
+  border-radius: 25px;
+  background: #342525;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.kids-tryon-result-actions button:first-child {
+  background: #eee4df;
+  color: #342525;
+}
+
+.kids-tryon-disclaimer {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #927f7f;
+  font-size: 11px;
+  margin: 0;
+}
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.no-products {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 20px;
+  background: white;
+  border-radius: 18px;
+}
+
+.no-products h3 {
+  margin-bottom: 8px;
+  font-size: 22px;
+}
+
+.no-products p {
+  color: #7c7070;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+  .kids-shop-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .kids-sidebar {
+    position: static;
+  }
+
+  .kids-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .kids-tryon-result {
+    grid-template-columns: 1fr;
+  }
+
+  .kids-tryon-product {
+    max-width: 300px;
+    margin: auto;
+  }
+
+  .kids-tryon-result-actions,
+  .kids-tryon-disclaimer {
+    grid-column: auto;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+  .kids-hero {
+    min-height: 360px;
+    margin: 15px;
+    border-radius: 20px;
+  }
+
+  .kids-hero-overlay {
+    padding: 30px;
+  }
+
+  .kids-hero h1 {
+    font-size: 40px;
+  }
+
+  .kids-hero p {
+    font-size: 15px;
+  }
+
+  .gender-filter {
+    flex-wrap: wrap;
+    margin: 0 0 12px;
+  }
+
+  .gender-btn {
+    min-width: 110px;
+    padding: 11px 22px;
+  }
+
+  .kids-products-section {
+    padding: 4px 5% 50px;
+  }
+
+  .kids-product-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .sort-box {
+    width: 100%;
+  }
+
+  .sort-box select {
+    flex: 1;
+  }
+
+  .kids-product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .kids-product-image {
+    height: 400px;
+  }
+
+  .kids-tryon-overlay {
+    padding: 12px;
+  }
+
+  .kids-tryon-modal {
+    padding: 22px 16px;
+    border-radius: 20px;
+  }
+
+  .kids-tryon-header h2 {
+    font-size: 27px;
+  }
+
+  .kids-tryon-result-actions {
+    flex-direction: column;
+  }
+
+  .kids-tryon-result-actions button {
+    width: 100%;
+  }
+}
