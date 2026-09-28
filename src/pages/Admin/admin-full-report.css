@@ -1,0 +1,331 @@
+/* =========================================================
+   VEYRAA ADMIN — FULL REPORT WORKSPACE
+   Dedicated in-app report page. No nested modal.
+   ========================================================= */
+
+.admin-full-report-page {
+  width: 100%;
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 6px 2px 36px;
+  box-sizing: border-box;
+}
+
+.admin-full-report-page,
+.admin-full-report-page * {
+  box-sizing: border-box;
+}
+
+.admin-full-report-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 4px 2px 26px;
+  border-bottom: 1px solid #eee8e4;
+}
+
+.admin-full-report-title {
+  min-width: 0;
+}
+
+.admin-report-back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  margin: 0 0 17px;
+  padding: 0 13px;
+  border: 1px solid #e4ddd8;
+  border-radius: 9px;
+  background: #fff;
+  color: #6c6260;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.admin-report-back:hover {
+  border-color: #8d1837;
+  color: #8d1837;
+  transform: translateX(-2px);
+}
+
+.admin-full-report-title h1 {
+  margin: 5px 0 7px;
+  color: #292426;
+  font-family: Georgia, serif;
+  font-size: clamp(30px, 3vw, 43px);
+  line-height: 1.05;
+  letter-spacing: -1.2px;
+}
+
+.admin-full-report-title p {
+  max-width: 720px;
+  margin: 0;
+  color: #766e6a;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.admin-full-report-status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 9px;
+  padding-top: 35px;
+  white-space: nowrap;
+}
+
+.admin-full-report-status > span {
+  color: #9a928e;
+  font-size: 9px;
+}
+
+.admin-report-toolbar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 22px 0;
+}
+
+.admin-report-toolbar > div {
+  min-width: 0;
+  min-height: 72px;
+  padding: 15px 17px;
+  border: 1px solid #ebe4df;
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: 0 5px 18px rgba(55, 38, 41, .035);
+}
+
+.admin-report-toolbar span {
+  display: block;
+  color: #a09792;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.admin-report-toolbar strong {
+  display: block;
+  margin-top: 8px;
+  overflow: hidden;
+  color: #383134;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-report-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.admin-report-summary-grid > * {
+  min-width: 0;
+}
+
+.admin-report-main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.75fr) minmax(300px, .8fr);
+  gap: 16px;
+  align-items: stretch;
+  margin-bottom: 18px;
+}
+
+.admin-report-chart-panel,
+.admin-report-side-panel,
+.admin-report-table {
+  min-width: 0;
+  border: 1px solid #ebe4df;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 8px 25px rgba(55, 38, 41, .035);
+}
+
+.admin-report-chart-panel,
+.admin-report-side-panel {
+  padding: 20px;
+}
+
+.admin-panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  min-width: 0;
+  margin-bottom: 16px;
+}
+
+.admin-panel-head h2 {
+  margin: 5px 0 0;
+  color: #393235;
+  font-family: Georgia, serif;
+  font-size: 19px;
+}
+
+.admin-right-text {
+  padding-top: 4px;
+  color: #9a928e;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.admin-full-chart {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 10px;
+  height: 330px;
+  padding: 16px 4px 25px;
+  border-top: 1px solid #f0ebe8;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 65px,
+    #f1ece9 66px,
+    transparent 67px
+  );
+  overflow: hidden;
+}
+
+.admin-full-bar-wrap {
+  min-width: 0;
+  height: 100%;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 20px;
+  align-items: end;
+  justify-items: center;
+}
+
+.admin-full-bar {
+  width: min(34px, 72%);
+  min-height: 8px;
+  align-self: end;
+  border-radius: 8px 8px 3px 3px;
+  background: linear-gradient(180deg, #bd2852 0%, #8d1837 100%);
+  box-shadow: 0 5px 12px rgba(141, 24, 55, .13);
+}
+
+.admin-full-bar-wrap span {
+  align-self: end;
+  color: #9d9591;
+  font-size: 8px;
+  line-height: 20px;
+}
+
+.admin-report-side-panel .admin-health-row {
+  margin: 0 0 17px;
+}
+
+.admin-report-side-panel .admin-health-row:last-child {
+  margin-bottom: 0;
+}
+
+.admin-report-table {
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.admin-report-table-head,
+.admin-report-table-row {
+  display: grid;
+  grid-template-columns: minmax(2fr, 2.2fr) minmax(90px, .8fr) minmax(90px, .8fr) minmax(100px, .8fr);
+  gap: 16px;
+  align-items: center;
+  min-width: 0;
+  padding: 15px 18px;
+}
+
+.admin-report-table-head {
+  background: #fbf9f8;
+  border-bottom: 1px solid #eee8e4;
+  color: #a09792;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .8px;
+}
+
+.admin-report-table-row {
+  min-height: 56px;
+  border-bottom: 1px solid #f0ebe8;
+  color: #625a58;
+  font-size: 10px;
+}
+
+.admin-report-table-row:last-child {
+  border-bottom: 0;
+}
+
+.admin-report-table-row strong {
+  color: #393235;
+  font-size: 10px;
+}
+
+.admin-full-report-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 2px;
+}
+
+.admin-full-report-empty {
+  margin: 0;
+  color: #756c68;
+  font-size: 11px;
+}
+
+@media (max-width: 1050px) {
+  .admin-report-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-report-main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .admin-full-report-head {
+    flex-direction: column;
+  }
+
+  .admin-full-report-status {
+    align-items: flex-start;
+    padding-top: 0;
+  }
+
+  .admin-report-toolbar,
+  .admin-report-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-full-chart {
+    gap: 4px;
+    height: 250px;
+  }
+
+  .admin-full-bar {
+    width: min(23px, 80%);
+  }
+
+  .admin-report-table {
+    overflow-x: auto;
+  }
+
+  .admin-report-table-head,
+  .admin-report-table-row {
+    min-width: 620px;
+  }
+
+  .admin-full-report-actions {
+    justify-content: stretch;
+  }
+
+  .admin-full-report-actions button {
+    flex: 1;
+  }
+}

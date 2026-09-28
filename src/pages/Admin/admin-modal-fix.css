@@ -1,0 +1,377 @@
+/* =========================================================
+   VEYRAA ADMIN - MODAL CONTAINMENT & PREVIEW FIX
+   ========================================================= */
+
+/* ---------- MODAL OVERLAY ---------- */
+
+.admin-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: rgba(37, 29, 31, 0.35);
+  backdrop-filter: blur(5px);
+}
+
+.admin-modal-overlay *,
+.admin-modal-overlay *::before,
+.admin-modal-overlay *::after {
+  box-sizing: border-box;
+}
+
+
+/* ---------- MODAL CONTAINER ---------- */
+
+.admin-modal {
+  position: relative;
+
+  width: min(1000px, calc(100vw - 48px));
+
+  /* IMPORTANT:
+     Do not give the modal a fixed height.
+     It should fit its actual preview content. */
+  height: auto;
+
+  max-width: 100%;
+  max-height: calc(100vh - 48px);
+
+  min-width: 0;
+  min-height: 0;
+
+  margin: 0;
+  padding: 0;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  border-radius: 20px;
+  background: #ffffff;
+
+  box-shadow: 0 25px 70px rgba(30, 20, 20, 0.20);
+}
+
+
+/* ---------- CLOSE BUTTON ---------- */
+
+.admin-modal-close {
+  position: absolute !important;
+
+  top: 14px !important;
+  right: 14px !important;
+
+  z-index: 50;
+
+  width: 34px !important;
+  height: 34px !important;
+
+  min-width: 34px;
+  min-height: 34px;
+
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e4ddd8;
+  border-radius: 50%;
+
+  background: #ffffff;
+  color: #77706c;
+
+  font-size: 20px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  box-shadow: 0 3px 12px rgba(30, 20, 20, 0.08);
+}
+
+
+/* ---------- DETAIL PAGE INSIDE MODAL ---------- */
+
+.admin-modal > .admin-detail-page {
+  width: 100%;
+
+  height: auto;
+
+  max-width: 100%;
+
+  min-width: 0;
+  min-height: 0;
+
+  margin: 0;
+
+  padding: 30px 32px 32px;
+
+  overflow: visible;
+}
+
+
+/* ---------- DETAIL HEADER ---------- */
+
+.admin-modal .admin-detail-header {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  padding-right: 46px;
+}
+
+
+/* ---------- GENERAL CONTENT CONTAINMENT ---------- */
+
+.admin-modal .admin-detail-page > * {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.admin-modal img {
+  max-width: 100%;
+}
+
+
+/* =========================================================
+   ORDER PREVIEW
+   ========================================================= */
+
+.admin-modal .admin-order-preview {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.admin-modal .admin-order-preview-product {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  overflow: hidden;
+}
+
+.admin-modal .admin-modal-grid {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.admin-modal .admin-order-timeline {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+
+/* =========================================================
+   PRODUCT PREVIEW
+   ========================================================= */
+
+.admin-modal .admin-product-preview {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 0.85fr)
+    minmax(0, 1.15fr);
+
+  gap: 28px;
+
+  align-items: start;
+}
+
+
+/* ---------- PRODUCT IMAGE ---------- */
+
+.admin-modal .admin-product-preview-image {
+  width: 100%;
+  max-width: 100%;
+
+  height: 470px;
+
+  position: relative;
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  border-radius: 14px;
+
+  background: #eee9e6;
+}
+
+.admin-modal .admin-product-preview-image img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  max-width: 100%;
+
+  object-fit: cover;
+}
+
+
+/* ---------- PRODUCT INFO ---------- */
+
+.admin-modal .admin-product-preview-info {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.admin-modal .admin-product-preview-info h2 {
+  max-width: 100%;
+
+  overflow-wrap: anywhere;
+}
+
+.admin-modal .admin-product-preview-info p {
+  max-width: 100%;
+}
+
+
+/* ---------- PRODUCT DETAILS GRID ---------- */
+
+.admin-modal .admin-product-preview-info .admin-modal-grid {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+}
+
+
+/* ---------- PRODUCT ACTIONS ---------- */
+
+.admin-modal .admin-product-preview-info .admin-modal-actions {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 9px;
+
+  max-width: 100%;
+}
+
+
+/* =========================================================
+   REPORT PREVIEW
+   ========================================================= */
+
+.admin-modal .admin-report-preview {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  overflow: hidden;
+}
+
+.admin-modal .admin-report-grid {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+
+/* =========================================================
+   BUTTON CONTAINMENT
+   ========================================================= */
+
+.admin-modal .admin-primary-button,
+.admin-modal .admin-outline-button {
+  max-width: 100%;
+}
+
+
+/* =========================================================
+   MOBILE / SMALL SCREEN
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .admin-modal {
+    width: min(96vw, 900px);
+
+    max-height: calc(100vh - 32px);
+  }
+
+  .admin-modal > .admin-detail-page {
+    padding: 28px 24px 28px;
+  }
+
+  .admin-modal .admin-product-preview {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr);
+
+    gap: 20px;
+  }
+
+  .admin-modal .admin-product-preview-image {
+    height: 400px;
+  }
+
+}
+
+
+@media (max-width: 760px) {
+
+  .admin-modal-overlay {
+    padding: 12px;
+  }
+
+  .admin-modal {
+    width: 100%;
+
+    max-width: 100%;
+
+    max-height: calc(100vh - 24px);
+
+    border-radius: 16px;
+  }
+
+  .admin-modal > .admin-detail-page {
+    padding: 30px 18px 22px;
+  }
+
+  .admin-modal .admin-detail-header {
+    padding-right: 42px;
+  }
+
+  .admin-modal .admin-product-preview {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .admin-modal .admin-product-preview-image {
+    height: 350px;
+  }
+
+  .admin-modal .admin-product-preview-info .admin-modal-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+@media (max-width: 480px) {
+
+  .admin-modal .admin-product-preview-info .admin-modal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-modal .admin-product-preview-image {
+    height: 300px;
+  }
+
+}
