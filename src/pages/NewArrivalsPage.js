@@ -1,7 +1,6 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import VirtualTryOn from "../components/VirtualTryOn";
 
 import { products as womenProducts } from "../components/WomenFashion";
 import { products as menProducts } from "../components/MenCategory";
@@ -46,299 +45,6 @@ const newArrivalProducts = existingProducts.filter((product) => {
   );
 });
 
-
-/* =========================================================
-   EXISTING PRODUCT IMAGE RESOLVER
-   Uses the real /public/women, /public/men and /public/kids
-   files already used by the existing catalog.
-   ========================================================= */
-
-function resolveExistingProductImage(product) {
-  const raw = String(product?.image || "").trim();
-
-  if (!raw) return "";
-
-  if (
-    raw.startsWith("http://") ||
-    raw.startsWith("https://") ||
-    raw.startsWith("data:") ||
-    raw.startsWith("blob:")
-  ) {
-    return raw;
-  }
-
-  if (
-    raw.startsWith("/women/") ||
-    raw.startsWith("/men/") ||
-    raw.startsWith("/kids/")
-  ) {
-    return encodeURI(raw);
-  }
-
-  const folder = String(product?.gender || "")
-    .toLowerCase()
-    .trim();
-
-  if (folder === "women" || folder === "men" || folder === "kids") {
-    return encodeURI(`/${folder}/${raw}`);
-  }
-
-  return encodeURI(raw);
-}
-
-function readWishlistIds() {
-  if (typeof window === "undefined") {
-    return [];
-  }
-
-  try {
-    const savedWishlist = JSON.parse(localStorage.getItem("veyraaWishlist")) || [];
-    return savedWishlist.map((item) => item.id);
-  } catch (error) {
-    return [];
-  }
-}
-
-
-/* =========================================================
-   EXISTING CATALOG IMAGE RESOLUTION
-   No new products or new product URLs are created.
-   ========================================================= */
-
-const EXISTING_LOCAL_IMAGES = {
-  women: [
-    "/women/floral-01.jpg",
-    "/women/black dress-01.jpg",
-    "/women/pastel-01.jpg",
-    "/women/new img-01.jpg",
-    "/women/whitedress-01.jpg",
-    "/women/black ribbed-01.jpg",
-    "/women/pink-01.jpg",
-    "/women/pinkos-01.jpg",
-    "/women/blackcas-01.jpg",
-    "/women/wide-01.jpg",
-    "/women/blacktrouser-01.jpg",
-    "/women/creamwhite-01.jpg",
-    "/women/pleatedskirt.jpg",
-    "/women/floraldress.jpg",
-    "/women/denimskirt.jpg",
-    "/women/beige.jpg",
-    "/women/grey.jpg",
-    "/women/pinkfit.jpg",
-    "/women/night.jpg",
-    "/women/floralnightwear.jpg",
-    "/women/satin.jpg",
-    "/women/sneaker.jpg",
-    "/women/beigeheel.jpg",
-    "/women/everyday.jpg",
-    "/women/brownbag.jpg",
-    "/women/blackhand.jpg",
-    "/women/pinkhandbag.jpg",
-    "/women/goldwatch.jpg",
-    "/women/goldwatchh.jpg",
-    "/women/blackcooler.jpg",
-    "/women/browncooler.jpg",
-    "/women/blackbelt.jpg",
-  ],
-
-  men: [
-    "/men/tshirt.jpg",
-    "/men/denim.jpg",
-    "/men/graphic.jpg",
-    "/men/denimshirt.jpg",
-    "/men/indiankurta.jpg",
-    "/men/kurtaset.jpg",
-    "/men/nehru.jpg",
-    "/men/shrawani.jpg",
-    "/men/dhoti.jpg",
-    "/men/dhotii.jpg",
-    "/men/formalshirt.jpg",
-    "/men/trousers.jpg",
-    "/men/blazer.jpg",
-    "/men/suit.jpg",
-    "/men/cashirt.jpg",
-    "/men/chino pant.jpg",
-    "/men/polo1.jpg",
-    "/men/jean1.jpg",
-    "/men/sports1.jpg",
-    "/men/jogger1.jpg",
-    "/men/sports2.jpg",
-    "/men/nightsuit1.jpg",
-    "/men/lounge1.jpg",
-    "/men/sleepwear1.jpg",
-  ],
-
-  kids: [
-    "/kids/bhangraboy.jpg",
-    "/kids/casualboy.jpg",
-    "/kids/casualwearboy.jpg",
-    "/kids/dhoti.jpg",
-    "/kids/dhotiboy.jpg",
-    "/kids/frock1.jpg",
-    "/kids/frock2.jpg",
-    "/kids/frock3.jpg",
-    "/kids/frock4.jpg",
-    "/kids/frock5.jpg",
-    "/kids/frock7.jpg",
-    "/kids/greenshirt.jpg",
-    "/kids/jeantype.jpg",
-    "/kids/jumpsuit.jpg",
-    "/kids/kurtaboy.jpg",
-    "/kids/ni8wear.jpg",
-    "/kids/ni8wearboy.jpg",
-    "/kids/paattu.jpg",
-    "/kids/pinkfrock1.jpg",
-    "/kids/pinkpeplumgirl.jpg",
-    "/kids/purplegirl.jpg",
-    "/kids/purplegirlfrock.jpg",
-    "/kids/royalboy.jpg",
-    "/kids/shirt.jpg",
-    "/kids/suitboy.jpg",
-    "/kids/tshirtboy.jpg",
-    "/kids/yellowboy.jpg",
-    "/kids/yellowgirl.jpg",
-  ],
-};
-
-function imageCandidates(product) {
-  const raw = String(product?.image || "").trim();
-  const gender = String(product?.gender || "").toLowerCase().trim();
-  const name = String(product?.name || "").toLowerCase();
-  const category = String(
-    product?.type || product?.category || ""
-  ).toLowerCase();
-
-  const candidates = [];
-
-  if (raw) {
-    if (
-      raw.startsWith("http://") ||
-      raw.startsWith("https://") ||
-      raw.startsWith("data:") ||
-      raw.startsWith("blob:")
-    ) {
-      candidates.push(raw);
-    } else if (
-      raw.startsWith("/women/") ||
-      raw.startsWith("/men/") ||
-      raw.startsWith("/kids/")
-    ) {
-      candidates.push(encodeURI(raw));
-    } else if (gender === "women" || gender === "men" || gender === "kids") {
-      candidates.push(
-        encodeURI(`/${gender}/${raw}`)
-      );
-    } else {
-      candidates.push(encodeURI(raw));
-    }
-  }
-
-  if (gender === "women") {
-    const keywordMap = [
-      ["black ribbed", "/women/black ribbed-01.jpg"],
-      ["fitness", "/women/pinkfit.jpg"],
-      ["sleepwear", "/women/floralnightwear.jpg"],
-      ["nightwear", "/women/night.jpg"],
-      ["skirt", "/women/pleatedskirt.jpg"],
-      ["jean", "/women/denimskirt.jpg"],
-      ["trouser", "/women/blacktrouser-01.jpg"],
-      ["handbag", "/women/pinkhandbag.jpg"],
-      ["bag", "/women/pinkhandbag.jpg"],
-      ["watch", "/women/goldwatch.jpg"],
-      ["sunglass", "/women/blackcooler.jpg"],
-      ["belt", "/women/blackbelt.jpg"],
-      ["frock", "/women/floral-01.jpg"],
-      ["dress", "/women/floraldress.jpg"],
-      ["top", "/women/black ribbed-01.jpg"],
-      ["salwar", "/women/pastel-01.jpg"],
-      ["saree", "/women/satin.jpg"],
-      ["kurti", "/women/floral-01.jpg"],
-      ["chudidar", "/women/creamwhite-01.jpg"],
-      ["lehenga", "/women/pink-01.jpg"],
-      ["jacket", "/women/beige.jpg"],
-    ];
-
-    keywordMap.forEach(([keyword, path]) => {
-      if (
-        name.includes(keyword) ||
-        category.includes(keyword)
-      ) {
-        candidates.push(path);
-      }
-    });
-  }
-
-  if (gender === "men") {
-    const keywordMap = [
-      ["formal", "/men/formalshirt.jpg"],
-      ["shirt", "/men/shirt.jpg"],
-      ["t-shirt", "/men/tshirt.jpg"],
-      ["tshirt", "/men/tshirt.jpg"],
-      ["jacket", "/men/denim.jpg"],
-      ["kurta", "/men/indiankurta.jpg"],
-      ["nehru", "/men/nehru.jpg"],
-      ["sherwani", "/men/shrawani.jpg"],
-      ["dhoti", "/men/dhoti.jpg"],
-      ["blazer", "/men/blazer.jpg"],
-      ["suit", "/men/suit.jpg"],
-      ["trouser", "/men/trousers.jpg"],
-      ["chino", "/men/chino pant.jpg"],
-      ["jean", "/men/jean1.jpg"],
-      ["sport", "/men/sports1.jpg"],
-      ["jogger", "/men/jogger1.jpg"],
-      ["night", "/men/nightsuit1.jpg"],
-      ["sleep", "/men/sleepwear1.jpg"],
-    ];
-
-    keywordMap.forEach(([keyword, path]) => {
-      if (
-        name.includes(keyword) ||
-        category.includes(keyword)
-      ) {
-        candidates.push(path);
-      }
-    });
-  }
-
-  if (gender === "kids") {
-    const keywordMap = [
-      ["frock", "/kids/frock2.jpg"],
-      ["dress", "/kids/frock3.jpg"],
-      ["girl", "/kids/frock2.jpg"],
-      ["party", "/kids/frock4.jpg"],
-      ["pink", "/kids/pinkfrock1.jpg"],
-      ["purple", "/kids/purplegirl.jpg"],
-      ["lehenga", "/kids/purplegirlfrock.jpg"],
-      ["kurta", "/kids/kurtaboy.jpg"],
-      ["dhoti", "/kids/dhotiboy.jpg"],
-      ["suit", "/kids/suitboy.jpg"],
-      ["shirt", "/kids/shirt.jpg"],
-      ["t-shirt", "/kids/tshirtboy.jpg"],
-      ["tshirt", "/kids/tshirtboy.jpg"],
-      ["jean", "/kids/jeantype.jpg"],
-      ["jumpsuit", "/kids/jumpsuit.jpg"],
-      ["night", "/kids/ni8wear.jpg"],
-      ["boy", "/kids/casualboy.jpg"],
-    ];
-
-    keywordMap.forEach(([keyword, path]) => {
-      if (
-        name.includes(keyword) ||
-        category.includes(keyword)
-      ) {
-        candidates.push(path);
-      }
-    });
-  }
-
-  const folderImages =
-    EXISTING_LOCAL_IMAGES[gender] || [];
-
-  candidates.push(...folderImages);
-
-  return [...new Set(candidates)];
-}
-
 function discountPercent(price, oldPrice) {
   const current = Number(price);
   const original = Number(oldPrice);
@@ -350,22 +56,170 @@ function discountPercent(price, oldPrice) {
   return Math.round(((original - current) / original) * 100);
 }
 
-function getStockLeft(product) {
-  return product?.stock ?? product?.stockQuantity ?? null;
+
+function resolveCatalogImage(product) {
+  const raw = String(product?.image || "").trim();
+  if (!raw) return "";
+
+  const lower = raw.toLowerCase();
+  if (lower.indexOf("http://") === 0 ||
+      lower.indexOf("https://") === 0 ||
+      lower.indexOf("data:") === 0 ||
+      lower.indexOf("blob:") === 0) {
+    return raw;
+  }
+
+  const normalized = raw.replace(/^\/+/, "");
+  const firstPart = normalized.split("/")[0].toLowerCase();
+  if (firstPart === "women" || firstPart === "men" || firstPart === "kids") {
+    return encodeURI("/" + normalized);
+  }
+
+  const gender = String(product?.gender || "Women").toLowerCase();
+  return encodeURI("/" + gender + "/" + normalized);
 }
 
-function resolveProductPreviewImage(product) {
-  const candidates = imageCandidates(product);
-  return candidates[0] || String(product?.image || "").trim() || "";
+function fallbackImageFor(product) {
+  const gender = String(product?.gender || "Women").toLowerCase();
+  if (gender === "men") return "/men/formalshirt.jpg";
+  if (gender === "kids") return "/kids/kids-01.jpg";
+  return "/women/saree-01.jpg";
 }
 
 function NewArrivalsPage() {
   const [gender, setGender] = useState("All");
   const [sort, setSort] = useState("featured");
   const [maxPrice, setMaxPrice] = useState(10000);
-  const [minimumDiscount, setMinimumDiscount] = useState("all");
-  const [category, setCategory] = useState("All");
-  const [wishlistIds, setWishlistIds] = useState(() => readWishlistIds());
+
+  /* =======================================================
+     VIRTUAL TRY-ON
+     ======================================================= */
+
+  const [tryOnProduct, setTryOnProduct] = useState(null);
+  const [tryOnImage, setTryOnImage] = useState(null);
+  const [cameraOpen, setCameraOpen] = useState(false);
+
+  const videoRef = useRef(null);
+  const streamRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+      }
+    };
+  }, []);
+
+  const openTryOn = (product) => {
+    setTryOnProduct(product);
+    setTryOnImage(null);
+    setCameraOpen(false);
+  };
+
+  const closeTryOn = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+    }
+
+    streamRef.current = null;
+    setCameraOpen(false);
+    setTryOnImage(null);
+    setTryOnProduct(null);
+  };
+
+  const startCamera = async () => {
+    try {
+      if (
+        !navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia
+      ) {
+        alert("Camera is not supported. Please upload your photo.");
+        return;
+      }
+
+      const stream =
+        await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: "user",
+          },
+          audio: false,
+        });
+
+      streamRef.current = stream;
+
+      setCameraOpen(true);
+
+      setTimeout(() => {
+        if (videoRef.current && streamRef.current) {
+          videoRef.current.srcObject = streamRef.current;
+          videoRef.current.play().catch(() => {});
+        }
+      }, 100);
+    } catch (error) {
+      alert(
+        "Camera permission was not available. Please use Upload Your Photo."
+      );
+    }
+  };
+
+  const capturePhoto = () => {
+    if (!videoRef.current) return;
+
+    const video = videoRef.current;
+
+    if (!video.videoWidth || !video.videoHeight) {
+      alert("Camera is still loading. Please try again.");
+      return;
+    }
+
+    const canvas = document.createElement("canvas");
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const context = canvas.getContext("2d");
+
+    if (!context) return;
+
+    context.drawImage(
+      video,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    setTryOnImage(canvas.toDataURL("image/png"));
+
+    if (streamRef.current) {
+      streamRef.current
+        .getTracks()
+        .forEach((track) => track.stop());
+    }
+
+    streamRef.current = null;
+    setCameraOpen(false);
+  };
+
+  const uploadPhoto = (event) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image file.");
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      setTryOnImage(reader.result);
+      setCameraOpen(false);
+    };
+
+    reader.readAsDataURL(file);
+  };
 
   /* =======================================================
      FILTER + SORT
@@ -383,14 +237,6 @@ function NewArrivalsPage() {
     result = result.filter(
       (product) => Number(product.price) <= maxPrice
     );
-
-    if (category !== "All") {
-      result = result.filter((product) => (product.type || product.category || "") === category);
-    }
-
-    if (minimumDiscount !== "all") {
-      result = result.filter((product) => discountPercent(product.price, product.oldPrice) >= Number(minimumDiscount));
-    }
 
     if (sort === "low") {
       result.sort((a, b) => a.price - b.price);
@@ -413,16 +259,18 @@ function NewArrivalsPage() {
     }
 
     return result;
-  }, [category, gender, maxPrice, minimumDiscount, sort]);
-
-  const categories = useMemo(() => [
-    "All",
-    ...new Set(newArrivalProducts.map((product) => product.type || product.category).filter(Boolean)),
-  ], []);
+  }, [gender, maxPrice, sort]);
 
   /* =======================================================
      CART
      ======================================================= */
+
+
+  const openProduct = (product) => {
+    if (product?.id === undefined) return;
+    const catalog = product.gender || "Women";
+    window.location.href = `/products/${encodeURIComponent(product.id)}?catalog=${encodeURIComponent(catalog)}&source=new-arrivals`;
+  };
 
   const addToCart = (product) => {
     const savedCart =
@@ -454,37 +302,7 @@ function NewArrivalsPage() {
       JSON.stringify(updatedCart)
     );
 
-    window.dispatchEvent(new Event("veyraa:cart-updated"));
-  };
-
-  /* =======================================================
-     BUY NOW
-     ======================================================= */
-
-  const buyNow = (product) => {
-    const savedCart =
-      JSON.parse(localStorage.getItem("veyraaCart")) || [];
-
-    const existing = savedCart.find(
-      (item) => item.id === product.id
-    );
-
-    const updatedCart = existing
-      ? savedCart
-      : [
-          ...savedCart,
-          {
-            ...product,
-            quantity: 1,
-          },
-        ];
-
-    localStorage.setItem(
-      "veyraaCart",
-      JSON.stringify(updatedCart)
-    );
-
-    window.location.href = "/billing";
+    alert(`${product.name} added to cart`);
   };
 
   /* =======================================================
@@ -511,8 +329,6 @@ function NewArrivalsPage() {
       "veyraaWishlist",
       JSON.stringify(updatedWishlist)
     );
-
-    setWishlistIds(readWishlistIds());
   };
 
   return (
@@ -524,20 +340,27 @@ function NewArrivalsPage() {
       ===================================================== */}
 
       <section className="new-arrivals-hero">
+
         <div className="new-arrivals-hero-content">
-          <span className="new-arrivals-eyebrow">NEW ARRIVALS</span>
+
+          <span className="new-arrivals-eyebrow">
+            VEYRAA • JUST LANDED
+          </span>
 
           <h1>
-            Fresh Styles.
-            <em> Real You.</em>
+            New Arrivals
+            <br />
+            <em>Fresh. Current. Veyraa.</em>
           </h1>
 
           <p>
-            Curated seasonal edits and new favourites from the Veyraa fashion world — polished,
-            expressive, and made to move with you.
+            Discover the newest existing styles across
+            Women, Men and Kids — all curated from the
+            Veyraa catalog.
           </p>
 
           <div className="hero-actions">
+
             <button
               type="button"
               className="hero-primary-btn"
@@ -549,15 +372,18 @@ function NewArrivalsPage() {
                   })
               }
             >
-              Shop New Arrivals
+              Shop New Arrivals →
             </button>
 
             <span className="hero-count">
               <strong>{newArrivalProducts.length}</strong>
               <small>NEW STYLES</small>
             </span>
+
           </div>
+
         </div>
+
       </section>
 
       {/* =====================================================
@@ -588,320 +414,421 @@ function NewArrivalsPage() {
         id="new-arrivals-collection"
       >
 
-        {/* FILTER BAR */}
+        {/* WOMEN-STYLE COLLECTION LAYOUT */}
+        <div className="new-shop-layout">
 
-        <div className="new-arrivals-toolbar">
+          <aside className="new-filters">
+            <div className="new-filter-title">
+              <h2>FILTERS</h2>
+              <button
+                type="button"
+                onClick={() => {
+                  setGender("All");
+                  setMaxPrice(10000);
+                  setSort("featured");
+                }}
+              >
+                Clear
+              </button>
+            </div>
 
-          <div className="gender-filters">
-
-            <button
-              className={gender === "All" ? "active" : ""}
-              onClick={() => setGender("All")}
-            >
-              All
-            </button>
-
-            <button
-              className={gender === "Women" ? "active" : ""}
-              onClick={() => setGender("Women")}
-            >
-              Women
-            </button>
-
-            <button
-              className={gender === "Men" ? "active" : ""}
-              onClick={() => setGender("Men")}
-            >
-              Men
-            </button>
-
-            <button
-              className={gender === "Kids" ? "active" : ""}
-              onClick={() => setGender("Kids")}
-            >
-              Kids
-            </button>
-
-          </div>
-
-          <div className="new-arrivals-controls">
-
-            <div className="price-control">
-
-              <label>
-                Up to ₹{maxPrice}
-              </label>
-
+            <div className="new-filter-block">
+              <h3>Price</h3>
               <input
                 type="range"
                 min="500"
                 max="10000"
                 step="100"
                 value={maxPrice}
-                onChange={(e) =>
-                  setMaxPrice(Number(e.target.value))
-                }
+                onChange={(e) => setMaxPrice(Number(e.target.value))}
               />
-
+              <div className="new-price-range">
+                <span>₹500</span>
+                <strong>₹{Number(maxPrice).toLocaleString("en-IN")}</strong>
+              </div>
             </div>
 
-            <div className="category-control">
-              <label>Category</label>
-              <select value={category} onChange={(e) => setCategory(e.target.value)}>
-                {categories.map((option) => <option key={option} value={option}>{option}</option>)}
-              </select>
+            <div className="new-filter-block">
+              <h3>Collection</h3>
+              {["All", "Women", "Men", "Kids"].map((option) => (
+                <label key={option}>
+                  <input
+                    type="radio"
+                    name="new-arrivals-audience"
+                    checked={gender === option}
+                    onChange={() => setGender(option)}
+                  />
+                  {option}
+                </label>
+              ))}
             </div>
 
-            <div className="discount-control">
-              <label>Discount</label>
-              <select value={minimumDiscount} onChange={(e) => setMinimumDiscount(e.target.value)}>
-                <option value="all">Any</option>
-                <option value="10">10%+</option>
-                <option value="20">20%+</option>
-                <option value="30">30%+</option>
-              </select>
+            <div className="new-filter-block">
+              <h3>Fashion Discovery</h3>
+              {["All", "Women", "Men", "Kids"].map((option) => (
+                <button
+                  type="button"
+                  className={`new-filter-link ${gender === option ? "active" : ""}`}
+                  key={option}
+                  onClick={() => setGender(option)}
+                >
+                  {option === "All" ? "New Arrivals" : `${option}'s New Arrivals`}
+                </button>
+              ))}
+            </div>
+          </aside>
+
+          <section className="new-products-area">
+            <div className="new-products-toolbar">
+              <div>
+                <span>VEYRAA NEW ARRIVALS</span>
+                <h2>
+                  {gender === "All" ? "Latest Styles" : `${gender}'s New Arrivals`}
+                </h2>
+                <p><strong>{displayedProducts.length}</strong> products</p>
+              </div>
+
+              <div className="new-sort-control">
+                <span>Sort by</span>
+                <select
+                  value={sort}
+                  onChange={(e) => setSort(e.target.value)}
+                >
+                  <option value="featured">Featured</option>
+                  <option value="low">Price: Low to High</option>
+                  <option value="high">Price: High to Low</option>
+                  <option value="discount">Biggest Discount</option>
+                  <option value="rating">Highest Rated</option>
+                </select>
+              </div>
             </div>
 
-            <div className="sort-control">
+            <div className="new-arrivals-grid">
+              {displayedProducts.length === 0 ? (
+                <div className="new-products-empty">
+                  <h2>No products found</h2>
+                  <p>Try another audience or increase the price range.</p>
+                </div>
+              ) : (
+                displayedProducts.map((product) => {
+                  const image = resolveCatalogImage(product);
 
-              <label>Sort by</label>
+                  return (
+                    <article
+                      className="new-arrival-card"
+                      key={`${product.gender}-${product.id}`}
+                    >
+                      <div
+                        className="new-arrival-image"
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => openProduct(product)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") openProduct(product);
+                        }}
+                      >
+                        <img
+                          src={image}
+                          alt={product.name}
+                          loading="lazy"
+                          onError={(e) => {
+                            if (!e.currentTarget.dataset.fallback) {
+                              e.currentTarget.dataset.fallback = "1";
+                              e.currentTarget.src = fallbackImageFor(product);
+                            }
+                          }}
+                        />
 
-              <select
-                value={sort}
-                onChange={(e) =>
-                  setSort(e.target.value)
-                }
-              >
-                <option value="featured">
-                  Featured
-                </option>
+                        <span className="new-badge">
+                          {product.badge || "NEW"}
+                        </span>
 
-                <option value="low">
-                  Price: Low to High
-                </option>
+                        <button
+                          type="button"
+                          className="arrival-heart"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleWishlist(product);
+                          }}
+                          aria-label="Add to wishlist"
+                        >
+                          ♡
+                        </button>
 
-                <option value="high">
-                  Price: High to Low
-                </option>
+                        <button
+                          type="button"
+                          className="new-try-on-button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            openTryOn(product);
+                          }}
+                        >
+                          ✦ Virtual Try-On
+                        </button>
+                      </div>
 
-                <option value="discount">
-                  Biggest Discount
-                </option>
+                      <div className="new-arrival-info">
+                        <div className="arrival-rating">
+                          ★ {Number(product.rating || 4.5).toFixed(1)}
+                        </div>
 
-                <option value="rating">
-                  Highest Rated
-                </option>
-              </select>
+                        <span className="arrival-category">
+                          {String(product.gender || "Women").toUpperCase()} ·{" "}
+                          {String(product.type || product.category || "Fashion").toUpperCase()}
+                        </span>
 
+                        <h3
+                          onClick={() => openProduct(product)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {product.name}
+                        </h3>
+
+                        <p className="arrival-material">
+                          {product.material || "Premium fabric"} · {product.colour || product.color || "Classic"}
+                        </p>
+
+                        <div className="arrival-price">
+                          ₹{Number(product.price || 0).toLocaleString("en-IN")}
+                          {product.oldPrice && (
+                            <del>
+                              ₹{Number(product.oldPrice).toLocaleString("en-IN")}
+                            </del>
+                          )}
+                        </div>
+
+                        <div className="arrival-actions">
+                          <button
+                            type="button"
+                            className="arrival-cart"
+                            onClick={() => addToCart(product)}
+                          >
+                            🛒 Add to Cart
+                          </button>
+
+                          <button
+                            type="button"
+                            className="arrival-buy"
+                            onClick={() => {
+                              const savedCart =
+                                JSON.parse(localStorage.getItem("veyraaCart")) || [];
+                              const existing = savedCart.find((item) => item.id === product.id);
+
+                              if (!existing) {
+                                localStorage.setItem(
+                                  "veyraaCart",
+                                  JSON.stringify([...savedCart, { ...product, quantity: 1 }])
+                                );
+                              }
+
+                              window.location.href = "/billing";
+                            }}
+                          >
+                            Buy Now
+                          </button>
+                        </div>
+
+                        <button
+                          type="button"
+                          className="new-view-product"
+                          onClick={() => openProduct(product)}
+                        >
+                          View Product →
+                        </button>
+                      </div>
+                    </article>
+                  );
+                })
+              )}
             </div>
-
-          </div>
-
+          </section>
         </div>
 
-        {/* COLLECTION HEADER */}
+      </main>
 
-        <div className="new-arrivals-section-head">
+            {/* =====================================================
+          VIRTUAL TRY-ON MODAL
+      ===================================================== */}
 
-          <div>
+      {tryOnProduct && (
+        <div
+          className="arrival-tryon-overlay"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              closeTryOn();
+            }
+          }}
+        >
 
-            <span>
-              VEYRAA NEW ARRIVALS
-            </span>
+          <div className="arrival-tryon-modal">
 
-            <h2>
-              {gender === "All"
-                ? "Latest Styles"
-                : `${gender}'s New Arrivals`}
-            </h2>
+            <button
+              type="button"
+              className="arrival-tryon-close"
+              onClick={closeTryOn}
+              aria-label="Close Virtual Try-On"
+            >
+              ×
+            </button>
 
-            <p>
-              {displayedProducts.length} products
-            </p>
+            <div className="arrival-tryon-heading">
 
-          </div>
+              <span>
+                VEYRAA SMART FIT
+              </span>
 
-          <div className="discount-note">
-            ✦ Exclusive launch pricing
-          </div>
+              <h2>
+                Virtual Try-On
+              </h2>
 
-        </div>
+              <p>
+                Preview{" "}
+                <strong>
+                  {tryOnProduct.name}
+                </strong>
+                {" "}with your photo.
+              </p>
 
-        {/* PRODUCT GRID */}
+            </div>
 
-        <div className="new-arrivals-grid">
+            {!tryOnImage && !cameraOpen && (
+              <div className="arrival-tryon-start">
 
-          {displayedProducts.map((product) => {
-
-            const discount = discountPercent(
-              product.price,
-              product.oldPrice
-            );
-            const stockLeft = getStockLeft(product);
-            const isWishlisted = wishlistIds.includes(product.id);
-
-            return (
-              <article
-                className="new-arrival-card"
-                key={`${product.gender}-${product.id}`}
-              >
-
-                <div className="new-arrival-image">
+                <div className="arrival-tryon-product">
 
                   <img
-                    src={imageCandidates(product)[0] || ""}
-                    alt={product.name}
-                    data-image-index="0"
-                    onError={(e) => {
-                      const candidates =
-                        imageCandidates(product);
-
-                      const nextIndex =
-                        Number(
-                          e.currentTarget.dataset.imageIndex || "0"
-                        ) + 1;
-
-                      if (
-                        nextIndex < candidates.length
-                      ) {
-                        e.currentTarget.dataset.imageIndex =
-                          String(nextIndex);
-
-                        e.currentTarget.src =
-                          candidates[nextIndex];
-                      }
-                    }}
+                    src={tryOnProduct.image}
+                    alt={tryOnProduct.name}
                   />
 
-                  <span className="new-badge">
-                    NEW
+                  <span>
+                    Selected New Arrival
                   </span>
 
-                  {discount > 0 && (
-                    <span className="discount-badge">
-                      {discount}% OFF
-                    </span>
-                  )}
+                </div>
+
+                <div className="arrival-tryon-options">
 
                   <button
                     type="button"
-                    className={`arrival-heart ${isWishlisted ? "active" : ""}`}
-                    onClick={() =>
-                      toggleWishlist(product)
-                    }
-                    aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
-                    aria-pressed={isWishlisted}
+                    onClick={startCamera}
                   >
-                    {isWishlisted ? "♥" : "♡"}
+                    📷 Use Camera
+                  </button>
+
+                  <label>
+                    🖼 Upload Your Photo
+
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={uploadPhoto}
+                    />
+                  </label>
+
+                </div>
+
+                <p className="arrival-tryon-note">
+                  Use your camera or upload a photo to preview
+                  the selected Veyraa style.
+                </p>
+
+              </div>
+            )}
+
+            {cameraOpen && (
+              <div className="arrival-camera">
+
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  playsInline
+                  muted
+                />
+
+                <div className="arrival-camera-actions">
+
+                  <button
+                    type="button"
+                    onClick={capturePhoto}
+                  >
+                    ● Capture Photo
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={closeTryOn}
+                  >
+                    Cancel
                   </button>
 
                 </div>
 
-                <div className="new-arrival-info">
+              </div>
+            )}
 
-                  <span className="arrival-category">
-                    {product.gender}
-                    {" • "}
-                    {product.type || product.category}
+            {tryOnImage && !cameraOpen && (
+              <div className="arrival-tryon-result">
+
+                <div className="arrival-preview">
+
+                  <img
+                    src={tryOnImage}
+                    alt="Customer preview"
+                  />
+
+                </div>
+
+                <div className="arrival-result-info">
+
+                  <span>
+                    {tryOnProduct.gender}
                   </span>
 
-                  <a className="arrival-product-name" href={`/products/${encodeURIComponent(product.id)}?catalog=${product.gender}`}>
-                    {product.name}
-                  </a>
+                  <h3>
+                    {tryOnProduct.name}
+                  </h3>
 
-                  <div className="arrival-rating">
-                    ★ {Number(product.rating || 0).toFixed(1)} {product.reviews ? `(${product.reviews})` : ""}
-                  </div>
+                  <p>
+                    Selected new arrival:
+                    ₹{Number(
+                      tryOnProduct.price
+                    ).toLocaleString("en-IN")}
+                  </p>
 
-                  <div className="arrival-price">
-
-                    <strong>
-                      ₹
-                      {Number(product.price).toLocaleString(
-                        "en-IN"
-                      )}
-                    </strong>
-
-                    {product.oldPrice && (
-                      <del>
-                        ₹
-                        {Number(product.oldPrice).toLocaleString(
-                          "en-IN"
-                        )}
-                      </del>
-                    )}
-
-                  </div>
-
-                  <div className="arrival-saved">
-                    {discount > 0
-                      ? `You save ₹${(
-                          Number(product.oldPrice) -
-                          Number(product.price)
-                        ).toLocaleString("en-IN")}`
-                      : "New collection price"}
-                  </div>
-
-                  <div className="arrival-discount-line">
-                    {discount > 0 ? `${discount}% OFF` : "New collection price"}
-                  </div>
-
-                  <div className="arrival-stock">
-                    {stockLeft ? (stockLeft <= 6 ? `Only ${stockLeft} left` : `${stockLeft} items left`) : "In Stock"}
-                  </div>
-
-                  <div className="arrival-actions">
+                  <div className="arrival-result-buttons">
 
                     <button
                       type="button"
-                      className="arrival-cart"
-                      onClick={() =>
-                        addToCart(product)
-                      }
-                    >
-                      🛒 Add to Cart
-                    </button>
-
-                    <button
-                      type="button"
-                      className="arrival-buy"
-                      onClick={() =>
-                        buyNow(product)
-                      }
-                    >
-                      Buy Now
-                    </button>
-
-                  </div>
-
-                  <div className="arrival-tryon-wrap">
-                    <VirtualTryOn
-                      product={{
-                        ...product,
-                        image: resolveProductPreviewImage(product),
+                      onClick={() => {
+                        addToCart(tryOnProduct);
+                        closeTryOn();
                       }}
-                    />
+                    >
+                      🛒 Add This Look
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setTryOnImage(null)
+                      }
+                    >
+                      ← Change Photo
+                    </button>
+
                   </div>
 
                 </div>
 
-              </article>
-            );
-          })}
+              </div>
+            )}
+
+          </div>
 
         </div>
-
-        {displayedProducts.length === 0 && (
-          <div className="new-arrivals-empty">
-            <h3>No new arrivals in this filter</h3>
-            <p>
-              Increase the price range or switch the category
-              to view more existing Veyraa new arrivals.
-            </p>
-          </div>
-        )}
-
-      </main>
+      )}
 
       <Footer />
     </div>

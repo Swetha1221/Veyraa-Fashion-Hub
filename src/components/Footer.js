@@ -2,145 +2,468 @@ import React from "react";
 
 function Footer() {
   return (
-    <footer className="footer">
+    <footer
+      style={{
+        background: "#120e0f",
+        color: "#fff",
+        width: "100%",
+        marginTop: 0,
+        fontFamily: "Arial, sans-serif",
+      }}
+    >
 
-      {/* MAIN FOOTER */}
-      <div className="footer-container">
+      {/* ================= MAIN FOOTER ================= */}
+      <div
+        style={{
+          maxWidth: "1320px",
+          margin: "0 auto",
+          padding: "58px 40px 35px",
+          boxSizing: "border-box",
+        }}
+      >
 
-        {/* BRAND */}
-        <div className="footer-brand">
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1.5fr 0.8fr 1.2fr",
+            gap: "90px",
+            alignItems: "start",
+          }}
+        >
 
-          <img
-            src="/logo512.png"
-            alt="Veyraa Fashion Hub"
-            className="footer-logo"
-          />
-
-          <p>
-            Fashion that understands your style,
-            personality and everyday vibe.
-          </p>
-
-          {/* SOCIAL ICONS */}
-          <div className="footer-social">
-            <a href="#" aria-label="Instagram">◎</a>
-            <a href="#" aria-label="Facebook">f</a>
-            <a href="#" aria-label="Pinterest">p</a>
-            <a href="#" aria-label="YouTube">▶</a>
-            <a href="#" aria-label="LinkedIn">in</a>
-          </div>
-
-        </div>
-
-
-        {/* SHOP */}
-        <div className="footer-column">
-
-          <h3>SHOP</h3>
-
-          <span className="footer-line"></span>
-
-          <a href="#categories">Women</a>
-          <a href="#categories">Men</a>
-          <a href="#categories">Kids</a>
-          <a href="#trending">Trending</a>
-          <a href="#deals">Deals</a>
-
-        </div>
-
-
-        {/* VEYRAA AI */}
-        <div className="footer-column">
-
-          <h3>VEYRAA AI</h3>
-
-          <span className="footer-line"></span>
-
-          <a href="#ai-fashion">Fashion Matchmaker</a>
-          <a href="#ai-fashion">AI Style Twin</a>
-          <a href="#complete-look">Complete My Look</a>
-          <a href="#ai-fashion">Virtual Try-On</a>
-          <a href="#ai-fashion">Digital Closet</a>
-
-        </div>
-
-
-        {/* CONTACT */}
-        <div className="footer-column contact-column">
-
-          <h3>CONTACT US</h3>
-
-          <span className="footer-line"></span>
-
-          <p>📍 Coimbatore, Tamil Nadu</p>
-          <p>📞 +91 98765 43210</p>
-          <p>✉ support@veyraa.com</p>
-          <p>💬 Live Chat</p>
-
-          <a href="#contact" className="contact-button">
-            Contact Support →
-          </a>
-
-        </div>
-
-      </div>
-
-
-      {/* COMMUNITY */}
-      <div className="footer-community">
-
-        <div className="community-text">
-
-          <span className="community-icon">✉</span>
-
+          {/* ================= BRAND ================= */}
           <div>
-            <h3>Join the Veyraa Community</h3>
 
-            <p>
-              Get exclusive deals, new arrivals and style inspiration.
+            <img
+              src="/logo512.png"
+              alt="Veyraa Fashion Hub"
+              style={{
+                width: "205px",
+                height: "auto",
+                display: "block",
+                background: "#fff",
+                borderRadius: "6px",
+                padding: "10px",
+                boxSizing: "border-box",
+              }}
+            />
+
+            <p
+              style={{
+                margin: "20px 0 22px",
+                maxWidth: "330px",
+                color: "#c8bfc1",
+                fontSize: "14px",
+                lineHeight: "1.8",
+              }}
+            >
+              Fashion that understands your style,
+              personality and everyday vibe.
             </p>
+
+
+            {/* SOCIAL ICONS */}
+            <div
+              style={{
+                display: "flex",
+                gap: "12px",
+              }}
+            >
+
+              {["◎", "f", "p", "▶", "in"].map((icon, index) => (
+                <a
+                  key={index}
+                  href="#"
+                  aria-label="Social media"
+                  style={{
+                    width: "36px",
+                    height: "36px",
+                    border: "1px solid rgba(255,255,255,0.25)",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#f0a0bd",
+                    textDecoration: "none",
+                    fontSize: "13px",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  {icon}
+                </a>
+              ))}
+
+            </div>
+
+          </div>
+
+
+          {/* ================= SHOP ================= */}
+          <div>
+
+            <h3
+              style={{
+                margin: "0 0 10px",
+                fontFamily: "Georgia, serif",
+                fontSize: "22px",
+                color: "#fff",
+              }}
+            >
+              SHOP
+            </h3>
+
+            <div
+              style={{
+                width: "38px",
+                height: "2px",
+                background: "#e99ab7",
+                marginBottom: "22px",
+              }}
+            />
+
+            {[
+              "Women",
+              "Men",
+              "Kids",
+              "Trending",
+              "Deals",
+            ].map((item) => (
+              <a
+                key={item}
+                href="#"
+                style={{
+                  display: "block",
+                  marginBottom: "14px",
+                  color: "#c8bfc1",
+                  textDecoration: "none",
+                  fontSize: "14px",
+                  transition: "color 0.2s ease",
+                }}
+              >
+                {item}
+              </a>
+            ))}
+
+          </div>
+
+
+          {/* ================= CONTACT ================= */}
+          <div>
+
+            <h3
+              style={{
+                margin: "0 0 10px",
+                fontFamily: "Georgia, serif",
+                fontSize: "22px",
+                color: "#fff",
+              }}
+            >
+              CONTACT US
+            </h3>
+
+            <div
+              style={{
+                width: "38px",
+                height: "2px",
+                background: "#e99ab7",
+                marginBottom: "22px",
+              }}
+            />
+
+            <p
+              style={{
+                margin: "0 0 14px",
+                color: "#c8bfc1",
+                fontSize: "14px",
+              }}
+            >
+              📍 Coimbatore, Tamil Nadu
+            </p>
+
+            <p
+              style={{
+                margin: "0 0 14px",
+                color: "#c8bfc1",
+                fontSize: "14px",
+              }}
+            >
+              📞 +91 98765 43210
+            </p>
+
+            <p
+              style={{
+                margin: "0 0 14px",
+                color: "#c8bfc1",
+                fontSize: "14px",
+              }}
+            >
+              ✉ support@veyraa.com
+            </p>
+
+            <p
+              style={{
+                margin: "0 0 18px",
+                color: "#c8bfc1",
+                fontSize: "14px",
+              }}
+            >
+              💬 Live Chat
+            </p>
+
+
+            <a
+              href="#contact"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                padding: "11px 20px",
+                border: "1px solid #e99ab7",
+                borderRadius: "25px",
+                color: "#fff",
+                textDecoration: "none",
+                fontSize: "13px",
+                fontWeight: "600",
+                transition: "all 0.2s ease",
+              }}
+            >
+              Contact Support →
+            </a>
+
           </div>
 
         </div>
 
 
-        <div className="newsletter">
+        {/* ================= COMMUNITY ================= */}
+        <div
+          style={{
+            marginTop: "42px",
+            padding: "22px 25px",
+            border: "1px solid rgba(255,255,255,0.12)",
+            borderRadius: "16px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "30px",
+            boxSizing: "border-box",
+          }}
+        >
 
-          <input
-            type="email"
-            placeholder="Enter your email address"
-          />
+          {/* COMMUNITY TEXT */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "15px",
+              minWidth: 0,
+            }}
+          >
 
-          <button>
-            Subscribe →
-          </button>
+            <div
+              style={{
+                width: "42px",
+                height: "42px",
+                minWidth: "42px",
+                border: "1px solid #e99ab7",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#e99ab7",
+                fontSize: "17px",
+              }}
+            >
+              ✉
+            </div>
+
+
+            <div>
+
+              <h3
+                style={{
+                  margin: 0,
+                  fontFamily: "Georgia, serif",
+                  fontSize: "19px",
+                  color: "#fff",
+                }}
+              >
+                Join the Veyraa Community
+              </h3>
+
+              <p
+                style={{
+                  margin: "5px 0 0",
+                  color: "#aaa0a3",
+                  fontSize: "12px",
+                }}
+              >
+                Get exclusive deals, new arrivals and style inspiration.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          {/* NEWSLETTER */}
+          <div
+            style={{
+              display: "flex",
+              width: "52%",
+              maxWidth: "560px",
+              minWidth: "350px",
+            }}
+          >
+
+            <input
+              type="email"
+              placeholder="Enter your email address"
+              style={{
+                flex: 1,
+                height: "44px",
+                background: "transparent",
+                border: "1px solid rgba(255,255,255,0.18)",
+                borderRight: "none",
+                borderRadius: "25px 0 0 25px",
+                padding: "0 18px",
+                color: "#fff",
+                outline: "none",
+                boxSizing: "border-box",
+                fontSize: "13px",
+              }}
+            />
+
+            <button
+              style={{
+                height: "44px",
+                padding: "0 25px",
+                border: "none",
+                borderRadius: "0 25px 25px 0",
+                background: "#e99ab7",
+                color: "#160f11",
+                fontWeight: "700",
+                cursor: "pointer",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Subscribe →
+            </button>
+
+          </div>
 
         </div>
 
-      </div>
+
+        {/* ================= BOTTOM ================= */}
+        <div
+          style={{
+            marginTop: "28px",
+            paddingTop: "20px",
+            borderTop: "1px solid rgba(255,255,255,0.10)",
+            display: "grid",
+            gridTemplateColumns: "1fr auto 1fr",
+            alignItems: "center",
+            gap: "20px",
+          }}
+        >
+
+          {/* COPYRIGHT */}
+          <div
+            style={{
+              color: "#807679",
+              fontSize: "11px",
+              lineHeight: "1.7",
+            }}
+          >
+            <div>© 2026 Veyraa Fashion Hub</div>
+            <div>All Rights Reserved.</div>
+          </div>
 
 
-      {/* BOTTOM */}
-      <div className="footer-bottom">
+          {/* CENTER BRAND MESSAGE */}
+          <div
+            style={{
+              color: "#fff",
+              fontFamily: "Georgia, serif",
+              fontSize: "15px",
+              whiteSpace: "nowrap",
+            }}
+          >
+            Fashion
 
-        <div className="footer-copy">
-          <span>© 2026 Veyraa Fashion Hub</span>
-          <span>All Rights Reserved.</span>
-        </div>
+            <span
+              style={{
+                color: "#e99ab7",
+                margin: "0 9px",
+              }}
+            >
+              •
+            </span>
+
+            Technology
+
+            <span
+              style={{
+                color: "#e99ab7",
+                margin: "0 9px",
+              }}
+            >
+              •
+            </span>
+
+            Personalization
+          </div>
 
 
-        {/* CENTER BRAND MESSAGE */}
-        <div className="footer-center-text">
-          Fashion <span>•</span> Technology <span>•</span> Personalization
-        </div>
+          {/* LEGAL LINKS */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              gap: "8px",
+              color: "#807679",
+              fontSize: "11px",
+              whiteSpace: "nowrap",
+            }}
+          >
 
+            <a
+              href="#"
+              style={{
+                color: "#807679",
+                textDecoration: "none",
+              }}
+            >
+              Privacy Policy
+            </a>
 
-        <div className="footer-links">
-          <a href="#">Privacy Policy</a>
-          <span>|</span>
-          <a href="#">Terms of Service</a>
-          <span>|</span>
-          <a href="#">Cookies</a>
+            <span>|</span>
+
+            <a
+              href="#"
+              style={{
+                color: "#807679",
+                textDecoration: "none",
+              }}
+            >
+              Terms of Service
+            </a>
+
+            <span>|</span>
+
+            <a
+              href="#"
+              style={{
+                color: "#807679",
+                textDecoration: "none",
+              }}
+            >
+              Cookies
+            </a>
+
+          </div>
+
         </div>
 
       </div>

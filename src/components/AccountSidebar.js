@@ -118,6 +118,13 @@ function AccountSidebar({ isOpen, onClose }) {
     window.location.href = url;
   };
 
+  const openPortal = (portal) => {
+    onClose();
+    if (portal === "seller") { window.location.href = "/seller"; return; }
+    if (portal === "admin") { window.location.href = "/admin"; return; }
+    if (portal === "delivery") { window.location.href = "/delivery"; return; }
+  };
+
   return (
     <>
       {isOpen && (
@@ -356,6 +363,42 @@ function AccountSidebar({ isOpen, onClose }) {
                   <span className="account-row-arrow">→</span>
                 </div>
               </button>
+            </div>
+
+            {/* VEYRAA WORKSPACE */}
+            <div className="veyraa-workspace" style={{ width: "100%", marginTop: "26px", boxSizing: "border-box" }}>
+              <div style={{ width: "100%", height: "1px", background: "#eadfe3", marginBottom: "20px" }} />
+              <div style={{ marginBottom: "15px" }}>
+                <div style={{ color: "#9b5368", fontSize: "10px", fontWeight: 700, letterSpacing: "2px", marginBottom: "5px" }}>VEYRAA WORKSPACE</div>
+                <p style={{ margin: 0, color: "#777", fontSize: "13px", lineHeight: 1.4 }}>Access your Veyraa portal</p>
+              </div>
+
+              <div role="button" tabIndex={0} onClick={() => openPortal("seller")} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && openPortal("seller")} style={{ width: "100%", minHeight: "82px", display: "flex", alignItems: "center", gap: "13px", marginBottom: "10px", padding: "14px 15px", boxSizing: "border-box", border: "1px solid #eadfe3", borderRadius: "15px", background: "#fff", cursor: "pointer" }}>
+                <div style={{ width: "46px", height: "46px", minWidth: "46px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "13px", background: "#f7e9ed", fontSize: "20px" }}>🏪</div>
+                <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: "4px" }}>
+                  <div style={{ color: "#241e20", fontSize: "14px", fontWeight: 700, lineHeight: 1.25 }}>Seller Portal</div>
+                  <div style={{ color: "#777", fontSize: "11px", lineHeight: 1.4 }}>Manage products, inventory, orders &amp; sales</div>
+                </div>
+                <div style={{ width: "24px", minWidth: "24px", textAlign: "center", color: "#8f596a", fontSize: "17px" }}>→</div>
+              </div>
+
+              <div role="button" tabIndex={0} onClick={() => openPortal("admin")} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && openPortal("admin")} style={{ width: "100%", minHeight: "82px", display: "flex", alignItems: "center", gap: "13px", marginBottom: "10px", padding: "14px 15px", boxSizing: "border-box", border: "1px solid #eadfe3", borderRadius: "15px", background: "#fff", cursor: "pointer" }}>
+                <div style={{ width: "46px", height: "46px", minWidth: "46px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "13px", background: "#f0eeee", fontSize: "20px" }}>◈</div>
+                <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: "4px" }}>
+                  <div style={{ color: "#241e20", fontSize: "14px", fontWeight: 700, lineHeight: 1.25 }}>Admin Portal</div>
+                  <div style={{ color: "#777", fontSize: "11px", lineHeight: 1.4 }}>Manage Veyraa operations, sellers &amp; analytics</div>
+                </div>
+                <div style={{ width: "24px", minWidth: "24px", textAlign: "center", color: "#8f596a", fontSize: "17px" }}>→</div>
+              </div>
+
+              <div role="button" tabIndex={0} onClick={() => openPortal("delivery")} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && openPortal("delivery")} style={{ width: "100%", minHeight: "82px", display: "flex", alignItems: "center", gap: "13px", marginBottom: "10px", padding: "14px 15px", boxSizing: "border-box", border: "1px solid #eadfe3", borderRadius: "15px", background: "#fff", cursor: "pointer" }}>
+                <div style={{ width: "46px", height: "46px", minWidth: "46px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "13px", background: "#f8ece8", fontSize: "20px" }}>🚚</div>
+                <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: "4px" }}>
+                  <div style={{ color: "#241e20", fontSize: "14px", fontWeight: 700, lineHeight: 1.25 }}>Delivery Portal</div>
+                  <div style={{ color: "#777", fontSize: "11px", lineHeight: 1.4 }}>Manage deliveries, pickups &amp; routes</div>
+                </div>
+                <div style={{ width: "24px", minWidth: "24px", textAlign: "center", color: "#8f596a", fontSize: "17px" }}>→</div>
+              </div>
             </div>
 
             {/* 7. LOGOUT */}

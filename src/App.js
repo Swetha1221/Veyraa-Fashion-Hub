@@ -1,5 +1,9 @@
 import "./App.css";
 
+// =====================================================
+// CUSTOMER PAGES
+// =====================================================
+
 import Billing from "./pages/Billing";
 import Home from "./pages/Home";
 import ProductDetail from "./pages/ProductDetail";
@@ -11,16 +15,80 @@ import TrendingPage from "./pages/TrendingPage";
 import BefittingStylePage from "./pages/BefittingStylePage";
 import LookPreview from "./pages/LookPreview";
 import AIFeaturePage from "./pages/AIFeaturePage";
-
+import SearchResultsPage from "./pages/SearchResultsPage";
 import DiscoveryPage from "./pages/DiscoveryPage";
 import DealsPage from "./pages/DealsPage";
+
+// =====================================================
+// CUSTOMER SUBSCRIPTION
+// =====================================================
+
+import SubscriptionPlans from "./pages/SubscriptionPlans";
+
+// =====================================================
+// CUSTOMER CATEGORIES
+// =====================================================
 
 import KidsCategory from "./components/KidsCategory";
 import WomenFashion from "./components/WomenFashion";
 import MenCategory from "./components/MenCategory";
 
+// =====================================================
+// PORTALS
+// =====================================================
+
+import SellerDashboard from "./pages/Seller/SellerDashboard";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import DeliveryDashboard from "./components/Delivery/DeliveryDashboard";
+
+// =====================================================
+// PORTAL LOGIN
+// =====================================================
+
+import {
+  SellerPortal,
+  AdminPortal,
+  DeliveryPortal,
+} from "./pages/PortalLogin";
+
 function App() {
   const path = window.location.pathname;
+
+  // =====================================================
+  // SELLER PORTAL
+  // =====================================================
+
+  if (path === "/seller" || path.startsWith("/seller/")) {
+    return (
+      <SellerPortal>
+        <SellerDashboard />
+      </SellerPortal>
+    );
+  }
+
+  // =====================================================
+  // ADMIN PORTAL
+  // =====================================================
+
+  if (path === "/admin" || path.startsWith("/admin/")) {
+    return (
+      <AdminPortal>
+        <AdminDashboard />
+      </AdminPortal>
+    );
+  }
+
+  // =====================================================
+  // DELIVERY PORTAL
+  // =====================================================
+
+  if (path === "/delivery" || path.startsWith("/delivery/")) {
+    return (
+      <DeliveryPortal>
+        <DeliveryDashboard />
+      </DeliveryPortal>
+    );
+  }
 
   // =====================================================
   // CART
@@ -55,6 +123,14 @@ function App() {
   }
 
   // =====================================================
+  // VEYRAA CUSTOMER MEMBERSHIP
+  // =====================================================
+
+  if (path === "/subscription-plans") {
+    return <SubscriptionPlans />;
+  }
+
+  // =====================================================
   // WOMEN
   // =====================================================
 
@@ -62,7 +138,6 @@ function App() {
     return <WomenFashion />;
   }
 
-  // Women categories
   if (path.startsWith("/women/")) {
     return <WomenFashion />;
   }
@@ -71,24 +146,35 @@ function App() {
   // BEFITTING YOUR STYLE
   // =====================================================
 
-  if (path === "/befitting-your-style" || path === "/befitting-style") {
+  if (
+    path === "/befitting-your-style" ||
+    path === "/befitting-style"
+  ) {
     return <BefittingStylePage />;
   }
+
+  // =====================================================
+  // LOOK PREVIEW
+  // =====================================================
 
   if (path === "/look-preview") {
     return <LookPreview />;
   }
 
-if (
-  [
-    "/ai/fashion-matchmaker",
-    "/ai/pick-my-vibe",
-    "/ai/complete-my-look",
-    "/ai/fit-profile",
-  ].includes(path)
-) {
-  return <AIFeaturePage />;
-} 
+  // =====================================================
+  // AI FEATURES
+  // =====================================================
+
+  if (
+    [
+      "/ai/fashion-matchmaker",
+      "/ai/pick-my-vibe",
+      "/ai/complete-my-look",
+      "/ai/fit-profile",
+    ].includes(path)
+  ) {
+    return <AIFeaturePage />;
+  }
 
   // =====================================================
   // MEN
@@ -98,7 +184,6 @@ if (
     return <MenCategory />;
   }
 
-  // Men categories
   if (path.startsWith("/men/")) {
     return <MenCategory />;
   }
@@ -111,26 +196,38 @@ if (
     return <KidsCategory />;
   }
 
-  // Kids categories
   if (path.startsWith("/kids/")) {
     return <KidsCategory />;
   }
 
   // =====================================================
-  // DISCOVERY PAGES
+  // SEARCH
   // =====================================================
 
-  // New Arrivals
+  if (path === "/search") {
+    return <SearchResultsPage />;
+  }
+
+  // =====================================================
+  // NEW ARRIVALS
+  // =====================================================
+
   if (path === "/new-arrivals") {
     return <NewArrivalsPage />;
   }
 
-  // Trending Now
+  // =====================================================
+  // TRENDING
+  // =====================================================
+
   if (path === "/trending") {
     return <TrendingPage />;
   }
 
-  // Best Sellers
+  // =====================================================
+  // BEST SELLERS
+  // =====================================================
+
   if (path === "/best-sellers") {
     return (
       <DiscoveryPage
@@ -140,7 +237,10 @@ if (
     );
   }
 
-  // Recommended
+  // =====================================================
+  // RECOMMENDED
+  // =====================================================
+
   if (path === "/recommended") {
     return (
       <DiscoveryPage
@@ -150,7 +250,10 @@ if (
     );
   }
 
-  // Shop By Vibe
+  // =====================================================
+  // SHOP BY VIBE
+  // =====================================================
+
   if (path === "/shop-by-vibe") {
     return (
       <DiscoveryPage
@@ -160,12 +263,18 @@ if (
     );
   }
 
-  // Deals & Offers
+  // =====================================================
+  // DEALS
+  // =====================================================
+
   if (path === "/deals") {
     return <DealsPage />;
   }
 
-  // Shop By Occasion
+  // =====================================================
+  // SHOP BY OCCASION
+  // =====================================================
+
   if (path === "/shop-by-occasion") {
     return (
       <DiscoveryPage
@@ -175,7 +284,10 @@ if (
     );
   }
 
-  // Shop By Color
+  // =====================================================
+  // SHOP BY COLOR
+  // =====================================================
+
   if (path === "/shop-by-color") {
     return (
       <DiscoveryPage

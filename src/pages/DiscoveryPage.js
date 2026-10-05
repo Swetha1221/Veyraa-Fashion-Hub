@@ -2,370 +2,50 @@ import React, { useMemo, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import VirtualTryOn from "../components/VirtualTryOn";
-
 import { products as womenProducts } from "../components/WomenFashion";
 import { products as menProducts } from "../components/MenCategory";
 import { kidsProducts } from "../components/KidsCategory";
-
 import "./DiscoveryPage.css";
 
-function readWishlistIds() {
-  if (typeof window === "undefined") {
-    return [];
-  }
-
-  try {
-    const savedWishlist = JSON.parse(localStorage.getItem("veyraaWishlist")) || [];
-    return savedWishlist.map((item) => item.id);
-  } catch (error) {
-    return [];
-  }
-}
-
-const allProducts = [
-  ...womenProducts.map((product) => ({ ...product, gender: "Women", audience: "Women" })),
-  ...menProducts.map((product) => ({ ...product, gender: "Men", audience: "Men" })),
-  ...kidsProducts.map((product) => ({
-    ...product,
-    gender: "Kids",
-    audience: product.gender || "Kids",
-  })),
-];
-
-function resolveCatalogImage(product) {
-  const raw = String(product?.image || "").trim();
-
-  if (!raw) return "";
-  if (raw.startsWith("http://") || raw.startsWith("https://") || raw.startsWith("data:") || raw.startsWith("blob:")) {
-    return raw;
-  }
-  if (raw.startsWith("/women/") || raw.startsWith("/men/") || raw.startsWith("/kids/")) {
-    return raw;
-  }
-
-  const gender = String(product?.gender || "").toLowerCase();
-  if (gender === "women" || gender === "men" || gender === "kids") {
-    return `/${gender}/${raw}`;
-  }
-
-  return raw;
-}
-
-function getCollectionProducts(title) {
-  const normalizedTitle = title?.toLowerCase().trim();
-  const normalizedProducts = allProducts.filter(Boolean);
-
-  if (normalizedTitle === "new arrivals") {
-    return normalizedProducts.filter((product) => {
-      const badge = String(product.badge || "").toLowerCase().trim();
-      return badge === "new" || badge === "just in" || badge === "new arrival" || badge === "new arrivals";
-    });
-  }
-
-  if (normalizedTitle === "trending now") {
-    return normalizedProducts.filter((product) => {
-      const badge = String(product.badge || "").toLowerCase().trim();
-      return badge === "trending" || badge === "hot" || badge === "popular";
-    });
-  }
-
-  if (normalizedTitle === "best sellers") {
-    return normalizedProducts.filter((product) => {
-      const badge = String(product.badge || "").toLowerCase().trim();
-      return badge === "bestseller" || badge === "best seller";
-    });
-  }
-
-  return normalizedProducts;
-}
-
-function getDiscountPercent(product) {
-  const current = Number(product.price) || 0;
-  const original = Number(product.oldPrice || product.originalPrice || product.price) || 0;
-
-  if (!original || original <= current) {
-    return 0;
-  }
-
-  return Math.round(((original - current) / original) * 100);
-}
-
-function getStockLeft(product) {
-  const key = String(product?.id || product?.name || "");
-  const hash = [...key].reduce((total, character) => total + character.charCodeAt(0), 0);
-  return 2 + (hash % 8);
-}
-
+function readWishlistIds() { try { return (JSON.parse(localStorage.getItem("veyraaWishlist")) || []).map(x => x.id) } catch { return [] } }
+const allProducts = [...womenProducts.map(p => ({ ...p, gender: "Women", audience: "Women" })), ...menProducts.map(p => ({ ...p, gender: "Men", audience: "Men" })), ...kidsProducts.map(p => ({ ...p, gender: "Kids", audience: p.gender || "Kids" }))];
+function resolveCatalogImage(product) { const raw = String(product?.image || "").trim(); if (!raw) return ""; if (/^(https?:|data:|blob:)/i.test(raw)) return raw; if (/^\/(women|men|kids)\//i.test(raw)) return raw; const g = String(product?.gender || product?.audience || "").toLowerCase(); return ["women", "men", "kids"].includes(g) ? `/${g}/${raw.replace(/^\//, "")}` : raw }
+function getCollectionProducts(title) { const t = title?.toLowerCase().trim(); const p = allProducts.filter(Boolean); if (t === "new arrivals") return p.filter(x => /^(new|just in|new arrival|new arrivals)$/i.test(String(x.badge || "").trim())); if (t === "trending now") return p.filter(x => /^(trending|hot|popular)$/i.test(String(x.badge || "").trim())); if (t === "best sellers") return p.filter(x => /^(bestseller|best seller)$/i.test(String(x.badge || "").trim())); return p }
+function discount(p) { const c = Number(p.price) || 0, o = Number(p.oldPrice || p.originalPrice || p.price) || 0; return o > c ? Math.round((o - c) / o * 100) : 0 }
+function stock(p) { const k = String(p?.id || p?.name || ""); return 2 + ([...k].reduce((a, c) => a + c.charCodeAt(0), 0) % 8) }
+function openProduct(product, title = "") { if (product?.id === undefined) return; const source = /trending/i.test(title) ? "trending" : /new arrivals/i.test(title) ? "new-arrivals" : "collection"; window.location.href = `/products/${encodeURIComponent(product.id)}?catalog=${encodeURIComponent(product.audience || product.gender || "Women")}&source=${source}` }
 function DiscoveryPage({ title, subtitle }) {
-  const [sort, setSort] = useState("featured");
-  const [audience, setAudience] = useState("All");
-  const [maxPrice, setMaxPrice] = useState(10000);
-  const [minimumDiscount, setMinimumDiscount] = useState("all");
-  const [stockFilter, setStockFilter] = useState("all");
-  const [wishlistIds, setWishlistIds] = useState(() => readWishlistIds());
-  const isTrending = title === "Trending Now";
-  const isBestSeller = title === "Best Sellers";
-
-  const collectionProducts = useMemo(() => {
-    const products = getCollectionProducts(title);
-
-    if (!isTrending) {
-      return products;
-    }
-
-    return products.filter((product) => {
-      const productDiscount = getDiscountPercent(product);
-      const productStock = getStockLeft(product);
-      const matchesAudience = audience === "All" || product.audience === audience;
-      const matchesPrice = Number(product.price) <= maxPrice;
-      const matchesDiscount = minimumDiscount === "all" || productDiscount >= Number(minimumDiscount);
-      const matchesStock = stockFilter === "all" || (stockFilter === "limited" && productStock <= 6) || (stockFilter === "available" && productStock > 6);
-
-      return matchesAudience && matchesPrice && matchesDiscount && matchesStock;
-    });
-  }, [audience, isTrending, maxPrice, minimumDiscount, stockFilter, title]);
-
-  const displayedProducts = useMemo(() => {
-    const result = [...collectionProducts];
-
-    if (sort === "low") {
-      result.sort((a, b) => a.price - b.price);
-    }
-
-    if (sort === "high") {
-      result.sort((a, b) => b.price - a.price);
-    }
-
-    if (sort === "rating") {
-      result.sort((a, b) => b.rating - a.rating);
-    }
-
-    return result;
-  }, [collectionProducts, sort]);
-
-  const addToCart = (product) => {
-    const savedCart = JSON.parse(localStorage.getItem("veyraaCart")) || [];
-    const existing = savedCart.find((item) => item.id === product.id);
-
-    const updatedCart = existing
-      ? savedCart.map((item) =>
-          item.id === product.id ? { ...item, quantity: (item.quantity || 1) + 1 } : item
-        )
-      : [...savedCart, { ...product, quantity: 1 }];
-
-    localStorage.setItem("veyraaCart", JSON.stringify(updatedCart));
-    alert(`${product.name} added to cart`);
-  };
-
-  const buyNow = (product) => {
-    const savedCart = JSON.parse(localStorage.getItem("veyraaCart")) || [];
-    const existing = savedCart.find((item) => item.id === product.id);
-
-    if (!existing) {
-      localStorage.setItem("veyraaCart", JSON.stringify([...savedCart, { ...product, quantity: 1 }]));
-    }
-
-    window.location.href = "/billing";
-  };
-
-  const toggleWishlist = (product) => {
-    const savedWishlist = JSON.parse(localStorage.getItem("veyraaWishlist")) || [];
-    const exists = savedWishlist.some((item) => item.id === product.id);
-
-    const updatedWishlist = exists
-      ? savedWishlist.filter((item) => item.id !== product.id)
-      : [...savedWishlist, product];
-
-    localStorage.setItem("veyraaWishlist", JSON.stringify(updatedWishlist));
-    setWishlistIds(readWishlistIds());
-  };
-
-  return (
-    <div className="discovery-page">
-      <Navbar />
-
-      <section className={isTrending ? "discovery-hero trending-hero" : "discovery-hero new-arrivals-hero"}>
-        <div className="discovery-hero-overlay">
-          <span className="discovery-eyebrow">
-            {isTrending ? "WHAT'S HOT AT VEYRAA" : isBestSeller ? "VEYRAA CUSTOMER FAVORITES" : "JUST LANDED AT VEYRAA"}
-          </span>
-          <h1>{title}</h1>
-          <p>{subtitle}</p>
-          <button
-            type="button"
-            onClick={() => document.getElementById("discovery-products")?.scrollIntoView({ behavior: "smooth" })}
-          >
-            Explore Collection
-          </button>
-        </div>
-      </section>
-
-      <section className="collection-intro">
-        <span className="collection-eyebrow">
-          {isTrending ? "TREND REPORT" : isBestSeller ? "VEYRAA FAVORITES" : "LATEST DROP"}
-        </span>
-        <h2>{isTrending ? "What's Trending Now" : isBestSeller ? "Best Sellers" : "Fresh From Veyraa"}</h2>
-        <p>
-          {isTrending
-            ? "Trending products from the existing premium collection — curated for now, styled for everywhere."
-            : isBestSeller
-            ? "Customer-favorite pieces from the existing Veyraa catalog, selected for their repeat appeal."
-            : "Fresh arrivals already available across the existing Women, Men and Kids collections."}
-        </p>
-      </section>
-
-      <section className="discovery-products" id="discovery-products">
-        <div className="discovery-header">
-          <div>
-            <span className="discovery-small-title">
-              {isTrending ? "TRENDING COLLECTION" : isBestSeller ? "BEST SELLER COLLECTION" : "NEW COLLECTION"}
-            </span>
-            <h2>{title}</h2>
-            <p>{displayedProducts.length} existing Veyraa products</p>
-          </div>
-
-          {isTrending && (
-            <div className="discovery-filters" aria-label="Trending collection filters">
-              <label>
-                Collection
-                <select value={audience} onChange={(event) => setAudience(event.target.value)}>
-                  <option value="All">All</option>
-                  <option value="Women">Women</option>
-                  <option value="Men">Men</option>
-                  <option value="Boys">Kids - Boys</option>
-                  <option value="Girls">Kids - Girls</option>
-                </select>
-              </label>
-
-              <label>
-                Up to ₹{maxPrice.toLocaleString("en-IN")}
-                <input
-                  type="range"
-                  min="500"
-                  max="10000"
-                  step="100"
-                  value={maxPrice}
-                  onChange={(event) => setMaxPrice(Number(event.target.value))}
-                />
-              </label>
-
-              <label>
-                Discount
-                <select value={minimumDiscount} onChange={(event) => setMinimumDiscount(event.target.value)}>
-                  <option value="all">Any</option>
-                  <option value="10">10%+</option>
-                  <option value="20">20%+</option>
-                  <option value="30">30%+</option>
-                </select>
-              </label>
-
-              <label>
-                Stock
-                <select value={stockFilter} onChange={(event) => setStockFilter(event.target.value)}>
-                  <option value="all">All stock</option>
-                  <option value="limited">Limited stock</option>
-                  <option value="available">In stock</option>
-                </select>
-              </label>
-            </div>
-          )}
-
-          <div className="discovery-sort">
-            <label>Sort by</label>
-            <select value={sort} onChange={(event) => setSort(event.target.value)}>
-              <option value="featured">Featured</option>
-              <option value="low">Price: Low to High</option>
-              <option value="high">Price: High to Low</option>
-              <option value="rating">Highest Rated</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="discovery-grid">
-          {displayedProducts.length === 0 ? (
-            <div className="discovery-empty">
-              <h3>No products available</h3>
-              <p>No existing products currently use the required collection badge.</p>
-            </div>
-          ) : (
-            displayedProducts.map((product) => {
-              const discount = getDiscountPercent(product);
-              const stockLeft = getStockLeft(product);
-              const currentPrice = Number(product.price) || 0;
-              const originalPrice = Number(product.oldPrice || product.originalPrice || currentPrice) || currentPrice;
-              const isHot = String(product.badge || "").toLowerCase().includes("trending") || String(product.badge || "").toLowerCase().includes("hot");
-              const isLimited = stockLeft <= 6;
-              const isWishlisted = wishlistIds.includes(product.id);
-
-              return (
-                <article className="discovery-card" key={`${product.gender}-${product.id}`}>
-                  <div className="discovery-image">
-                    <img src={resolveCatalogImage(product)} alt={product.name} />
-                    <span className="discovery-badge">{product.badge || "Trending"}</span>
-                    {isHot && <span className="discovery-hot">Hot Pick</span>}
-                    {isLimited && <span className="discovery-limited">Limited Stock</span>}
-                    <button
-                      type="button"
-                      className={`discovery-heart ${isWishlisted ? "active" : ""}`}
-                      onClick={() => toggleWishlist(product)}
-                      aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
-                      aria-pressed={isWishlisted}
-                    >
-                      {isWishlisted ? "♥" : "♡"}
-                    </button>
-                  </div>
-
-                  <div className="discovery-info">
-                    <span className="discovery-category">
-                      {product.gender} • {product.type || product.category}
-                    </span>
-
-                    <h3>{product.name}</h3>
-
-                    <div className="discovery-rating">★ {Number(product.rating || 4.5).toFixed(1)}</div>
-
-                    <div className="discovery-price-row">
-                      <div className="discovery-price">
-                        <del>₹{originalPrice.toLocaleString("en-IN")}</del>
-                        <strong>₹{currentPrice.toLocaleString("en-IN")}</strong>
-                      </div>
-                      <span className="discovery-offer">
-                        {discount > 0 ? `${discount}% OFF` : "NEW PRICE"}
-                      </span>
-                    </div>
-
-                    <div className="discovery-stock">
-                      {isLimited ? `Only ${stockLeft} left` : `${stockLeft} in stock`}
-                    </div>
-
-                    <div className="discovery-actions">
-                      <button type="button" className="discovery-cart" onClick={() => addToCart(product)}>
-                        🛒 Add to Cart
-                      </button>
-                      <button type="button" className="discovery-buy" onClick={() => buyNow(product)}>
-                        Buy Now
-                      </button>
-                    </div>
-
-                    <div className="discovery-tryon-wrap">
-                      <VirtualTryOn
-                        product={{
-                          ...product,
-                          image: resolveCatalogImage(product),
-                        }}
-                      />
-                    </div>
-                  </div>
-                </article>
-              );
-            })
-          )}
-        </div>
-      </section>
-
-      <Footer />
-    </div>
-  );
+  const [sort, setSort] = useState("featured"), [audience, setAudience] = useState("All"), [maxPrice, setMaxPrice] = useState(10000), [minimumDiscount, setMinimumDiscount] = useState("all"), [stockFilter, setStockFilter] = useState("all"), [wishlistIds, setWishlistIds] = useState(readWishlistIds());
+  const isTrending = title === "Trending Now", isBestSeller = title === "Best Sellers";
+  const collectionProducts = useMemo(() => { let p = getCollectionProducts(title); if (isTrending) p = p.filter(x => (audience === "All" || x.audience === audience) && Number(x.price) <= maxPrice && (minimumDiscount === "all" || discount(x) >= Number(minimumDiscount)) && (stockFilter === "all" || (stockFilter === "limited" && stock(x) <= 6) || (stockFilter === "available" && stock(x) > 6))); return p }, [audience, isTrending, maxPrice, minimumDiscount, stockFilter, title]);
+  const displayedProducts = useMemo(() => { const r = [...collectionProducts]; if (sort === "low") r.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0)); if (sort === "high") r.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0)); if (sort === "rating") r.sort((a, b) => (Number(b.rating) || 0) - (Number(a.rating) || 0)); return r }, [collectionProducts, sort]);
+  const addToCart = p => { const saved = JSON.parse(localStorage.getItem("veyraaCart")) || []; const key = String(p.id); const existing = saved.find(x => String(x.id) === key && String(x.audience || x.gender) === String(p.audience || p.gender)); const updated = existing ? saved.map(x => String(x.id) === key && String(x.audience || x.gender) === String(p.audience || p.gender) ? { ...x, quantity: (x.quantity || 1) + 1 } : x) : [...saved, { ...p, image: resolveCatalogImage(p), quantity: 1 }]; localStorage.setItem("veyraaCart", JSON.stringify(updated)); window.dispatchEvent(new Event("veyraa:cart-updated")); alert(`${p.name} added to cart`) };
+  const buyNow = p => { addToCart(p); window.location.href = "/billing" };
+  const toggleWishlist = p => { const saved = JSON.parse(localStorage.getItem("veyraaWishlist")) || []; const key = String(p.id), aud = String(p.audience || p.gender); const exists = saved.some(x => String(x.id) === key && String(x.audience || x.gender) === aud); const updated = exists ? saved.filter(x => !(String(x.id) === key && String(x.audience || x.gender) === aud)) : [...saved, { ...p, image: resolveCatalogImage(p) }]; localStorage.setItem("veyraaWishlist", JSON.stringify(updated)); setWishlistIds(readWishlistIds()) };
+  return <div className="discovery-page"><Navbar /><section className={isTrending ? "discovery-hero trending-hero" : "discovery-hero new-arrivals-hero"}><div className="discovery-hero-overlay"><span className="discovery-eyebrow">{isTrending ? "WHAT'S HOT AT VEYRAA" : isBestSeller ? "VEYRAA CUSTOMER FAVORITES" : "JUST LANDED AT VEYRAA"}</span><h1>{title}</h1><p>{subtitle}</p><button type="button" onClick={() => document.getElementById("discovery-products")?.scrollIntoView({ behavior: "smooth" })}>Explore Collection</button></div></section>
+    <section className="collection-intro"><span className="collection-eyebrow">{isTrending ? "TREND REPORT" : isBestSeller ? "VEYRAA FAVORITES" : "LATEST DROP"}</span><h2>{isTrending ? "What's Trending Now" : isBestSeller ? "Best Sellers" : "Fresh From Veyraa"}</h2><p>{isTrending ? "Trending products from the existing premium collection — curated for now, styled for everywhere." : isBestSeller ? "Customer-favorite pieces from the existing Veyraa catalog, selected for their repeat appeal." : "Fresh arrivals already available across the existing Women, Men and Kids collections."}</p></section>
+    <section className="discovery-products" id="discovery-products"><div className="discovery-header"><div><span className="discovery-small-title">{isTrending ? "TRENDING COLLECTION" : isBestSeller ? "BEST SELLER COLLECTION" : "NEW COLLECTION"}</span><h2>{title}</h2><p>{displayedProducts.length} existing Veyraa products</p></div>
+      {isTrending && <div className="discovery-filters"><label>Collection<select value={audience} onChange={e => setAudience(e.target.value)}><option>All</option><option>Women</option><option>Men</option><option>Boys</option><option>Girls</option></select></label><label>Up to ₹{maxPrice.toLocaleString("en-IN")}<input type="range" min="500" max="10000" step="100" value={maxPrice} onChange={e => setMaxPrice(Number(e.target.value))} /></label><label>Discount<select value={minimumDiscount} onChange={e => setMinimumDiscount(e.target.value)}><option value="all">Any</option><option value="10">10%+</option><option value="20">20%+</option><option value="30">30%+</option></select></label><label>Stock<select value={stockFilter} onChange={e => setStockFilter(e.target.value)}><option value="all">All stock</option><option value="limited">Limited stock</option><option value="available">In stock</option></select></label></div>}
+      <div className="discovery-sort"><label>Sort by</label><select value={sort} onChange={e => setSort(e.target.value)}><option value="featured">Featured</option><option value="low">Price: Low to High</option><option value="high">Price: High to Low</option><option value="rating">Highest Rated</option></select></div></div>
+      <div className="discovery-grid">{displayedProducts.length === 0 ? <div className="discovery-empty"><h3>No products available</h3><p>No existing products currently use the required collection badge.</p></div> : displayedProducts.map(product => {
+        const d = discount(product), s = stock(product), cp = Number(product.price) || 0, op = Number(product.oldPrice || product.originalPrice || cp) || cp, hot = /trending|hot/i.test(String(product.badge || "")), limited = s <= 6, wish = wishlistIds.includes(product.id); return <article className="discovery-card" key={`${product.gender}-${product.id}`}>
+          <button type="button" className="discovery-image discovery-image-clickable" onClick={() => openProduct(product, title)} aria-label={`View ${product.name}`}><img src={resolveCatalogImage(product)} alt={product.name} /><span className="discovery-badge">{product.badge || "Trending"}</span>{hot && <span className="discovery-hot">Hot Pick</span>}{limited && <span className="discovery-limited">Limited Stock</span>}</button>
+          <div className="discovery-info"><span className="discovery-category">{product.gender} • {product.type || product.category}</span><button type="button" className="discovery-product-name" onClick={() => openProduct(product, title)}>{product.name}</button><div className="discovery-rating">★ {Number(product.rating || 4.5).toFixed(1)}</div><div className="discovery-price-row"><div className="discovery-price"><del>₹{op.toLocaleString("en-IN")}</del><strong>₹{cp.toLocaleString("en-IN")}</strong></div><span className="discovery-offer">{d > 0 ? `${d}% OFF` : "NEW PRICE"}</span></div><div className="discovery-stock">{limited ? `Only ${s} left` : `${s} in stock`}</div><div className="discovery-actions"><button type="button" className="discovery-cart" onClick={() => addToCart(product)}>🛒 Add to Cart</button><button type="button" className="discovery-buy" onClick={() => buyNow(product)}>Buy Now</button></div><div className="discovery-tryon-wrap"><VirtualTryOn product={{ ...product, image: resolveCatalogImage(product) }} /></div></div>
+          <button type="button" className={`discovery-heart ${wish ? "active" : ""}`} onClick={() => toggleWishlist(product)} aria-label={wish ? "Remove from wishlist" : "Add to wishlist"}>{wish ? "♥" : "♡"}</button>
+        </article>
+      })}</div></section><Footer /><style>{`
+/* INDUSTRY-LEVEL COMPACT COLLECTION SPACING */
+.discovery-page{overflow-x:hidden}
+.discovery-hero{margin-bottom:0!important;padding-bottom:0!important}
+.collection-intro{margin-top:0!important;padding-top:20px!important;padding-bottom:18px!important}
+.discovery-products{margin-top:0!important;padding-top:18px!important}
+.discovery-header{margin-top:0!important;padding-top:0!important}
+.discovery-card{position:relative;margin-top:0!important}
+.discovery-image-clickable{display:block;width:100%;padding:0;border:0;text-align:left;cursor:pointer;position:relative;background:transparent;overflow:hidden}
+.discovery-image-clickable img{display:block;width:100%;height:100%;object-fit:cover}
+.discovery-product-name{display:block;width:100%;padding:0;border:0;background:transparent;text-align:left;font:inherit;font-weight:800;color:inherit;cursor:pointer;margin:8px 0}
+.discovery-heart{position:absolute;right:14px;top:14px;z-index:5;width:40px;height:40px;border:0;border-radius:50%;background:#fff;cursor:pointer;font-size:20px;box-shadow:0 8px 20px rgba(0,0,0,.12)}
+.discovery-heart.active{color:#9d234b}
+`}</style></div>
 }
-
 export default DiscoveryPage;

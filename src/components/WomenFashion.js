@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./WomenCategory.css";
 import Navbar from "./Navbar";
 export const products = [
- 
+
 
   {
     id: 101,
@@ -58,7 +58,7 @@ export const products = [
     image: "/women/saree-03.jpg"
   },
 
-  
+
 
   {
     id: 201,
@@ -130,7 +130,7 @@ export const products = [
     rating: 4.7,
     badge: "NEW",
     image:
-        "/women/kurti-05.jpg",
+      "/women/kurti-05.jpg",
   },
   {
     id: 303,
@@ -147,7 +147,7 @@ export const products = [
       "/women/kurti-06.jpg",
   },
 
-  
+
 
   {
     id: 401,
@@ -249,7 +249,7 @@ export const products = [
       "/women/lehenga-04.jpg",
   },
 
- 
+
 
   {
     id: 601,
@@ -369,7 +369,7 @@ export const products = [
       "pink-01.jpg",
   },
 
-  
+
 
   {
     id: 901,
@@ -458,7 +458,7 @@ export const products = [
       "https://images.unsplash.com/photo-1584370848010-d7fe6bc767ec?auto=format&fit=crop&w=700&q=85",
   },
 
-  
+
 
   {
     id: 1101,
@@ -609,7 +609,7 @@ export const products = [
       "pinkfit.jpg",
   },
 
-  
+
 
   {
     id: 1501,
@@ -654,7 +654,7 @@ export const products = [
       "satin.jpg",
   },
 
-  
+
 
   {
     id: 1601,
@@ -682,7 +682,8 @@ export const products = [
     rating: 4.5,
     badge: "PARTY",
     image:
-      "beigeheel.jpg",},
+      "beigeheel.jpg",
+  },
   {
     id: 1603,
     name: "Women's Everyday Sandals",
@@ -695,7 +696,35 @@ export const products = [
     rating: 4.4,
     badge: "CASUAL",
     image:
-      "everyday.jpg",
+      "/women/everyday.jpg",
+  },
+  {
+    id: 1604,
+    name: "Women's Ortho Comfort Daily Slippers",
+    category: "footwear",
+    type: "Slippers",
+    material: "EVA",
+    colour: "Brown",
+    price: 699,
+    oldPrice: 1099,
+    rating: 4.6,
+    badge: "COMFORT",
+    image:
+      "https://images.unsplash.com/photo-1603808033192-082d6919d3e1?auto=format&fit=crop&w=700&q=85",
+  },
+  {
+    id: 1605,
+    name: "Women's Velvet Ethnic Embroidered Slippers",
+    category: "footwear",
+    type: "Slippers",
+    material: "Velvet",
+    colour: "Red",
+    price: 999,
+    oldPrice: 1499,
+    rating: 4.7,
+    badge: "ETHNIC",
+    image:
+      "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=700&q=85",
   },
 
   /* ===================== HANDBAGS ===================== */
@@ -866,6 +895,23 @@ export const products = [
     image:
       "blackbelt.jpg",
   },
+
+  /* ===================== BEAUTY & MAKEUP ===================== */
+
+  {
+    id: 2201,
+    name: "Minimal Beauty Makeup Edit",
+    category: "beauty",
+    type: "Beauty & Makeup",
+    material: "Beauty Essentials",
+    colour: "Neutral",
+    price: 1299,
+    oldPrice: 1899,
+    rating: 4.7,
+    badge: "TRENDING",
+    image:
+      "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=700&q=85",
+  },
 ];
 
 /* =========================================================
@@ -895,6 +941,7 @@ const categories = [
   ["watches", "Watches"],
   ["sunglasses", "Sunglasses"],
   ["belts", "Belts"],
+  ["beauty", "Beauty & Makeup"],
 ];
 
 /* =========================================================
@@ -923,29 +970,29 @@ function WomenCategory() {
 
   const videoRef = useRef(null);
   const streamRef = useRef(null);
-useEffect(() => {
-  if (!cameraOpen) return;
-  if (!videoRef.current) return;
-  if (!streamRef.current) return;
+  useEffect(() => {
+    if (!cameraOpen) return;
+    if (!videoRef.current) return;
+    if (!streamRef.current) return;
 
-  const video = videoRef.current;
+    const video = videoRef.current;
 
-  video.srcObject = streamRef.current;
+    video.srcObject = streamRef.current;
 
-  const playVideo = async () => {
-    try {
-      await video.play();
-      setCameraReady(true);
-    } catch (error) {
-      // Ignore browser interruption errors
-      if (error.name !== "AbortError") {
-        console.error("Camera playback error:", error);
+    const playVideo = async () => {
+      try {
+        await video.play();
+        setCameraReady(true);
+      } catch (error) {
+        // Ignore browser interruption errors
+        if (error.name !== "AbortError") {
+          console.error("Camera playback error:", error);
+        }
       }
-    }
-  };
+    };
 
-  playVideo();
-}, [cameraOpen]);
+    playVideo();
+  }, [cameraOpen]);
   /* =====================================================
      READ CATEGORY FROM URL
      ===================================================== */
@@ -1061,8 +1108,8 @@ useEffect(() => {
     setWishlist((current) =>
       current.includes(id)
         ? current.filter(
-            (item) => item !== id
-          )
+          (item) => item !== id
+        )
         : [...current, id]
     );
   };
@@ -1072,44 +1119,44 @@ useEffect(() => {
      ===================================================== */
 
   const addToCart = (product) => {
-  const savedCart =
-    JSON.parse(localStorage.getItem("veyraaCart")) || [];
+    const savedCart =
+      JSON.parse(localStorage.getItem("veyraaCart")) || [];
 
-  const existingProduct = savedCart.find(
-    (item) => item.id === product.id
-  );
+    const existingProduct = savedCart.find(
+      (item) => item.id === product.id
+    );
 
-  let updatedCart;
+    let updatedCart;
 
-  if (existingProduct) {
-    updatedCart = savedCart.map((item) =>
-      item.id === product.id
-        ? {
+    if (existingProduct) {
+      updatedCart = savedCart.map((item) =>
+        item.id === product.id
+          ? {
             ...item,
             quantity: (item.quantity || 1) + 1,
           }
-        : item
+          : item
+      );
+    } else {
+      updatedCart = [
+        ...savedCart,
+        {
+          ...product,
+          quantity: 1,
+        },
+      ];
+    }
+
+    localStorage.setItem(
+      "veyraaCart",
+      JSON.stringify(updatedCart)
     );
-  } else {
-    updatedCart = [
-      ...savedCart,
-      {
-        ...product,
-        quantity: 1,
-      },
-    ];
-  }
 
-  localStorage.setItem(
-    "veyraaCart",
-    JSON.stringify(updatedCart)
-  );
+    setCart(updatedCart);
 
-  setCart(updatedCart);
+    alert(`${product.name} added to cart.`);
+  };
 
-  alert(`${product.name} added to cart.`);
-};
-  
   /* =====================================================
      BUY NOW
      ===================================================== */
@@ -1176,52 +1223,52 @@ useEffect(() => {
      CAMERA
      ===================================================== */
 
-const startCamera = async () => {
-  try {
-    if (
-      !navigator.mediaDevices ||
-      !navigator.mediaDevices.getUserMedia
-    ) {
+  const startCamera = async () => {
+    try {
+      if (
+        !navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia
+      ) {
+        alert(
+          "Camera is not supported. Please upload your photo."
+        );
+        return;
+      }
+
+      // Stop any previous camera stream
+      if (streamRef.current) {
+        streamRef.current
+          .getTracks()
+          .forEach((track) => track.stop());
+
+        streamRef.current = null;
+      }
+
+      const stream =
+        await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: "user",
+          },
+          audio: false,
+        });
+
+      streamRef.current = stream;
+
+      // First render the video element
+      setCameraReady(false);
+      setCameraOpen(true);
+
+    } catch (error) {
+      console.error("Camera error:", error);
+
       alert(
-        "Camera is not supported. Please upload your photo."
+        "Camera permission was not available. Please use Upload Your Photo."
       );
-      return;
+
+      setCameraOpen(false);
+      setCameraReady(false);
     }
-
-    // Stop any previous camera stream
-    if (streamRef.current) {
-      streamRef.current
-        .getTracks()
-        .forEach((track) => track.stop());
-
-      streamRef.current = null;
-    }
-
-    const stream =
-      await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: "user",
-        },
-        audio: false,
-      });
-
-    streamRef.current = stream;
-
-    // First render the video element
-    setCameraReady(false);
-    setCameraOpen(true);
-
-  } catch (error) {
-    console.error("Camera error:", error);
-
-    alert(
-      "Camera permission was not available. Please use Upload Your Photo."
-    );
-
-    setCameraOpen(false);
-    setCameraReady(false);
-  }
-};
+  };
 
   /* =====================================================
      CAPTURE PHOTO
@@ -1329,9 +1376,9 @@ const startCamera = async () => {
     selectedCategory === "all"
       ? "Women's Fashion"
       : categories.find(
-          ([id]) =>
-            id === selectedCategory
-        )?.[1];
+        ([id]) =>
+          id === selectedCategory
+      )?.[1];
 
   /* =====================================================
      JSX
@@ -1396,1118 +1443,618 @@ const startCamera = async () => {
 
         <section className="women-catalog-header">
 
-        {/* CATEGORY PILLS */}
+          {/* CATEGORY PILLS */}
 
-        <div className="women-category-pills">
+          <div className="women-category-pills">
 
-          {categories.map(
-            ([id, name]) => (
-              <button
-                key={id}
-                className={
-                  selectedCategory === id
-                    ? "active"
-                    : ""
-                }
-                onClick={() =>
-                  changeCategory(id)
-                }
-              >
-                {name}
-              </button>
-            )
-          )}
+            {categories.map(
+              ([id, name]) => (
+                <button
+                  key={id}
+                  className={
+                    selectedCategory === id
+                      ? "active"
+                      : ""
+                  }
+                  onClick={() =>
+                    changeCategory(id)
+                  }
+                >
+                  {name}
+                </button>
+              )
+            )}
 
-        </div>
+          </div>
 
-      </section>
+        </section>
 
-      {/* =================================================
+        {/* =================================================
           SHOP AREA
       ================================================= */}
 
-      <section className="women-shop-layout">
+        <section className="women-shop-layout">
 
-        {/* =================================================
+          {/* =================================================
             FILTER SIDEBAR
         ================================================= */}
 
-        <aside className="women-filters">
+          <aside className="women-filters">
 
-          <div className="filter-title">
+            <div className="filter-title">
 
-            <h2>
-              Filters
-            </h2>
+              <h2>
+                Filters
+              </h2>
 
-            <button
-              onClick={
-                clearFilters
-              }
-            >
-              Clear
-            </button>
-
-          </div>
-
-          {/* PRICE */}
-
-          <div className="filter-block">
-
-            <h3>
-              Price
-            </h3>
-
-            <input
-              type="range"
-              min="500"
-              max="10000"
-              step="100"
-              value={maxPrice}
-              onChange={(e) =>
-                setMaxPrice(
-                  Number(
-                    e.target.value
-                  )
-                )
-              }
-            />
-
-            <div className="price-range">
-
-              <span>
-                ₹500
-              </span>
-
-              <strong>
-                ₹{maxPrice}
-              </strong>
-
-            </div>
-
-          </div>
-
-          {/* MATERIAL */}
-
-          <div className="filter-block">
-
-            <h3>
-              Material
-            </h3>
-
-            {[
-              "All",
-              "Cotton",
-              "Silk",
-              "Georgette",
-              "Denim",
-              "Chiffon",
-              "Polyester",
-              "Rayon",
-              "Leather",
-              "Metal",
-              "Acetate",
-              "Synthetic",
-            ].map(
-              (item) => (
-                <label
-                  key={item}
-                >
-                  <input
-                    type="radio"
-                    name="material"
-                    checked={
-                      material ===
-                      item
-                    }
-                    onChange={() =>
-                      setMaterial(
-                        item
-                      )
-                    }
-                  />
-
-                  {item}
-                </label>
-              )
-            )}
-
-          </div>
-
-          {/* COLOUR */}
-
-          <div className="filter-block">
-
-            <h3>
-              Colour
-            </h3>
-
-            <select
-              value={colour}
-              onChange={(e) =>
-                setColour(
-                  e.target.value
-                )
-              }
-            >
-              <option value="All">
-                All Colours
-              </option>
-
-              <option>
-                Black
-              </option>
-
-              <option>
-                White
-              </option>
-
-              <option>
-                Red
-              </option>
-
-              <option>
-                Pink
-              </option>
-
-              <option>
-                Blue
-              </option>
-
-              <option>
-                Purple
-              </option>
-
-              <option>
-                Brown
-              </option>
-
-              <option>
-                Gold
-              </option>
-
-              <option>
-                Green
-              </option>
-
-            </select>
-
-          </div>
-
-          {/* DISCOVERY */}
-
-          <div className="filter-block">
-
-            <h3>
-              Fashion Discovery
-            </h3>
-
-            <button
-              className="filter-link"
-              onClick={() =>
-                setSort("new")
-              }
-            >
-              New Arrivals
-            </button>
-
-            <button
-              className="filter-link"
-              onClick={() =>
-                setSort("rating")
-              }
-            >
-              Trending Now
-            </button>
-
-            <button
-              className="filter-link"
-              onClick={() =>
-                setSort("rating")
-              }
-            >
-              Best Sellers
-            </button>
-
-            <button
-              className="filter-link"
-              onClick={() =>
-                setMaxPrice(2000)
-              }
-            >
-              Deals & Offers
-            </button>
-
-            <button
-              className="filter-link"
-              onClick={() =>
-                setSort("rating")
-              }
-            >
-              Recommended For You
-            </button>
-
-          </div>
-
-          {/* OCCASION */}
-
-          <div className="filter-block">
-
-            <h3>
-              Occasion
-            </h3>
-
-            <label>
-              <input type="checkbox" />
-              Casual
-            </label>
-
-            <label>
-              <input type="checkbox" />
-              Office
-            </label>
-
-            <label>
-              <input type="checkbox" />
-              Party
-            </label>
-
-            <label>
-              <input type="checkbox" />
-              Wedding
-            </label>
-
-            <label>
-              <input type="checkbox" />
-              Festival
-            </label>
-
-          </div>
-
-        </aside>
-
-        {/* =================================================
-            PRODUCTS
-        ================================================= */}
-
-        <main className="women-products-area">
-
-          {/* TOOLBAR */}
-
-          <div className="products-toolbar">
-
-            <div>
-
-              <strong>
-                {
-                  filteredProducts.length
+              <button
+                onClick={
+                  clearFilters
                 }
-              </strong>{" "}
-
-              Products
+              >
+                Clear
+              </button>
 
             </div>
 
-            <select
-              value={sort}
-              onChange={(e) =>
-                setSort(
-                  e.target.value
-                )
-              }
-            >
+            {/* PRICE */}
 
-              <option value="featured">
-                Sort by: Featured
-              </option>
+            <div className="filter-block">
 
-              <option value="low">
-                Price: Low to High
-              </option>
+              <h3>
+                Price
+              </h3>
 
-              <option value="high">
-                Price: High to Low
-              </option>
+              <input
+                type="range"
+                min="500"
+                max="10000"
+                step="100"
+                value={maxPrice}
+                onChange={(e) =>
+                  setMaxPrice(
+                    Number(
+                      e.target.value
+                    )
+                  )
+                }
+              />
 
-              <option value="rating">
-                Customer Rating
-              </option>
+              <div className="price-range">
 
-              <option value="new">
-                New Arrivals
-              </option>
+                <span>
+                  ₹500
+                </span>
 
-            </select>
+                <strong>
+                  ₹{maxPrice}
+                </strong>
 
-          </div>
+              </div>
 
-          {/* PRODUCT GRID */}
+            </div>
 
-          <div className="women-products-grid">
+            {/* MATERIAL */}
 
-            {filteredProducts.map(
-              (product) => (
+            <div className="filter-block">
 
-                <article
-                  className="women-product-card"
-                  key={product.id}
-                >
+              <h3>
+                Material
+              </h3>
 
-                  {/* PRODUCT IMAGE */}
-
-                  <div className="product-image-box">
-
-                    <img
-                      src={
-                        product.image
+              {[
+                "All",
+                "Cotton",
+                "Silk",
+                "Georgette",
+                "Denim",
+                "Chiffon",
+                "Polyester",
+                "Rayon",
+                "Leather",
+                "Metal",
+                "Acetate",
+                "Synthetic",
+              ].map(
+                (item) => (
+                  <label
+                    key={item}
+                  >
+                    <input
+                      type="radio"
+                      name="material"
+                      checked={
+                        material ===
+                        item
                       }
-                      alt={
-                        product.name
+                      onChange={() =>
+                        setMaterial(
+                          item
+                        )
                       }
                     />
 
-                    <span className="product-badge">
-                      {
-                        product.badge
-                      }
-                    </span>
-
-                    {/* WISHLIST */}
-
-                    <button
-                      className="wishlist-button"
-                      onClick={() =>
-                        toggleWishlist(
-                          product.id
-                        )
-                      }
-                    >
-                      {
-                        wishlist.includes(
-                          product.id
-                        )
-                          ? "♥"
-                          : "♡"
-                      }
-                    </button>
-
-                    {/* TRY ON */}
-
-                   <button
-  type="button"
-  className="try-on-button"
-  onClick={(e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    openTryOn(product);
-  }}
->
-  ✦ Virtual Try-On
-</button>
-
-                  </div>
-
-                  {/* PRODUCT INFORMATION */}
-
-                  <div className="product-information">
-
-                    <div className="product-rating">
-                      ★{" "}
-                      {
-                        product.rating
-                      }
-                    </div>
-
-                    <span className="product-category">
-
-                      WOMEN ·{" "}
-                      {product.type.toUpperCase()}
-
-                    </span>
-
-                    <h2>
-                      {
-                        product.name
-                      }
-                    </h2>
-
-                    <p>
-                      {
-                        product.material
-                      }{" "}
-                      ·{" "}
-                      {
-                        product.colour
-                      }
-                    </p>
-
-                    <div className="product-price">
-
-                      ₹
-                      {
-                        product.price
-                      }
-
-                      <del>
-                        ₹
-                        {
-                          product.oldPrice
-                        }
-                      </del>
-
-                    </div>
-
-                    {/* ACTION BUTTONS */}
-
-                    <div className="product-actions">
-
-                      <button
-                        className="cart-button"
-                        onClick={() =>
-                          addToCart(
-                            product
-                          )
-                        }
-                      >
-                        🛒 Add to Cart
-                      </button>
-
-                      <button
-                        className="buy-button"
-                        onClick={() =>
-                          buyNow(
-                            product
-                          )
-                        }
-                      >
-                        Buy Now
-                      </button>
-
-                    </div>
-
-                    {/* QUICK VIEW */}
-
-                    <button
-                      className="quick-view-button"
-                      onClick={() =>
-                        openQuickView(
-                          product
-                        )
-                      }
-                    >
-                      Quick View →
-                    </button>
-
-                  </div>
-
-                </article>
-
-              )
-            )}
-
-          </div>
-
-          {/* NO PRODUCTS */}
-
-          {filteredProducts.length ===
-            0 && (
-
-            <div className="no-products">
-
-              <h2>
-                No products found
-              </h2>
-
-              <p>
-                Try changing your
-                filters or category.
-              </p>
+                    {item}
+                  </label>
+                )
+              )}
 
             </div>
 
-          )}
+            {/* COLOUR */}
 
-        </main>
+            <div className="filter-block">
 
-      </section>
+              <h3>
+                Colour
+              </h3>
 
-      {/* =================================================
+              <select
+                value={colour}
+                onChange={(e) =>
+                  setColour(
+                    e.target.value
+                  )
+                }
+              >
+                <option value="All">
+                  All Colours
+                </option>
+
+                <option>
+                  Black
+                </option>
+
+                <option>
+                  White
+                </option>
+
+                <option>
+                  Red
+                </option>
+
+                <option>
+                  Pink
+                </option>
+
+                <option>
+                  Blue
+                </option>
+
+                <option>
+                  Purple
+                </option>
+
+                <option>
+                  Brown
+                </option>
+
+                <option>
+                  Gold
+                </option>
+
+                <option>
+                  Green
+                </option>
+
+              </select>
+
+            </div>
+
+            {/* DISCOVERY */}
+
+            <div className="filter-block">
+
+              <h3>
+                Fashion Discovery
+              </h3>
+
+              <button
+                className="filter-link"
+                onClick={() =>
+                  setSort("new")
+                }
+              >
+                New Arrivals
+              </button>
+
+              <button
+                className="filter-link"
+                onClick={() =>
+                  setSort("rating")
+                }
+              >
+                Trending Now
+              </button>
+
+              <button
+                className="filter-link"
+                onClick={() =>
+                  setSort("rating")
+                }
+              >
+                Best Sellers
+              </button>
+
+              <button
+                className="filter-link"
+                onClick={() =>
+                  setMaxPrice(2000)
+                }
+              >
+                Deals & Offers
+              </button>
+
+              <button
+                className="filter-link"
+                onClick={() =>
+                  setSort("rating")
+                }
+              >
+                Recommended For You
+              </button>
+
+            </div>
+
+            {/* OCCASION */}
+
+            <div className="filter-block">
+
+              <h3>
+                Occasion
+              </h3>
+
+              <label>
+                <input type="checkbox" />
+                Casual
+              </label>
+
+              <label>
+                <input type="checkbox" />
+                Office
+              </label>
+
+              <label>
+                <input type="checkbox" />
+                Party
+              </label>
+
+              <label>
+                <input type="checkbox" />
+                Wedding
+              </label>
+
+              <label>
+                <input type="checkbox" />
+                Festival
+              </label>
+
+            </div>
+
+          </aside>
+
+          {/* =================================================
+            PRODUCTS
+        ================================================= */}
+
+          <main className="women-products-area">
+
+            {/* TOOLBAR */}
+
+            <div className="products-toolbar">
+
+              <div>
+
+                <strong>
+                  {
+                    filteredProducts.length
+                  }
+                </strong>{" "}
+
+                Products
+
+              </div>
+
+              <select
+                value={sort}
+                onChange={(e) =>
+                  setSort(
+                    e.target.value
+                  )
+                }
+              >
+
+                <option value="featured">
+                  Sort by: Featured
+                </option>
+
+                <option value="low">
+                  Price: Low to High
+                </option>
+
+                <option value="high">
+                  Price: High to Low
+                </option>
+
+                <option value="rating">
+                  Customer Rating
+                </option>
+
+                <option value="new">
+                  New Arrivals
+                </option>
+
+              </select>
+
+            </div>
+
+            {/* PRODUCT GRID */}
+
+            <div className="women-products-grid">
+
+              {filteredProducts.map(
+                (product) => (
+
+                  <article
+                    className="women-product-card"
+                    key={product.id}
+                  >
+
+                    {/* PRODUCT IMAGE */}
+
+                    <div
+                      className="product-image-box"
+                      onClick={() => {
+                        window.location.href = `/products/${encodeURIComponent(product.id)}?catalog=Women`;
+                      }}
+                      style={{ cursor: "pointer" }}
+                    >
+
+                      <img
+                        src={
+                          product.image.startsWith("/") || product.image.startsWith("http")
+                            ? encodeURI(product.image)
+                            : encodeURI(`/women/${product.image}`)
+                        }
+                        alt={
+                          product.name
+                        }
+                        loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.src = "/women/saree-01.jpg";
+                        }}
+                      />
+
+                      <span className="product-badge">
+                        {
+                          product.badge
+                        }
+                      </span>
+
+                      {/* WISHLIST */}
+
+                      <button
+                        className="wishlist-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleWishlist(
+                            product.id
+                          );
+                        }}
+                      >
+                        {
+                          wishlist.includes(
+                            product.id
+                          )
+                            ? "♥"
+                            : "♡"
+                        }
+                      </button>
+
+                      {/* TRY ON */}
+
+                      <button
+                        type="button"
+                        className="try-on-button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          openTryOn(product);
+                        }}
+                      >
+                        ✦ Virtual Try-On
+                      </button>
+
+                    </div>
+
+                    {/* PRODUCT INFORMATION */}
+
+                    <div className="product-information">
+
+                      <div className="product-rating">
+                        ★{" "}
+                        {
+                          product.rating
+                        }
+                      </div>
+
+                      <span className="product-category">
+
+                        WOMEN ·{" "}
+                        {product.type.toUpperCase()}
+
+                      </span>
+
+                      <h2
+                        onClick={() => {
+                          window.location.href = `/products/${encodeURIComponent(product.id)}?catalog=Women`;
+                        }}
+                        style={{ cursor: "pointer" }}
+                      >
+                        {
+                          product.name
+                        }
+                      </h2>
+
+                      <p>
+                        {
+                          product.material
+                        }{" "}
+                        ·{" "}
+                        {
+                          product.colour
+                        }
+                      </p>
+
+                      <div className="product-price">
+
+                        ₹
+                        {
+                          product.price
+                        }
+
+                        <del>
+                          ₹
+                          {
+                            product.oldPrice
+                          }
+                        </del>
+
+                      </div>
+
+                      {/* ACTION BUTTONS */}
+
+                      <div className="product-actions">
+
+                        <button
+                          className="cart-button"
+                          onClick={() =>
+                            addToCart(
+                              product
+                            )
+                          }
+                        >
+                          🛒 Add to Cart
+                        </button>
+
+                        <button
+                          className="buy-button"
+                          onClick={() =>
+                            buyNow(
+                              product
+                            )
+                          }
+                        >
+                          Buy Now
+                        </button>
+
+                      </div>
+
+                      {/* VIEW PRODUCT BUTTON */}
+
+                      <a
+                        className="quick-view-button"
+                        href={`/products/${encodeURIComponent(product.id)}?catalog=Women`}
+                        style={{ textDecoration: "none", display: "block", textAlign: "center" }}
+                      >
+                        View Product →
+                      </a>
+
+                    </div>
+
+                  </article>
+
+                )
+              )}
+
+            </div>
+
+            {/* NO PRODUCTS */}
+
+            {filteredProducts.length ===
+              0 && (
+
+                <div className="no-products">
+
+                  <h2>
+                    No products found
+                  </h2>
+
+                  <p>
+                    Try changing your
+                    filters or category.
+                  </p>
+
+                </div>
+
+              )}
+
+          </main>
+
+        </section>
+
+        {/* =================================================
           CART SUMMARY
       ================================================= */}
 
-      {cart.length > 0 && (
+        {cart.length > 0 && (
 
-        <div className="veyraa-cart-floating">
+          <div className="veyraa-cart-floating">
 
-          🛒{" "}
-          {cart.reduce(
-            (total, item) =>
-              total +
-              (item.quantity ||
-                1),
-            0
-          )}{" "}
-          items in cart
+            🛒{" "}
+            {cart.reduce(
+              (total, item) =>
+                total +
+                (item.quantity ||
+                  1),
+              0
+            )}{" "}
+            items in cart
 
-        </div>
+          </div>
 
-      )}
+        )}
 
-      {/* =================================================
+        {/* =================================================
           QUICK VIEW MODAL
       ================================================= */}
 
-      {quickProduct && (
+        {quickProduct && (
 
-        <div className="tryon-overlay">
+          <div className="tryon-overlay">
 
-          <div className="tryon-modal">
+            <div className="tryon-modal">
 
-            <button
-              className="tryon-close"
-              onClick={
-                closeQuickView
-              }
-            >
-              ×
-            </button>
-
-            <span className="tryon-eyebrow">
-              VEYRAA QUICK VIEW
-            </span>
-
-            <h2>
-              {
-                quickProduct.name
-              }
-            </h2>
-
-            <div className="tryon-result">
-
-              <div className="tryon-preview">
-
-                <img
-                  src={
-                    quickProduct.image
-                  }
-                  alt={
-                    quickProduct.name
-                  }
-                />
-
-              </div>
-
-              <div className="tryon-result-info">
-
-                <h3>
-                  ₹
-                  {
-                    quickProduct.price
-                  }
-                </h3>
-
-                <p>
-                  {
-                    quickProduct.material
-                  }{" "}
-                  ·{" "}
-                  {
-                    quickProduct.colour
-                  }
-                </p>
-
-                <p>
-                  ★{" "}
-                  {
-                    quickProduct.rating
-                  }
-                </p>
-
-                <button
-                  className="tryon-cart-button"
-                  onClick={() => {
-                    addToCart(
-                      quickProduct
-                    );
-
-                    closeQuickView();
-                  }}
-                >
-                  🛒 Add to Cart
-                </button>
-
-                <button
-                  className="tryon-cart-button"
-                  onClick={() =>
-                    buyNow(
-                      quickProduct
-                    )
-                  }
-                >
-                  Buy Now
-                </button>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      )}
-
-      {/* =================================================
-          VIRTUAL TRY-ON
-      ================================================= */}
-
-      {tryOnProduct && (
-
-        <div className="tryon-overlay">
-
-          <div className="tryon-modal">
-
-            <button
-              className="tryon-close"
-              onClick={
-                closeTryOn
-              }
-            >
-              ×
-            </button>
-
-            <span className="tryon-eyebrow">
-              VEYRAA SMART FIT
-            </span>
-
-            <h2>
-              Virtual Try-On
-            </h2>
-
-            <p>
-              See how{" "}
-              <strong>
-                {
-                  tryOnProduct.name
+              <button
+                className="tryon-close"
+                onClick={
+                  closeQuickView
                 }
-              </strong>{" "}
-              could look with your
-              photo.
-            </p>
+              >
+                ×
+              </button>
 
-            {/* PHOTO INPUT */}
+              <span className="tryon-eyebrow">
+                VEYRAA QUICK VIEW
+              </span>
 
-           {/* =====================================================
-    VEYRAA VIRTUAL TRY-ON
-===================================================== */}
-
-{tryOnProduct && (
-  <div
-    style={{
-      position: "fixed",
-      inset: 0,
-      background: "rgba(20, 15, 18, 0.72)",
-      backdropFilter: "blur(8px)",
-      WebkitBackdropFilter: "blur(8px)",
-      zIndex: 99999,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "24px",
-    }}
-    onClick={(e) => {
-      if (e.target === e.currentTarget) {
-        closeTryOn();
-      }
-    }}
-  >
-
-    <div
-      style={{
-        width: "min(900px, 96vw)",
-        maxHeight: "90vh",
-        overflowY: "auto",
-        background: "#fff",
-        borderRadius: "24px",
-        padding: "30px",
-        position: "relative",
-        boxShadow: "0 30px 80px rgba(0,0,0,0.3)",
-      }}
-    >
-
-      {/* CLOSE */}
-
-      <button
-        type="button"
-        onClick={closeTryOn}
-        style={{
-          position: "absolute",
-          top: "16px",
-          right: "16px",
-          width: "42px",
-          height: "42px",
-          borderRadius: "50%",
-          border: "1px solid #eadfe2",
-          background: "#fff",
-          fontSize: "24px",
-          cursor: "pointer",
-          zIndex: 5,
-        }}
-      >
-        ×
-      </button>
-
-      {/* HEADER */}
-
-      <div
-        style={{
-          textAlign: "center",
-          marginBottom: "25px",
-        }}
-      >
-
-        <span
-          style={{
-            display: "block",
-            fontSize: "11px",
-            fontWeight: 800,
-            letterSpacing: "3px",
-            color: "#c22d61",
-            marginBottom: "8px",
-          }}
-        >
-          VEYRAA SMART FIT
-        </span>
-
-        <h2
-          style={{
-            margin: 0,
-            fontFamily: "Georgia, serif",
-            fontSize: "34px",
-            color: "#211d1e",
-          }}
-        >
-          Virtual Try-On
-        </h2>
-
-        <p
-          style={{
-            marginTop: "10px",
-            color: "#71666a",
-          }}
-        >
-          See how{" "}
-          <strong>{tryOnProduct.name}</strong>{" "}
-          could look with your photo.
-        </p>
-
-      </div>
-
-      {/* PHOTO SELECTION */}
-
-      {!tryOnImage && !cameraOpen && (
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(2, minmax(0, 1fr))",
-            gap: "18px",
-            marginTop: "20px",
-          }}
-        >
-
-          {/* CAMERA */}
-
-          <button
-            type="button"
-            onClick={startCamera}
-            style={{
-              minHeight: "150px",
-              borderRadius: "18px",
-              border: "1px solid #eadfe2",
-              background: "#fff7fa",
-              cursor: "pointer",
-              fontSize: "16px",
-              fontWeight: 700,
-              color: "#c22d61",
-            }}
-          >
-            <div
-              style={{
-                fontSize: "32px",
-                marginBottom: "10px",
-              }}
-            >
-              📷
-            </div>
-
-            Use Camera
-
-            <small
-              style={{
-                display: "block",
-                marginTop: "8px",
-                color: "#777",
-                fontWeight: 400,
-              }}
-            >
-              Take a photo instantly
-            </small>
-          </button>
-
-          {/* UPLOAD */}
-
-          <label
-            style={{
-              minHeight: "150px",
-              borderRadius: "18px",
-              border: "1px solid #eadfe2",
-              background: "#fff",
-              cursor: "pointer",
-              fontSize: "16px",
-              fontWeight: 700,
-              color: "#c22d61",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-
-            <div
-              style={{
-                fontSize: "32px",
-                marginBottom: "10px",
-              }}
-            >
-              🖼
-            </div>
-
-            Upload Your Photo
-
-            <small
-              style={{
-                display: "block",
-                marginTop: "8px",
-                color: "#777",
-                fontWeight: 400,
-              }}
-            >
-              Choose a photo from your device
-            </small>
-
-            <input
-              type="file"
-              accept="image/*"
-              onChange={uploadPhoto}
-              style={{ display: "none" }}
-            />
-
-          </label>
-
-        </div>
-      )}
-
-      {/* CAMERA */}
-
-      {cameraOpen && (
-
-        <div
-          style={{
-            textAlign: "center",
-          }}
-        >
-
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            style={{
-              width: "100%",
-              maxHeight: "500px",
-              objectFit: "cover",
-              borderRadius: "18px",
-              background: "#111",
-            }}
-          />
-
-          {cameraReady && (
-
-            <button
-              type="button"
-              onClick={capturePhoto}
-              style={{
-                marginTop: "18px",
-                padding: "14px 28px",
-                border: "none",
-                borderRadius: "12px",
-                background: "#c22d61",
-                color: "#fff",
-                fontWeight: 700,
-                cursor: "pointer",
-              }}
-            >
-              📸 Capture Photo
-            </button>
-
-          )}
-
-        </div>
-
-      )}
-
-      {/* PHOTO RESULT */}
-
-      {tryOnImage && (
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns:
-              "1fr 1fr",
-            gap: "28px",
-            alignItems: "center",
-          }}
-        >
-
-          {/* USER PHOTO */}
-
-          <div>
-
-            <img
-              src={tryOnImage}
-              alt="Customer"
-              style={{
-                width: "100%",
-                maxHeight: "500px",
-                objectFit: "cover",
-                borderRadius: "18px",
-                display: "block",
-              }}
-            />
-
-          </div>
-
-          {/* PRODUCT INFO */}
-
-          <div>
-
-            <span
-              style={{
-                color: "#c22d61",
-                fontSize: "11px",
-                fontWeight: 800,
-                letterSpacing: "2px",
-              }}
-            >
-              YOUR LOOK
-            </span>
-
-            <h3
-              style={{
-                fontSize: "25px",
-                margin: "10px 0",
-                color: "#211d1e",
-              }}
-            >
-              {tryOnProduct.name}
-            </h3>
-
-            <p
-              style={{
-                color: "#777",
-              }}
-            >
-              {tryOnProduct.material} ·{" "}
-              {tryOnProduct.colour}
-            </p>
-
-            <h3
-              style={{
-                fontSize: "24px",
-                margin: "18px 0",
-              }}
-            >
-              ₹{tryOnProduct.price}
-            </h3>
-
-            <p
-              style={{
-                color: "#71666a",
-                lineHeight: 1.6,
-              }}
-            >
-              Your photo is ready for the
-              Veyraa Smart Fit preview.
-            </p>
-
-            <button
-              type="button"
-              onClick={() => {
-                addToCart(tryOnProduct);
-                closeTryOn();
-              }}
-              style={{
-                width: "100%",
-                padding: "14px",
-                border: "none",
-                borderRadius: "12px",
-                background: "#c22d61",
-                color: "#fff",
-                fontWeight: 700,
-                cursor: "pointer",
-                marginTop: "12px",
-              }}
-            >
-              🛒 Add This Look to Cart
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setTryOnImage(null);
-              }}
-              style={{
-                width: "100%",
-                padding: "13px",
-                border: "1px solid #c22d61",
-                borderRadius: "12px",
-                background: "#fff",
-                color: "#c22d61",
-                fontWeight: 700,
-                cursor: "pointer",
-                marginTop: "10px",
-              }}
-            >
-              ← Change Photo
-            </button>
-
-          </div>
-
-        </div>
-
-      )}
-
-    </div>
-
-  </div>
-)}
-
-            {/* TRY-ON RESULT */}
-
-            {tryOnImage && (
+              <h2>
+                {
+                  quickProduct.name
+                }
+              </h2>
 
               <div className="tryon-result">
 
                 <div className="tryon-preview">
 
-                  {/* USER IMAGE */}
-
                   <img
-                    src={tryOnImage}
-                    alt="Customer"
+                    src={
+                      quickProduct.image
+                    }
+                    alt={
+                      quickProduct.name
+                    }
                   />
 
                 </div>
@@ -2515,83 +2062,598 @@ const startCamera = async () => {
                 <div className="tryon-result-info">
 
                   <h3>
-                    Virtual Try-On
-                    Preview
+                    ₹
+                    {
+                      quickProduct.price
+                    }
                   </h3>
 
                   <p>
                     {
-                      tryOnProduct.name
+                      quickProduct.material
+                    }{" "}
+                    ·{" "}
+                    {
+                      quickProduct.colour
                     }
                   </p>
 
                   <p>
-                    ₹
+                    ★{" "}
                     {
-                      tryOnProduct.price
+                      quickProduct.rating
                     }
                   </p>
-
-                  <small>
-                    Your uploaded photo
-                    is ready for the
-                    Veyraa Smart Fit
-                    experience.
-                  </small>
-
-                  {/* ADD LOOK */}
 
                   <button
                     className="tryon-cart-button"
                     onClick={() => {
                       addToCart(
-                        tryOnProduct
+                        quickProduct
                       );
 
-                      closeTryOn();
+                      closeQuickView();
                     }}
                   >
-                    🛒 Add This Look
-                    to Cart
+                    🛒 Add to Cart
                   </button>
-
-                  {/* BUY NOW */}
 
                   <button
                     className="tryon-cart-button"
                     onClick={() =>
                       buyNow(
-                        tryOnProduct
+                        quickProduct
                       )
                     }
                   >
-                    Buy This Look
-                  </button>
-
-                  {/* CHANGE PHOTO */}
-
-                  <button
-                    className="quick-view-button"
-                    onClick={() =>
-                      setTryOnImage(
-                        null
-                      )
-                    }
-                  >
-                    ← Change Photo
+                    Buy Now
                   </button>
 
                 </div>
 
               </div>
 
-            )}
+            </div>
 
           </div>
 
-        </div>
+        )}
 
-      )}
+        {/* =================================================
+          VIRTUAL TRY-ON
+      ================================================= */}
+
+        {tryOnProduct && (
+
+          <div className="tryon-overlay">
+
+            <div className="tryon-modal">
+
+              <button
+                className="tryon-close"
+                onClick={
+                  closeTryOn
+                }
+              >
+                ×
+              </button>
+
+              <span className="tryon-eyebrow">
+                VEYRAA SMART FIT
+              </span>
+
+              <h2>
+                Virtual Try-On
+              </h2>
+
+              <p>
+                See how{" "}
+                <strong>
+                  {
+                    tryOnProduct.name
+                  }
+                </strong>{" "}
+                could look with your
+                photo.
+              </p>
+
+              {/* PHOTO INPUT */}
+
+              {/* =====================================================
+    VEYRAA VIRTUAL TRY-ON
+===================================================== */}
+
+              {tryOnProduct && (
+                <div
+                  style={{
+                    position: "fixed",
+                    inset: 0,
+                    background: "rgba(20, 15, 18, 0.72)",
+                    backdropFilter: "blur(8px)",
+                    WebkitBackdropFilter: "blur(8px)",
+                    zIndex: 99999,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "24px",
+                  }}
+                  onClick={(e) => {
+                    if (e.target === e.currentTarget) {
+                      closeTryOn();
+                    }
+                  }}
+                >
+
+                  <div
+                    style={{
+                      width: "min(900px, 96vw)",
+                      maxHeight: "90vh",
+                      overflowY: "auto",
+                      background: "#fff",
+                      borderRadius: "24px",
+                      padding: "30px",
+                      position: "relative",
+                      boxShadow: "0 30px 80px rgba(0,0,0,0.3)",
+                    }}
+                  >
+
+                    {/* CLOSE */}
+
+                    <button
+                      type="button"
+                      onClick={closeTryOn}
+                      style={{
+                        position: "absolute",
+                        top: "16px",
+                        right: "16px",
+                        width: "42px",
+                        height: "42px",
+                        borderRadius: "50%",
+                        border: "1px solid #eadfe2",
+                        background: "#fff",
+                        fontSize: "24px",
+                        cursor: "pointer",
+                        zIndex: 5,
+                      }}
+                    >
+                      ×
+                    </button>
+
+                    {/* HEADER */}
+
+                    <div
+                      style={{
+                        textAlign: "center",
+                        marginBottom: "25px",
+                      }}
+                    >
+
+                      <span
+                        style={{
+                          display: "block",
+                          fontSize: "11px",
+                          fontWeight: 800,
+                          letterSpacing: "3px",
+                          color: "#c22d61",
+                          marginBottom: "8px",
+                        }}
+                      >
+                        VEYRAA SMART FIT
+                      </span>
+
+                      <h2
+                        style={{
+                          margin: 0,
+                          fontFamily: "Georgia, serif",
+                          fontSize: "34px",
+                          color: "#211d1e",
+                        }}
+                      >
+                        Virtual Try-On
+                      </h2>
+
+                      <p
+                        style={{
+                          marginTop: "10px",
+                          color: "#71666a",
+                        }}
+                      >
+                        See how{" "}
+                        <strong>{tryOnProduct.name}</strong>{" "}
+                        could look with your photo.
+                      </p>
+
+                    </div>
+
+                    {/* PHOTO SELECTION */}
+
+                    {!tryOnImage && !cameraOpen && (
+
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns:
+                            "repeat(2, minmax(0, 1fr))",
+                          gap: "18px",
+                          marginTop: "20px",
+                        }}
+                      >
+
+                        {/* CAMERA */}
+
+                        <button
+                          type="button"
+                          onClick={startCamera}
+                          style={{
+                            minHeight: "150px",
+                            borderRadius: "18px",
+                            border: "1px solid #eadfe2",
+                            background: "#fff7fa",
+                            cursor: "pointer",
+                            fontSize: "16px",
+                            fontWeight: 700,
+                            color: "#c22d61",
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontSize: "32px",
+                              marginBottom: "10px",
+                            }}
+                          >
+                            📷
+                          </div>
+
+                          Use Camera
+
+                          <small
+                            style={{
+                              display: "block",
+                              marginTop: "8px",
+                              color: "#777",
+                              fontWeight: 400,
+                            }}
+                          >
+                            Take a photo instantly
+                          </small>
+                        </button>
+
+                        {/* UPLOAD */}
+
+                        <label
+                          style={{
+                            minHeight: "150px",
+                            borderRadius: "18px",
+                            border: "1px solid #eadfe2",
+                            background: "#fff",
+                            cursor: "pointer",
+                            fontSize: "16px",
+                            fontWeight: 700,
+                            color: "#c22d61",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            textAlign: "center",
+                          }}
+                        >
+
+                          <div
+                            style={{
+                              fontSize: "32px",
+                              marginBottom: "10px",
+                            }}
+                          >
+                            🖼
+                          </div>
+
+                          Upload Your Photo
+
+                          <small
+                            style={{
+                              display: "block",
+                              marginTop: "8px",
+                              color: "#777",
+                              fontWeight: 400,
+                            }}
+                          >
+                            Choose a photo from your device
+                          </small>
+
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={uploadPhoto}
+                            style={{ display: "none" }}
+                          />
+
+                        </label>
+
+                      </div>
+                    )}
+
+                    {/* CAMERA */}
+
+                    {cameraOpen && (
+
+                      <div
+                        style={{
+                          textAlign: "center",
+                        }}
+                      >
+
+                        <video
+                          ref={videoRef}
+                          autoPlay
+                          playsInline
+                          style={{
+                            width: "100%",
+                            maxHeight: "500px",
+                            objectFit: "cover",
+                            borderRadius: "18px",
+                            background: "#111",
+                          }}
+                        />
+
+                        {cameraReady && (
+
+                          <button
+                            type="button"
+                            onClick={capturePhoto}
+                            style={{
+                              marginTop: "18px",
+                              padding: "14px 28px",
+                              border: "none",
+                              borderRadius: "12px",
+                              background: "#c22d61",
+                              color: "#fff",
+                              fontWeight: 700,
+                              cursor: "pointer",
+                            }}
+                          >
+                            📸 Capture Photo
+                          </button>
+
+                        )}
+
+                      </div>
+
+                    )}
+
+                    {/* PHOTO RESULT */}
+
+                    {tryOnImage && (
+
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns:
+                            "1fr 1fr",
+                          gap: "28px",
+                          alignItems: "center",
+                        }}
+                      >
+
+                        {/* USER PHOTO */}
+
+                        <div>
+
+                          <img
+                            src={tryOnImage}
+                            alt="Customer"
+                            style={{
+                              width: "100%",
+                              maxHeight: "500px",
+                              objectFit: "cover",
+                              borderRadius: "18px",
+                              display: "block",
+                            }}
+                          />
+
+                        </div>
+
+                        {/* PRODUCT INFO */}
+
+                        <div>
+
+                          <span
+                            style={{
+                              color: "#c22d61",
+                              fontSize: "11px",
+                              fontWeight: 800,
+                              letterSpacing: "2px",
+                            }}
+                          >
+                            YOUR LOOK
+                          </span>
+
+                          <h3
+                            style={{
+                              fontSize: "25px",
+                              margin: "10px 0",
+                              color: "#211d1e",
+                            }}
+                          >
+                            {tryOnProduct.name}
+                          </h3>
+
+                          <p
+                            style={{
+                              color: "#777",
+                            }}
+                          >
+                            {tryOnProduct.material} ·{" "}
+                            {tryOnProduct.colour}
+                          </p>
+
+                          <h3
+                            style={{
+                              fontSize: "24px",
+                              margin: "18px 0",
+                            }}
+                          >
+                            ₹{tryOnProduct.price}
+                          </h3>
+
+                          <p
+                            style={{
+                              color: "#71666a",
+                              lineHeight: 1.6,
+                            }}
+                          >
+                            Your photo is ready for the
+                            Veyraa Smart Fit preview.
+                          </p>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              addToCart(tryOnProduct);
+                              closeTryOn();
+                            }}
+                            style={{
+                              width: "100%",
+                              padding: "14px",
+                              border: "none",
+                              borderRadius: "12px",
+                              background: "#c22d61",
+                              color: "#fff",
+                              fontWeight: 700,
+                              cursor: "pointer",
+                              marginTop: "12px",
+                            }}
+                          >
+                            🛒 Add This Look to Cart
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setTryOnImage(null);
+                            }}
+                            style={{
+                              width: "100%",
+                              padding: "13px",
+                              border: "1px solid #c22d61",
+                              borderRadius: "12px",
+                              background: "#fff",
+                              color: "#c22d61",
+                              fontWeight: 700,
+                              cursor: "pointer",
+                              marginTop: "10px",
+                            }}
+                          >
+                            ← Change Photo
+                          </button>
+
+                        </div>
+
+                      </div>
+
+                    )}
+
+                  </div>
+
+                </div>
+              )}
+
+              {/* TRY-ON RESULT */}
+
+              {tryOnImage && (
+
+                <div className="tryon-result">
+
+                  <div className="tryon-preview">
+
+                    {/* USER IMAGE */}
+
+                    <img
+                      src={tryOnImage}
+                      alt="Customer"
+                    />
+
+                  </div>
+
+                  <div className="tryon-result-info">
+
+                    <h3>
+                      Virtual Try-On
+                      Preview
+                    </h3>
+
+                    <p>
+                      {
+                        tryOnProduct.name
+                      }
+                    </p>
+
+                    <p>
+                      ₹
+                      {
+                        tryOnProduct.price
+                      }
+                    </p>
+
+                    <small>
+                      Your uploaded photo
+                      is ready for the
+                      Veyraa Smart Fit
+                      experience.
+                    </small>
+
+                    {/* ADD LOOK */}
+
+                    <button
+                      className="tryon-cart-button"
+                      onClick={() => {
+                        addToCart(
+                          tryOnProduct
+                        );
+
+                        closeTryOn();
+                      }}
+                    >
+                      🛒 Add This Look
+                      to Cart
+                    </button>
+
+                    {/* BUY NOW */}
+
+                    <button
+                      className="tryon-cart-button"
+                      onClick={() =>
+                        buyNow(
+                          tryOnProduct
+                        )
+                      }
+                    >
+                      Buy This Look
+                    </button>
+
+                    {/* CHANGE PHOTO */}
+
+                    <button
+                      className="quick-view-button"
+                      onClick={() =>
+                        setTryOnImage(
+                          null
+                        )
+                      }
+                    >
+                      ← Change Photo
+                    </button>
+
+                  </div>
+
+                </div>
+
+              )}
+
+            </div>
+
+          </div>
+
+        )}
 
       </div>
     </>

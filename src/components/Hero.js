@@ -61,6 +61,8 @@ function Hero() {
     window.location.href = slide.link;
   };
 
+
+
   return (
     <section
       className="hero"

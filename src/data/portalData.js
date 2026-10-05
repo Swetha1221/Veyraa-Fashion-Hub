@@ -287,3 +287,592 @@ export function getSellerMetrics() {
     units,
   };
 }
+/* =========================================================
+   VEYRAA MARKETPLACE REVENUE ENGINE
+   ---------------------------------------------------------
+   Uses the SAME existing catalogue, orders and inventory.
+   No duplicate products are created.
+   ========================================================= */
+
+const REVENUE_KEY = "veyraaMarketplaceRevenue";
+
+/* ---------------------------------------------------------
+   DEFAULT REVENUE STATE
+   --------------------------------------------------------- */
+
+const defaultRevenueState = {
+  commissionRate: 10,
+
+  subscription: {
+    plan: "Starter",
+    active: true,
+    renewalDate: "",
+  },
+
+  sponsoredProducts: [],
+
+  featuredProducts: [],
+
+  sponsoredSearch: [],
+
+  campaigns: [],
+
+  catalogueServices: [],
+
+  fulfilment: {
+    enabled: false,
+    service: "Veyraa Standard Fulfilment",
+    fee: 49,
+    ordersProcessed: 0,
+  },
+
+  verifiedSeller: {
+    verified: true,
+    badge: "Veyraa Verified",
+    since: new Date().toISOString(),
+  },
+};
+
+/* ---------------------------------------------------------
+   REVENUE STATE
+   --------------------------------------------------------- */
+
+export function getRevenueState() {
+  try {
+    const stored = localStorage.getItem(REVENUE_KEY);
+
+    if (!stored) {
+      return defaultRevenueState;
+    }
+
+    return {
+      ...defaultRevenueState,
+      ...JSON.parse(stored),
+    };
+  } catch {
+    return defaultRevenueState;
+  }
+}
+
+export function saveRevenueState(state) {
+  localStorage.setItem(
+    REVENUE_KEY,
+    JSON.stringify(state)
+  );
+
+  window.dispatchEvent(
+    new Event("veyraa:revenue-updated")
+  );
+}
+
+/* ---------------------------------------------------------
+   SELLER COMMISSION
+   --------------------------------------------------------- */
+
+export function getCommissionRate() {
+  return Number(
+    getRevenueState().commissionRate || 10
+  );
+}
+
+export function calculateSellerCommission(orderAmount) {
+  const amount = Number(orderAmount || 0);
+  const rate = getCommissionRate();
+
+  return Number(
+    ((amount * rate) / 100).toFixed(2)
+  );
+}
+
+export function calculateSellerSettlement(orderAmount) {
+  const amount = Number(orderAmount || 0);
+  const commission =
+    calculateSellerCommission(amount);
+
+  return Number(
+    (amount - commission).toFixed(2)
+  );
+}
+
+/* ---------------------------------------------------------
+   SELLER SUBSCRIPTION
+   --------------------------------------------------------- */
+
+export const sellerSubscriptionPlans = [
+  {
+    id: "starter",
+    name: "Starter",
+    price: 0,
+    commission: 12,
+    description:
+      "Essential marketplace tools for growing sellers.",
+  },
+
+  {
+    id: "growth",
+    name: "Growth",
+    price: 999,
+    commission: 10,
+    description:
+      "Advanced selling and promotional capabilities.",
+  },
+
+  {
+    id: "premium",
+    name: "Premium",
+    price: 2499,
+    commission: 7,
+    description:
+      "Priority marketplace tools and premium visibility.",
+  },
+];
+
+export function getSellerSubscription() {
+  return getRevenueState().subscription;
+}
+
+export function updateSellerSubscription(plan) {
+  const state = getRevenueState();
+
+  const selectedPlan =
+    sellerSubscriptionPlans.find(
+      (item) => item.id === plan || item.name === plan
+    );
+
+  if (!selectedPlan) {
+    return state;
+  }
+
+  const updated = {
+    ...state,
+
+    commissionRate: selectedPlan.commission,
+
+    subscription: {
+      plan: selectedPlan.name,
+      active: true,
+      renewalDate: new Date(
+        Date.now() +
+          30 * 24 * 60 * 60 * 1000
+      ).toISOString(),
+    },
+  };
+
+  saveRevenueState(updated);
+
+  return updated;
+}
+
+/* ---------------------------------------------------------
+   SPONSORED PRODUCTS
+   --------------------------------------------------------- */
+
+export function getSponsoredProducts() {
+  return getRevenueState().sponsoredProducts || [];
+}
+
+export function sponsorProduct(product) {
+  const state = getRevenueState();
+
+  const id = String(
+    product?.id ?? product?.name
+  );
+
+  const exists =
+    state.sponsoredProducts.some(
+      (item) => String(item.productId) === id
+    );
+
+  if (exists) {
+    return state;
+  }
+
+  const updated = {
+    ...state,
+
+    sponsoredProducts: [
+      ...state.sponsoredProducts,
+
+      {
+        productId: id,
+        productName: product?.name || "Product",
+        image: resolveProductImage(product),
+        createdAt: new Date().toISOString(),
+        status: "Active",
+      },
+    ],
+  };
+
+  saveRevenueState(updated);
+
+  return updated;
+}
+
+export function removeSponsoredProduct(productId) {
+  const state = getRevenueState();
+
+  const updated = {
+    ...state,
+
+    sponsoredProducts:
+      state.sponsoredProducts.filter(
+        (item) =>
+          String(item.productId) !==
+          String(productId)
+      ),
+  };
+
+  saveRevenueState(updated);
+
+  return updated;
+}
+
+/* ---------------------------------------------------------
+   FEATURED PLACEMENT
+   --------------------------------------------------------- */
+
+export function getFeaturedProducts() {
+  return getRevenueState().featuredProducts || [];
+}
+
+export function featureProduct(product) {
+  const state = getRevenueState();
+
+  const id = String(
+    product?.id ?? product?.name
+  );
+
+  if (
+    state.featuredProducts.some(
+      (item) => String(item.productId) === id
+    )
+  ) {
+    return state;
+  }
+
+  const updated = {
+    ...state,
+
+    featuredProducts: [
+      ...state.featuredProducts,
+
+      {
+        productId: id,
+        productName: product?.name || "Product",
+        image: resolveProductImage(product),
+        position: "Marketplace Featured",
+        status: "Active",
+        createdAt: new Date().toISOString(),
+      },
+    ],
+  };
+
+  saveRevenueState(updated);
+
+  return updated;
+}
+
+export function removeFeaturedProduct(productId) {
+  const state = getRevenueState();
+
+  const updated = {
+    ...state,
+
+    featuredProducts:
+      state.featuredProducts.filter(
+        (item) =>
+          String(item.productId) !==
+          String(productId)
+      ),
+  };
+
+  saveRevenueState(updated);
+
+  return updated;
+}
+
+/* ---------------------------------------------------------
+   SPONSORED SEARCH
+   --------------------------------------------------------- */
+
+export function getSponsoredSearch() {
+  return getRevenueState().sponsoredSearch || [];
+}
+
+export function addSponsoredSearch(keyword, product) {
+  const state = getRevenueState();
+
+  const updated = {
+    ...state,
+
+    sponsoredSearch: [
+      ...state.sponsoredSearch,
+
+      {
+        id: `SEARCH-${Date.now()}`,
+        keyword: String(keyword || "").trim(),
+        productId:
+          product?.id ??
+          product?.name ??
+          "",
+        productName:
+          product?.name ||
+          "Marketplace Product",
+        status: "Active",
+        createdAt: new Date().toISOString(),
+      },
+    ],
+  };
+
+  saveRevenueState(updated);
+
+  return updated;
+}
+
+/* ---------------------------------------------------------
+   MARKETING CAMPAIGNS
+   --------------------------------------------------------- */
+
+export function getRevenueCampaigns() {
+  return getRevenueState().campaigns || [];
+}
+
+export function createRevenueCampaign({
+  name,
+  type = "Promotion",
+  discount = 10,
+  startDate = "",
+  endDate = "",
+}) {
+  const state = getRevenueState();
+
+  const campaign = {
+    id: `CMP-${Date.now()}`,
+    name:
+      String(name || "").trim() ||
+      "New Veyraa Campaign",
+    type,
+    discount: Number(discount || 0),
+    startDate,
+    endDate,
+    status: "Active",
+    createdAt: new Date().toISOString(),
+  };
+
+  const updated = {
+    ...state,
+
+    campaigns: [
+      ...state.campaigns,
+      campaign,
+    ],
+  };
+
+  saveRevenueState(updated);
+
+  return campaign;
+}
+
+/* ---------------------------------------------------------
+   PROFESSIONAL CATALOGUE SERVICE
+   --------------------------------------------------------- */
+
+export function getCatalogueServices() {
+  return getRevenueState().catalogueServices || [];
+}
+
+export function requestCatalogueService(product) {
+  const state = getRevenueState();
+
+  const productId = String(
+    product?.id ?? product?.name
+  );
+
+  const exists =
+    state.catalogueServices.some(
+      (item) =>
+        String(item.productId) === productId
+    );
+
+  if (exists) {
+    return state;
+  }
+
+  const updated = {
+    ...state,
+
+    catalogueServices: [
+      ...state.catalogueServices,
+
+      {
+        id: `CAT-${Date.now()}`,
+        productId,
+        productName:
+          product?.name || "Product",
+        service:
+          "Professional Catalogue Service",
+        price: 299,
+        status: "Requested",
+        requestedAt:
+          new Date().toISOString(),
+      },
+    ],
+  };
+
+  saveRevenueState(updated);
+
+  return updated;
+}
+
+/* ---------------------------------------------------------
+   VEYRAA FULFILMENT
+   --------------------------------------------------------- */
+
+export function getFulfilmentSettings() {
+  return getRevenueState().fulfilment;
+}
+
+export function enableFulfilment(enabled = true) {
+  const state = getRevenueState();
+
+  const updated = {
+    ...state,
+
+    fulfilment: {
+      ...state.fulfilment,
+      enabled,
+    },
+  };
+
+  saveRevenueState(updated);
+
+  return updated;
+}
+
+export function updateFulfilmentOrders(count) {
+  const state = getRevenueState();
+
+  const updated = {
+    ...state,
+
+    fulfilment: {
+      ...state.fulfilment,
+      ordersProcessed:
+        Number(count || 0),
+    },
+  };
+
+  saveRevenueState(updated);
+
+  return updated;
+}
+
+/* ---------------------------------------------------------
+   ADVANCED SELLER ANALYTICS
+   --------------------------------------------------------- */
+
+export function getAdvancedSellerAnalytics() {
+  const orders = ensureDemoOrders();
+
+  const revenue = orders.reduce(
+    (sum, order) =>
+      sum +
+      Number(order.amount || 0) *
+        Number(order.quantity || 1),
+    0
+  );
+
+  const units = orders.reduce(
+    (sum, order) =>
+      sum +
+      Number(order.quantity || 1),
+    0
+  );
+
+  const averageOrderValue =
+    orders.length > 0
+      ? revenue / orders.length
+      : 0;
+
+  const deliveredOrders =
+    orders.filter(
+      (order) =>
+        order.status === "Delivered"
+    ).length;
+
+  const deliveryRate =
+    orders.length > 0
+      ? (deliveredOrders /
+          orders.length) *
+        100
+      : 0;
+
+  const commission =
+    orders.reduce(
+      (sum, order) =>
+        sum +
+        calculateSellerCommission(
+          Number(order.amount || 0) *
+            Number(order.quantity || 1)
+        ),
+      0
+    );
+
+  return {
+    revenue: Number(revenue.toFixed(2)),
+    units,
+    orders: orders.length,
+
+    averageOrderValue:
+      Number(
+        averageOrderValue.toFixed(2)
+      ),
+
+    deliveryRate:
+      Number(
+        deliveryRate.toFixed(1)
+      ),
+
+    commission:
+      Number(commission.toFixed(2)),
+
+    settlement:
+      Number(
+        (revenue - commission).toFixed(2)
+      ),
+  };
+}
+
+/* ---------------------------------------------------------
+   VEYRAA VERIFIED SELLER
+   --------------------------------------------------------- */
+
+export function getVerifiedSellerStatus() {
+  return getRevenueState().verifiedSeller;
+}
+
+export function setVerifiedSellerStatus(
+  verified
+) {
+  const state = getRevenueState();
+
+  const updated = {
+    ...state,
+
+    verifiedSeller: {
+      ...state.verifiedSeller,
+      verified: Boolean(verified),
+      badge: verified
+        ? "Veyraa Verified"
+        : "",
+      since: verified
+        ? state.verifiedSeller.since ||
+          new Date().toISOString()
+        : "",
+    },
+  };
+
+  saveRevenueState(updated);
+
+  return updated;
+}

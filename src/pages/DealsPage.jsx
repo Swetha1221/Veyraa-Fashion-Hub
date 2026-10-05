@@ -136,9 +136,9 @@ const SORT_OPTIONS = [
 function getImageFolder(product) {
   const audience = String(
     product?.audience ||
-      product?.gender ||
-      product?.targetAudience ||
-      ""
+    product?.gender ||
+    product?.targetAudience ||
+    ""
   )
     .trim()
     .toLowerCase();
@@ -214,9 +214,9 @@ function getImageFolder(product) {
 function getImageCandidates(product) {
   const raw = String(
     product?.image ||
-      product?.imageUrl ||
-      product?.thumbnail ||
-      ""
+    product?.imageUrl ||
+    product?.thumbnail ||
+    ""
   ).trim();
 
   if (!raw) {
@@ -480,16 +480,16 @@ function DealsPage() {
       selectedAudience === "All"
         ? allProducts
         : allProducts.filter(
-            (product) =>
-              product.audience ===
-                selectedAudience ||
-              (selectedAudience === "Kids" &&
-                [
-                  "Boys",
-                  "Girls",
-                  "Kids",
-                ].includes(product.gender))
-          );
+          (product) =>
+            product.audience ===
+            selectedAudience ||
+            (selectedAudience === "Kids" &&
+              [
+                "Boys",
+                "Girls",
+                "Kids",
+              ].includes(product.gender))
+        );
 
     const counts = {};
 
@@ -548,7 +548,7 @@ function DealsPage() {
         ) {
           const matchesAudience =
             product.audience ===
-              selectedAudience ||
+            selectedAudience ||
             (selectedAudience ===
               "Kids" &&
               [
@@ -569,7 +569,7 @@ function DealsPage() {
         if (
           selectedCategory !== "All" &&
           product.categoryGroup !==
-            selectedCategory
+          selectedCategory
         ) {
           return false;
         }
@@ -590,9 +590,9 @@ function DealsPage() {
           if (range) {
             if (
               product.price <
-                range.min ||
+              range.min ||
               product.price >
-                range.max
+              range.max
             ) {
               return false;
             }
@@ -841,10 +841,13 @@ function DealsPage() {
   const handleViewProduct = (
     product
   ) => {
+    const catalog = product?.audience || product?.gender || "";
+    const query = catalog
+      ? `?catalog=${encodeURIComponent(catalog)}`
+      : "";
+
     window.location.href =
-      `/products/${encodeURIComponent(
-        product.id
-      )}`;
+      `/products/${encodeURIComponent(product.id)}${query}`;
   };
 
   /* =======================================================
@@ -887,12 +890,11 @@ function DealsPage() {
             <button
               key={audience}
               type="button"
-              className={`filter-pill ${
-                selectedAudience ===
-                audience
+              className={`filter-pill ${selectedAudience ===
+                  audience
                   ? "active"
                   : ""
-              }`}
+                }`}
               onClick={() =>
                 setSelectedAudience(
                   audience
@@ -918,12 +920,11 @@ function DealsPage() {
         <div className="filter-category-list">
 
           <label
-            className={`category-radio-item ${
-              selectedCategory ===
-              "All"
+            className={`category-radio-item ${selectedCategory ===
+                "All"
                 ? "selected"
                 : ""
-            }`}
+              }`}
           >
 
             <input
@@ -950,12 +951,11 @@ function DealsPage() {
             (category) => (
               <label
                 key={category}
-                className={`category-radio-item ${
-                  selectedCategory ===
-                  category
+                className={`category-radio-item ${selectedCategory ===
+                    category
                     ? "selected"
                     : ""
-                }`}
+                  }`}
               >
 
                 <input
@@ -998,12 +998,11 @@ function DealsPage() {
             (range) => (
               <label
                 key={range.id}
-                className={`category-radio-item ${
-                  selectedPriceRange ===
-                  range.id
+                className={`category-radio-item ${selectedPriceRange ===
+                    range.id
                     ? "selected"
                     : ""
-                }`}
+                  }`}
               >
 
                 <input
@@ -1047,12 +1046,11 @@ function DealsPage() {
               <button
                 key={discount.id}
                 type="button"
-                className={`filter-pill ${
-                  selectedDiscount ===
-                  discount.id
+                className={`filter-pill ${selectedDiscount ===
+                    discount.id
                     ? "active"
                     : ""
-                }`}
+                  }`}
                 onClick={() =>
                   setSelectedDiscount(
                     discount.id
@@ -1095,12 +1093,11 @@ function DealsPage() {
             <button
               key={item.id}
               type="button"
-              className={`filter-pill ${
-                selectedAvailability ===
-                item.id
+              className={`filter-pill ${selectedAvailability ===
+                  item.id
                   ? "active"
                   : ""
-              }`}
+                }`}
               onClick={() =>
                 setSelectedAvailability(
                   item.id
@@ -1326,7 +1323,7 @@ function DealsPage() {
                   }
                 </strong>{" "}
                 {displayedProducts.length ===
-                1
+                  1
                   ? "style"
                   : "styles"}
               </span>
@@ -1377,105 +1374,105 @@ function DealsPage() {
 
               {selectedAudience !==
                 "All" && (
-                <button
-                  type="button"
-                  className="filter-chip"
-                  onClick={() =>
-                    setSelectedAudience(
-                      "All"
-                    )
-                  }
-                >
-                  {selectedAudience}
-                  <span className="chip-x">
-                    ×
-                  </span>
-                </button>
-              )}
+                  <button
+                    type="button"
+                    className="filter-chip"
+                    onClick={() =>
+                      setSelectedAudience(
+                        "All"
+                      )
+                    }
+                  >
+                    {selectedAudience}
+                    <span className="chip-x">
+                      ×
+                    </span>
+                  </button>
+                )}
 
               {selectedCategory !==
                 "All" && (
-                <button
-                  type="button"
-                  className="filter-chip"
-                  onClick={() =>
-                    setSelectedCategory(
-                      "All"
-                    )
-                  }
-                >
-                  {selectedCategory}
-                  <span className="chip-x">
-                    ×
-                  </span>
-                </button>
-              )}
+                  <button
+                    type="button"
+                    className="filter-chip"
+                    onClick={() =>
+                      setSelectedCategory(
+                        "All"
+                      )
+                    }
+                  >
+                    {selectedCategory}
+                    <span className="chip-x">
+                      ×
+                    </span>
+                  </button>
+                )}
 
               {selectedPriceRange !==
                 "all" && (
-                <button
-                  type="button"
-                  className="filter-chip"
-                  onClick={() =>
-                    setSelectedPriceRange(
-                      "all"
-                    )
-                  }
-                >
-                  {
-                    PRICE_RANGES.find(
-                      (range) =>
-                        range.id ===
-                        selectedPriceRange
-                    )?.label
-                  }
+                  <button
+                    type="button"
+                    className="filter-chip"
+                    onClick={() =>
+                      setSelectedPriceRange(
+                        "all"
+                      )
+                    }
+                  >
+                    {
+                      PRICE_RANGES.find(
+                        (range) =>
+                          range.id ===
+                          selectedPriceRange
+                      )?.label
+                    }
 
-                  <span className="chip-x">
-                    ×
-                  </span>
-                </button>
-              )}
+                    <span className="chip-x">
+                      ×
+                    </span>
+                  </button>
+                )}
 
               {selectedDiscount !==
                 "all" && (
-                <button
-                  type="button"
-                  className="filter-chip"
-                  onClick={() =>
-                    setSelectedDiscount(
-                      "all"
-                    )
-                  }
-                >
-                  {selectedDiscount}%+ OFF
+                  <button
+                    type="button"
+                    className="filter-chip"
+                    onClick={() =>
+                      setSelectedDiscount(
+                        "all"
+                      )
+                    }
+                  >
+                    {selectedDiscount}%+ OFF
 
-                  <span className="chip-x">
-                    ×
-                  </span>
-                </button>
-              )}
+                    <span className="chip-x">
+                      ×
+                    </span>
+                  </button>
+                )}
 
               {selectedAvailability !==
                 "all" && (
-                <button
-                  type="button"
-                  className="filter-chip"
-                  onClick={() =>
-                    setSelectedAvailability(
-                      "all"
-                    )
-                  }
-                >
-                  {selectedAvailability ===
-                  "in-stock"
-                    ? "In Stock"
-                    : "Out of Stock"}
+                  <button
+                    type="button"
+                    className="filter-chip"
+                    onClick={() =>
+                      setSelectedAvailability(
+                        "all"
+                      )
+                    }
+                  >
+                    {selectedAvailability ===
+                      "in-stock"
+                      ? "In Stock"
+                      : "Out of Stock"}
 
-                  <span className="chip-x">
-                    ×
-                  </span>
-                </button>
-              )}
+                    <span className="chip-x">
+                      ×
+                    </span>
+                  </button>
+                )}
 
               {searchQuery.trim() && (
                 <button
@@ -1511,7 +1508,7 @@ function DealsPage() {
               ================================================= */}
 
           {displayedProducts.length ===
-          0 ? (
+            0 ? (
 
             <div className="deals-empty-state">
 
@@ -1551,14 +1548,14 @@ function DealsPage() {
 
                   const isWishlisted =
                     !!wishlistMap[
-                      String(product.id)
+                    String(product.id)
                     ];
 
                   const originalPrice =
                     Number(
                       product.originalPrice ||
-                        product.oldPrice ||
-                        product.price
+                      product.oldPrice ||
+                      product.price
                     );
 
                   const salePrice =
@@ -1621,11 +1618,10 @@ function DealsPage() {
 
                         <button
                           type="button"
-                          className={`deal-card-wishlist-btn ${
-                            isWishlisted
+                          className={`deal-card-wishlist-btn ${isWishlisted
                               ? "active"
                               : ""
-                          }`}
+                            }`}
                           onClick={(
                             event
                           ) =>
@@ -1687,13 +1683,13 @@ function DealsPage() {
 
                             {originalPrice >
                               salePrice && (
-                              <del className="deal-orig-price">
-                                ₹
-                                {originalPrice.toLocaleString(
-                                  "en-IN"
-                                )}
-                              </del>
-                            )}
+                                <del className="deal-orig-price">
+                                  ₹
+                                  {originalPrice.toLocaleString(
+                                    "en-IN"
+                                  )}
+                                </del>
+                              )}
 
                           </div>
 

@@ -15,6 +15,13 @@ const PORTAL_INFO = {
     description:
       "Sign in to access Veyraa operations, sellers, catalogue and analytics.",
   },
+
+  delivery: {
+    label: "Delivery Center",
+    title: "Welcome back, Delivery Partner.",
+    description:
+      "Sign in to access assigned orders, pickup, delivery tracking and delivery operations.",
+  },
 };
 
 function PortalLogin({ role, children }) {
@@ -37,7 +44,7 @@ function PortalLogin({ role, children }) {
     const enteredUsername = username.trim();
     const enteredPassword = password.trim();
 
-    // Allow any username and password.
+    // Any username + any password is accepted.
     // Only empty fields are rejected.
     if (!enteredUsername || !enteredPassword) {
       setError("Please enter both username and password.");
@@ -60,9 +67,10 @@ function PortalLogin({ role, children }) {
     setShowPassword(false);
   };
 
-  /*
-   * AFTER LOGIN
-   */
+  // =====================================================
+  // AFTER LOGIN
+  // =====================================================
+
   if (authenticated) {
     return (
       <div className="portal-authenticated">
@@ -79,16 +87,15 @@ function PortalLogin({ role, children }) {
     );
   }
 
-  /*
-   * LOGIN PAGE
-   */
+  // =====================================================
+  // LOGIN PAGE
+  // =====================================================
+
   return (
     <div className={`portal-login-page portal-${role}`}>
       <div className="portal-login-shell">
 
-        {/* ================================
-            BRAND
-        ================================= */}
+        {/* BRAND */}
         <div className="portal-login-brand">
           <div className="portal-logo">V</div>
 
@@ -98,14 +105,10 @@ function PortalLogin({ role, children }) {
           </div>
         </div>
 
-        {/* ================================
-            LOGIN CONTENT
-        ================================= */}
+        {/* LOGIN CONTENT */}
         <div className="portal-login-content">
 
-          {/* ================================
-              LEFT SIDE
-          ================================= */}
+          {/* LEFT SIDE */}
           <div className="portal-login-copy">
             <small>SECURE WORKSPACE</small>
 
@@ -120,18 +123,17 @@ function PortalLogin({ role, children }) {
             </div>
           </div>
 
-          {/* ================================
-              LOGIN CARD
-          ================================= */}
+          {/* LOGIN CARD */}
           <form
             className="portal-login-card"
             onSubmit={login}
           >
-
             <div className="portal-card-kicker">
               {role === "seller"
                 ? "SELLER LOGIN"
-                : "ADMIN LOGIN"}
+                : role === "admin"
+                ? "ADMIN LOGIN"
+                : "DELIVERY LOGIN"}
             </div>
 
             <h2>Sign in</h2>
@@ -140,9 +142,7 @@ function PortalLogin({ role, children }) {
               Enter your Veyraa workspace credentials.
             </p>
 
-            {/* ================================
-                USERNAME
-            ================================= */}
+            {/* USERNAME */}
             <label>
               Username
 
@@ -159,19 +159,13 @@ function PortalLogin({ role, children }) {
               />
             </label>
 
-            {/* ================================
-                PASSWORD
-            ================================= */}
+            {/* PASSWORD */}
             <label>
               Password
 
               <div className="portal-password-wrap">
                 <input
-                  type={
-                    showPassword
-                      ? "text"
-                      : "password"
-                  }
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
@@ -185,48 +179,39 @@ function PortalLogin({ role, children }) {
                 <button
                   type="button"
                   onClick={() =>
-                    setShowPassword(
-                      (value) => !value
-                    )
+                    setShowPassword((value) => !value)
                   }
                 >
-                  {showPassword
-                    ? "Hide"
-                    : "Show"}
+                  {showPassword ? "Hide" : "Show"}
                 </button>
               </div>
             </label>
 
-            {/* ================================
-                ERROR
-            ================================= */}
+            {/* ERROR */}
             {error && (
               <div className="portal-login-error">
                 {error}
               </div>
             )}
 
-            {/* ================================
-                LOGIN BUTTON
-            ================================= */}
+            {/* LOGIN BUTTON */}
             <button
               className="portal-login-submit"
               type="submit"
             >
               Sign In →
             </button>
-
           </form>
         </div>
 
-        {/* ================================
-            FOOTER
-        ================================= */}
+        {/* FOOTER */}
         <div className="portal-login-footer">
           Veyraa Fashion Hub ·{" "}
           {role === "seller"
             ? "Seller Workspace"
-            : "Admin Workspace"}
+            : role === "admin"
+            ? "Admin Workspace"
+            : "Delivery Workspace"}
         </div>
 
       </div>
@@ -234,9 +219,9 @@ function PortalLogin({ role, children }) {
   );
 }
 
-/* =========================================
-   SELLER PORTAL
-========================================= */
+// =====================================================
+// SELLER PORTAL
+// =====================================================
 
 export function SellerPortal({ children }) {
   return (
@@ -246,13 +231,25 @@ export function SellerPortal({ children }) {
   );
 }
 
-/* =========================================
-   ADMIN PORTAL
-========================================= */
+// =====================================================
+// ADMIN PORTAL
+// =====================================================
 
 export function AdminPortal({ children }) {
   return (
     <PortalLogin role="admin">
+      {children}
+    </PortalLogin>
+  );
+}
+
+// =====================================================
+// DELIVERY PORTAL
+// =====================================================
+
+export function DeliveryPortal({ children }) {
+  return (
+    <PortalLogin role="delivery">
       {children}
     </PortalLogin>
   );

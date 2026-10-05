@@ -5871,3 +5871,277 @@ main{width:100%}
     width: 100%;
   }
 }
+/* =========================================================
+   VEYRAA WORKSPACE
+   SELLER + ADMIN PORTALS
+   FINAL UI FIX
+   ========================================================= */
+
+.veyraa-portal-section {
+  display: block !important;
+  width: 100% !important;
+  margin: 26px 0 20px !important;
+  padding: 20px 0 0 !important;
+  border-top: 1px solid #eee5e1 !important;
+  box-sizing: border-box !important;
+}
+
+/* Heading */
+
+.veyraa-portal-heading {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 0 13px !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.veyraa-portal-heading span {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 0 4px !important;
+  padding: 0 !important;
+
+  font-size: 10px !important;
+  line-height: 1.3 !important;
+  letter-spacing: 2px !important;
+  font-weight: 700 !important;
+
+  color: #9a6a68 !important;
+}
+
+.veyraa-portal-heading small {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+
+  color: #888 !important;
+}
+
+/* =========================================================
+   PORTAL BUTTON
+   ========================================================= */
+
+.veyraa-portal-card {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+
+  display: flex !important;
+  align-items: center !important;
+
+  width: 100% !important;
+  min-height: 72px !important;
+
+  margin: 10px 0 0 !important;
+  padding: 13px 14px !important;
+
+  box-sizing: border-box !important;
+
+  border: 1px solid #eee4df !important;
+  border-radius: 14px !important;
+
+  background: #ffffff !important;
+
+  color: #292322 !important;
+
+  text-align: left !important;
+  font-family: inherit !important;
+
+  cursor: pointer !important;
+
+  gap: 12px !important;
+
+  outline: none !important;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease !important;
+}
+
+.veyraa-portal-card:hover {
+  transform: translateY(-2px) !important;
+
+  background: #fffdfc !important;
+
+  box-shadow:
+    0 8px 22px rgba(80, 50, 45, 0.09) !important;
+}
+
+/* =========================================================
+   SELLER CARD
+   ========================================================= */
+
+.seller-portal-card:hover {
+  border-color: #c99a95 !important;
+}
+
+/* =========================================================
+   ADMIN CARD
+   ========================================================= */
+
+.admin-portal-card:hover {
+  border-color: #9d8b86 !important;
+}
+
+/* =========================================================
+   ICON
+   ========================================================= */
+
+.portal-card-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  flex: 0 0 42px !important;
+
+  width: 42px !important;
+  height: 42px !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  border-radius: 12px !important;
+
+  font-size: 18px !important;
+  line-height: 1 !important;
+
+  box-sizing: border-box !important;
+}
+
+.seller-icon {
+  background: #f7ebe8 !important;
+  color: #8e5753 !important;
+}
+
+.admin-icon {
+  background: #eee9e7 !important;
+  color: #554541 !important;
+}
+
+/* =========================================================
+   PORTAL TEXT
+   ========================================================= */
+
+.portal-card-content {
+  display: block !important;
+
+  flex: 1 1 auto !important;
+
+  min-width: 0 !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  text-align: left !important;
+}
+
+.portal-card-content strong {
+  display: block !important;
+
+  margin: 0 0 4px !important;
+  padding: 0 !important;
+
+  color: #292322 !important;
+
+  font-size: 14px !important;
+  line-height: 1.3 !important;
+
+  font-weight: 700 !important;
+}
+
+.portal-card-content span {
+  display: block !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  color: #8b8582 !important;
+
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+
+  white-space: normal !important;
+}
+
+/* =========================================================
+   ARROW
+   ========================================================= */
+
+.portal-arrow {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  flex: 0 0 auto !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  color: #9c7772 !important;
+
+  font-size: 18px !important;
+  line-height: 1 !important;
+
+  transition: transform 0.2s ease !important;
+}
+
+.veyraa-portal-card:hover .portal-arrow {
+  transform: translateX(4px) !important;
+}
+
+/* =========================================================
+   FIX EXISTING ACCOUNT MENU BUTTONS
+   ========================================================= */
+
+.account-menu-item {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Prevent buttons from getting browser default appearance */
+
+.account-menu-item.account-menu-button {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+
+  background: transparent !important;
+  border: none !important;
+
+  font-family: inherit !important;
+  font-size: inherit !important;
+
+  text-align: left !important;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .account-sidebar {
+    width: 92vw !important;
+    max-width: 92vw !important;
+    padding: 22px !important;
+  }
+
+  .veyraa-portal-card {
+    min-height: 68px !important;
+    padding: 12px !important;
+  }
+
+  .portal-card-content strong {
+    font-size: 13px !important;
+  }
+
+  .portal-card-content span {
+    font-size: 10px !important;
+  }
+
+}

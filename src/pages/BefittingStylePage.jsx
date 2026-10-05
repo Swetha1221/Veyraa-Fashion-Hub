@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import VirtualTryOn from "../components/VirtualTryOn";
@@ -151,27 +151,21 @@ function getDiscountPercent(product) {
 }
 
 function matchesAudience(product, audience) {
-  const productAudience = String(
-    product?.audience || ""
-  ).trim().toLowerCase();
+  const explicitAudience = String(product?.audience || "").trim().toLowerCase();
 
   if (audience === "Women") {
-    return productAudience === "women";
+    return explicitAudience === "women";
   }
 
   if (audience === "Men") {
-    return productAudience === "men";
+    return explicitAudience === "men";
   }
 
-  if (audience === "Kids") {
-    return (
-      productAudience === "kids" ||
-      productAudience === "boys" ||
-      productAudience === "girls"
-    );
-  }
-
-  return false;
+  return (
+    explicitAudience === "kids" ||
+    explicitAudience === "girls" ||
+    explicitAudience === "boys"
+  );
 }
 
 function getProductScore(product, selectedStyles, selectedColors, fitPreference, selectedOccasion, vibeData) {
@@ -228,6 +222,12 @@ function getLookTotal(look) {
   return Object.values(look).reduce((total, product) => total + (Number(product?.price) || 0), 0);
 }
 
+function getComboPrice(total, itemCount) {
+  if (!total || itemCount < 2) return total;
+  const discountRate = itemCount >= 4 ? 0.20 : 0.16;
+  return Math.max(0, Math.round((total * (1 - discountRate)) / 100) * 100);
+}
+
 function getRoleProducts(pool, role) {
   return pool.filter((product) => getLookRole(product) === role);
 }
@@ -243,10 +243,19 @@ function BefittingStylePage() {
   const [wishlistIds, setWishlistIds] = useState(() => readWishlistIds());
   const [lookSelections, setLookSelections] = useState({ top: null, bottom: null, footwear: null, accessory: null });
   const [selectorRole, setSelectorRole] = useState(null);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [assistPrompt, setAssistPrompt] = useState("");
-  const [assistResult, setAssistResult] = useState(null);
+  const [occasionPreview, setOccasionPreview] = useState(null);
+  const [occasionPreviewSize, setOccasionPreviewSize] = useState("M");
+  const previewSizes = ["XS", "S", "M", "L", "XL", "XXL"];
+  const [assistantInput, setAssistantInput] = useState("");
+  const [assistantMessages, setAssistantMessages] = useState([
+    {
+      role: "assistant",
+      text: "Hi! I’m your Veyraa Style Assistant. Tell me what you’re looking for — you can type it or use the microphone.",
+    },
+  ]);
+  const [isListening, setIsListening] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const recognitionRef = useRef(null);
   const [measurements, setMeasurements] = useState({
     height: "165 cm",
     weight: "60 kg",
@@ -279,19 +288,27 @@ function BefittingStylePage() {
   }, [recommendationPool, selectedColors, selectedFit, selectedOccasion, selectedStyles, selectedVibeData]);
 
   const occasionProducts = useMemo(() => {
-    const filtered = [...recommendationPool].filter((product) => {
-      const lower = `${product.name} ${product.category} ${product.type}`.toLowerCase();
-      if (selectedOccasion === "Wedding") return lower.includes("saree") || lower.includes("lehenga") || lower.includes("bridal");
-      if (selectedOccasion === "Festival") return lower.includes("festive") || lower.includes("silk") || lower.includes("ethnic");
-      if (selectedOccasion === "Office") return lower.includes("shirt") || lower.includes("blazer") || lower.includes("trouser");
-      if (selectedOccasion === "College") return lower.includes("tee") || lower.includes("jeans") || lower.includes("casual");
-      if (selectedOccasion === "Party") return lower.includes("dress") || lower.includes("frock") || lower.includes("party");
-      if (selectedOccasion === "Date Night") return lower.includes("dress") || lower.includes("silk") || lower.includes("top");
-      if (selectedOccasion === "Vacation") return lower.includes("cotton") || lower.includes("dress") || lower.includes("shirt");
-      return lower.includes("t-shirt") || lower.includes("casual") || lower.includes("kurti");
+    const keywordMap = {
+      Wedding: ["saree", "lehenga", "bridal", "silk", "ethnic", "traditional", "party"],
+      Festival: ["festive", "silk", "ethnic", "saree", "kurti", "salwar", "lehenga", "kurta"],
+      Office: ["shirt", "blazer", "trouser", "formal", "office", "kurti", "dress", "top"],
+      College: ["t-shirt", "tee", "jeans", "casual", "denim", "sneaker", "top"],
+      Party: ["dress", "frock", "party", "silk", "heels", "handbag", "top"],
+      "Date Night": ["dress", "silk", "top", "heels", "bag"],
+      Vacation: ["cotton", "dress", "shirt", "denim", "casual", "sandal"],
+      "Casual Day Out": ["t-shirt", "tee", "casual", "cotton", "jeans", "denim", "shirt", "kurti"],
+    };
+
+    const keywords = keywordMap[selectedOccasion] || keywordMap["Casual Day Out"];
+    const ranked = [...recommendationPool].sort((a, b) => {
+      const score = (product) => {
+        const text = productText(product);
+        return keywords.reduce((total, keyword) => total + (text.includes(keyword) ? 1 : 0), 0);
+      };
+      return score(b) - score(a);
     });
 
-    return filtered.slice(0, 4);
+    return ranked.slice(0, 4);
   }, [recommendationPool, selectedOccasion]);
 
   const styleMatch = useMemo(() => {
@@ -308,6 +325,12 @@ function BefittingStylePage() {
   }, [selectedColors, selectedFit, selectedStyles]);
 
   const completeLook = useMemo(() => {
+    const hasAnchorProduct = Object.values(lookSelections).some(Boolean);
+
+    if (!hasAnchorProduct) {
+      return { top: null, bottom: null, footwear: null, accessory: null };
+    }
+
     const ranked = (role) =>
       [...getRoleProducts(recommendationPool, role)].sort(
         (a, b) =>
@@ -320,11 +343,16 @@ function BefittingStylePage() {
     const footwearChoices = ranked("footwear");
     const accessoryChoices = ranked("accessory");
 
+    const chosenTop = lookSelections.top || topChoices[0] || null;
+    const chosenBottom = lookSelections.bottom || bottomChoices.find((item) => item.id !== chosenTop?.id) || bottomChoices[0] || null;
+    const chosenFootwear = lookSelections.footwear || footwearChoices[0] || null;
+    const chosenAccessory = lookSelections.accessory || accessoryChoices[0] || null;
+
     return {
-      top: lookSelections.top || topChoices[0] || recommendationPool[0],
-      bottom: lookSelections.bottom || bottomChoices[0] || recommendationPool[1] || recommendationPool[0],
-      footwear: lookSelections.footwear || footwearChoices[0] || null,
-      accessory: lookSelections.accessory || accessoryChoices[0] || null,
+      top: chosenTop,
+      bottom: chosenBottom,
+      footwear: chosenFootwear,
+      accessory: chosenAccessory,
     };
   }, [lookSelections, recommendationPool, selectedColors, selectedFit, selectedOccasion, selectedStyles, selectedVibeData]);
 
@@ -332,6 +360,14 @@ function BefittingStylePage() {
     () => Object.values(lookSelections).filter(Boolean),
     [lookSelections]
   );
+
+  const completeLookProducts = useMemo(
+    () => Object.values(completeLook).filter(Boolean),
+    [completeLook]
+  );
+  const separateLookTotal = getLookTotal(completeLookProducts);
+  const comboLookPrice = getComboPrice(separateLookTotal, completeLookProducts.length);
+  const comboSavings = Math.max(0, separateLookTotal - comboLookPrice);
 
   useEffect(() => {
     setLookSelections({ top: null, bottom: null, footwear: null, accessory: null });
@@ -352,13 +388,7 @@ function BefittingStylePage() {
     }
   }, []);
 
-  useEffect(() => {
-    const openSearch = () => setSearchOpen(true);
-    window.addEventListener("befitting:open-search", openSearch);
-    return () => window.removeEventListener("befitting:open-search", openSearch);
-  }, []);
-
-  const handleFieldChange = (event) => {
+const handleFieldChange = (event) => {
     const { name, value } = event.target;
     setMeasurements((current) => ({ ...current, [name]: value }));
   };
@@ -458,81 +488,172 @@ function BefittingStylePage() {
     window.location.href = `/products/${encodeURIComponent(product.id)}?catalog=${encodeURIComponent(product.audience || selectedAudience)}`;
   };
 
+  const openOccasionPreview = (product) => {
+    if (!product) return;
+    setOccasionPreview(product);
+    setOccasionPreviewSize("M");
+  };
+
   const openLookPreview = () => {
     sessionStorage.setItem("veyraaLookPreview", JSON.stringify(Object.values(completeLook).filter(Boolean)));
     window.location.href = "/look-preview";
   };
 
   const selectLookProduct = (product) => {
+    if (!product || !selectorRole) return;
     setLookSelections((current) => ({ ...current, [selectorRole]: product }));
     setSelectorRole(null);
   };
 
-  const assistPrompts = {
-    "What should I wear for a wedding?": {
-      label: "Wedding",
-      text: "Elegant festive styling with refined traditional silhouettes and statement accessories.",
-      filter: (product) => /saree|lehenga|ethnic|festive|silk|bridal|party|frock/i.test(productText(product)),
-    },
-    "Find something for a casual day out": {
-      label: "Casual Day Out",
-      text: "Easy, polished layers in breathable fabrics for an effortless day out.",
-      filter: (product) => /casual|cotton|t-shirt|jeans|denim|shirt/i.test(productText(product)),
-    },
-    "Suggest an outfit for college": {
-      label: "College",
-      text: "Comfort-first casual pieces with an expressive, youthful finish.",
-      filter: (product) => /casual|t-shirt|jeans|denim|shirt|sneaker/i.test(productText(product)),
-    },
-    "Help me complete this look": {
-      label: "Complete My Look",
-      text: `Your current look pairs ${completeLook.top?.name || "a top"} with ${completeLook.bottom?.name || "a bottom"}, ${completeLook.footwear?.name || "footwear"}${completeLook.accessory ? ` and ${completeLook.accessory.name}` : ""}.`,
-      filter: () => true,
-    },
+  const buildAssistantReply = (question) => {
+    const q = String(question || "").trim().toLowerCase();
+    const profile = `${selectedAudience} ${selectedStyles.join(" ")} ${selectedColors.join(" ")} ${selectedFit} ${selectedVibe} ${selectedOccasion}`;
+    const pool = recommendationPool;
+
+    let text = "";
+    let filter = () => true;
+
+    if (/wedding|marriage|bridal|reception/.test(q)) {
+      text = `For your ${selectedAudience} profile, I’d build a wedding look around ${selectedVibe.toLowerCase()} styling. I’d start with an elegant statement piece and finish it with coordinated accessories.`;
+      filter = (product) => /saree|lehenga|silk|ethnic|traditional|dress|party|jewellery|jewelry/i.test(productText(product));
+    } else if (/festival|diwali|pongal|onam|celebration|festive/.test(q)) {
+      text = `For a festival, I’d lean into ${selectedColors.join(" + ").toLowerCase()} tones with a traditional silhouette that still feels easy to wear.`;
+      filter = (product) => /saree|kurti|salwar|lehenga|kurta|silk|festive|ethnic|traditional/i.test(productText(product));
+    } else if (/college|campus|university/.test(q)) {
+      text = `For college, I’d keep it comfortable and expressive: ${selectedFit.toLowerCase()} fits, easy layers and pieces that work across the day.`;
+      filter = (product) => /t-shirt|tee|jeans|denim|shirt|casual|sneaker|top|trouser/i.test(productText(product));
+    } else if (/office|work|meeting|interview/.test(q)) {
+      text = `For work, I’d keep your ${selectedVibe.toLowerCase()} direction polished with clean tailoring and versatile colors.`;
+      filter = (product) => /shirt|blazer|trouser|formal|office|kurti|dress|top/i.test(productText(product));
+    } else if (/casual|day out|weekend|outing/.test(q)) {
+      text = `For a casual day out, I’d keep the look relaxed but intentional — easy separates with one polished detail.`;
+      filter = (product) => /casual|cotton|t-shirt|tee|jeans|denim|shirt|top|sneaker/i.test(productText(product));
+    } else if (/party|date|evening|night/.test(q)) {
+      text = `For an evening look, I’d make one piece the focus and keep the rest coordinated around it.`;
+      filter = (product) => /dress|top|silk|party|elegant|heels|heel|bag|handbag/i.test(productText(product));
+    } else if (/under|budget|cheap|affordable|price/.test(q)) {
+      text = `I’ll keep the recommendation practical and prioritize pieces with a strong value-to-style balance from your selected ${selectedAudience} collection.`;
+      filter = (product) => Number(product?.price || 0) <= 2500;
+    } else if (/with this|complete|pair|match|go with/.test(q)) {
+      text = `Let’s build around your current look. I’ll suggest pieces that complement the ${selectedVibe.toLowerCase()} direction and your ${selectedFit.toLowerCase()} fit preference.`;
+      filter = (product) => /jeans|trouser|skirt|top|shirt|kurti|saree|bag|handbag|shoe|sneaker|heel|belt|watch|jewellery|jewelry/i.test(productText(product));
+    } else {
+      text = `Absolutely. I can help you choose what to wear, find a product, match an outfit, or style you for a specific occasion. Based on your ${selectedAudience} profile and ${selectedVibe.toLowerCase()} direction, I’d keep the look aligned with your ${selectedFit.toLowerCase()} fit preference.`;
+    }
+
+    const productsForReply = pool.filter(filter).slice(0, 3);
+    return {
+      text,
+      products: productsForReply.length ? productsForReply : pool.slice(0, 3),
+      profile,
+    };
   };
 
-  const matchingSearchProducts = searchTerm.trim()
-    ? allProducts.filter((product) => productText(product).includes(searchTerm.trim().toLowerCase())).slice(0, 8)
-    : [];
+  const speakAssistantReply = (text) => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
 
-  const matchingAssistProducts = assistResult
-    ? recommendationPool.filter(assistResult.filter).slice(0, 3)
-    : [];
+    window.speechSynthesis.cancel();
+    const utterance = new window.SpeechSynthesisUtterance(text);
+    utterance.lang = "en-IN";
+    utterance.rate = 0.95;
+    utterance.pitch = 1;
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+    window.speechSynthesis.speak(utterance);
+  };
 
-  const promptSuggestions = [
-    "What should I wear for a wedding?",
-    "Find something for a casual day out",
-    "Suggest an outfit for college",
-    "Help me complete this look",
-  ];
+  const sendAssistantMessage = (rawText) => {
+    const text = String(rawText || "").trim();
+    if (!text) return;
+
+    const reply = buildAssistantReply(text);
+
+    setAssistantMessages((current) => [
+      ...current,
+      { role: "user", text },
+      {
+        role: "assistant",
+        text: reply.text,
+        products: reply.products,
+      },
+    ]);
+    setAssistantInput("");
+    speakAssistantReply(reply.text);
+  };
+
+  const startAssistantVoice = () => {
+    if (typeof window === "undefined") return;
+
+    const Recognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!Recognition) {
+      const message =
+        "Voice input is not available in this browser. Please use Google Chrome or Microsoft Edge, or type your question below.";
+      setAssistantMessages((current) => [
+        ...current,
+        { role: "assistant", text: message },
+      ]);
+      return;
+    }
+
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+    }
+
+    const recognition = new Recognition();
+    recognition.lang = "en-IN";
+    recognition.interimResults = false;
+    recognition.continuous = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => setIsListening(true);
+    recognition.onend = () => {
+      setIsListening(false);
+      recognitionRef.current = null;
+    };
+    recognition.onerror = () => {
+      setIsListening(false);
+      recognitionRef.current = null;
+      setAssistantMessages((current) => [
+        ...current,
+        {
+          role: "assistant",
+          text: "I couldn’t hear that clearly. Please try the microphone again or type your question.",
+        },
+      ]);
+    };
+    recognition.onresult = (event) => {
+      const transcript = event.results?.[0]?.[0]?.transcript || "";
+      setAssistantInput(transcript);
+      sendAssistantMessage(transcript);
+    };
+
+    recognitionRef.current = recognition;
+    recognition.start();
+  };
+
+  const quickAssistantPrompt = (text) => {
+    setAssistantInput(text);
+    sendAssistantMessage(text);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
 
   return (
     <div className="befitting-style-page">
       <Navbar />
 
-      {searchOpen && (
-        <div className="befitting-overlay" role="presentation" onClick={() => setSearchOpen(false)}>
-          <section className="befitting-search-dialog" role="dialog" aria-modal="true" aria-label="Search Veyraa fashion" onClick={(event) => event.stopPropagation()}>
-            <div className="overlay-heading">
-              <div>
-                <span className="eyebrow">VEYRAA SEARCH</span>
-                <h2>Find your next look</h2>
-              </div>
-              <button type="button" className="overlay-close" onClick={() => setSearchOpen(false)} aria-label="Close search">×</button>
-            </div>
-            <input autoFocus value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} placeholder="Search lehenga, kurti, jeans, wedding..." />
-            <div className="search-results">
-              {matchingSearchProducts.map((product) => (
-                <button type="button" key={`${product.audience}-${product.id}`} className="search-result" onClick={() => openProduct({ ...product, image: resolveCatalogImage(product) })}>
-                  <img src={resolveCatalogImage(product)} alt={product.name} />
-                  <span><strong>{product.name}</strong><small>{product.category || product.type} · ₹{product.price}</small></span>
-                </button>
-              ))}
-              {searchTerm && !matchingSearchProducts.length && <p className="empty-search">No matching styles yet. Try a product, category or occasion.</p>}
-            </div>
-          </section>
-        </div>
-      )}
 
       <section className="befitting-hero">
         <div className="befitting-hero-overlay">
@@ -701,69 +822,6 @@ function BefittingStylePage() {
         </div>
       </section>
 
-      <section className="style-match">
-        <div className="section-heading center">
-          <span className="eyebrow">STYLE MATCH RESULT</span>
-          <h2>Your Style Match</h2>
-        </div>
-
-        <div className="match-summary">
-          <div className="match-metric">
-            <span>STYLE MATCH</span>
-            <strong>{Math.round(styleMatch.score)}%</strong>
-          </div>
-          <div className="match-metric">
-            <span>FIT PREFERENCE</span>
-            <strong>{styleMatch.fit}</strong>
-          </div>
-          <div className="match-metric">
-            <span>COLOR MOOD</span>
-            <strong>{styleMatch.colorMood}</strong>
-          </div>
-        </div>
-
- <p className="match-caption">
-  Your style profile leans toward {styleMatch.style}, with a{" "}
-  {String(selectedVibe || "Everyday Chic").toLowerCase()} direction for{" "}
-  {String(selectedOccasion || "Casual Day Out").toLowerCase()}.
-</p>
-
-        <div className="match-grid">
-          {recommendedProducts.slice(0, 4).map((product) => (
-            <article className="product-card" key={product.id || product.name}>
-              <div className="product-image-wrap">
-                <button type="button" className="product-image-button" onClick={() => openProduct(product)} aria-label={`View ${product.name}`}><img src={product.image} alt={product.name} /></button>
-                <button
-                  type="button"
-                  className={wishlistIds.includes(product.id || product.name) ? "wishlist-btn active" : "wishlist-btn"}
-                  onClick={() => toggleWishlist(product)}
-                  aria-label={`Wishlist ${product.name}`}
-                >
-                  ♡
-                </button>
-              </div>
-              <div className="product-body">
-                <div className="product-meta">
-                  <span>{product.category || product.type}</span>
-                  <span className="discount-tag">-{getDiscountPercent(product)}%</span>
-                </div>
-                <button type="button" className="product-name-button" onClick={() => openProduct(product)}>{product.name}</button>
-                <div className="price-row">
-                  <span className="current-price">₹{product.price}</span>
-                  <span className="original-price">₹{product.oldPrice || product.originalPrice || product.price}</span>
-                </div>
-                <div className="shop-actions">
-                  <button type="button" onClick={() => toggleWishlist(product)}>♡ Wishlist</button>
-                  <VirtualTryOn product={{ ...product, image: resolveCatalogImage(product) }} />
-                  <button type="button" onClick={() => addToCart(product)}>Add to Cart</button>
-                  <button type="button" className="buy-button" onClick={() => buyNow(product)}>Buy Now</button>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
       <section className="made-for-you">
         <div className="section-heading">
           <span className="eyebrow">MADE FOR YOU</span>
@@ -807,77 +865,134 @@ function BefittingStylePage() {
       </section>
 
       <section className="complete-look">
-        <div className="section-heading">
-          <span className="eyebrow">COMPLETE MY LOOK</span>
+        <div className="section-heading center">
+          <span className="eyebrow">SMART LOOK COMPOSER</span>
           <h2>Complete My Look</h2>
+          <p>Start with one piece. Veyraa will style the rest into a polished look — with a little extra value for choosing the full edit.</p>
         </div>
 
-        <div className="look-builder">
-          <div className="look-items">
-            <div className="look-item">
-              <span>TOP</span>
-              <img src={resolveCatalogImage(completeLook.top || {})} alt={completeLook.top?.name || "Top"} />
-              <strong>{completeLook.top?.name || "Top"}</strong>
+        <div className={`look-builder ${completeLookProducts.length ? "has-look" : "empty-look"}`}>
+          {!completeLookProducts.length ? (
+            <div className="look-start-panel">
+              <div className="look-start-copy">
+                <span className="look-kicker">YOUR LOOK, YOUR WAY</span>
+                <h3>Pick one piece and let Veyraa finish the story.</h3>
+                <p>Choose a top, bottom, footwear or accessory. We&apos;ll instantly curate the missing pieces around your choice.</p>
+              </div>
+
+              <div className="look-start-grid">
+                {[
+                  ["top", "TOP", "Start with a top", "＋"],
+                  ["bottom", "BOTTOM", "Start with a bottom", "＋"],
+                  ["footwear", "FOOTWEAR", "Add a finishing step", "＋"],
+                  ["accessory", "ACCESSORY", "Add your signature", "＋"],
+                ].map(([role, label, copy, icon]) => (
+                  <button
+                    type="button"
+                    key={role}
+                    className="look-start-card"
+                    onClick={() => setSelectorRole(role)}
+                  >
+                    <span className="look-start-label">{label}</span>
+                    <span className="look-start-icon">{icon}</span>
+                    <strong>{copy}</strong>
+                    <small>Tap to explore curated picks →</small>
+                  </button>
+                ))}
+              </div>
+
+              <div className="look-start-note">
+                <span>✦</span>
+                <p><strong>One choice is enough.</strong> We&apos;ll build the rest around it.</p>
+              </div>
             </div>
-            <div className="look-plus">+</div>
-            <div className="look-item">
-              <span>BOTTOM</span>
-              <img src={resolveCatalogImage(completeLook.bottom || {})} alt={completeLook.bottom?.name || "Bottom"} />
-              <strong>{completeLook.bottom?.name || "Bottom"}</strong>
-            </div>
-            <div className="look-plus">+</div>
-            <div className="look-item">
-              <span>FOOTWEAR</span>
-              {completeLook.footwear ? <img src={resolveCatalogImage(completeLook.footwear)} alt={completeLook.footwear.name} /> : <div className="look-empty">Optional</div>}
-              <strong>{completeLook.footwear?.name || "Footwear / Slippers"}</strong>
-            </div>
-            <div className="look-plus">+</div>
-            <div className="look-item">
-              <span>ACCESSORY</span>
-              {completeLook.accessory ? <img src={resolveCatalogImage(completeLook.accessory)} alt={completeLook.accessory.name} /> : <div className="look-empty">Optional</div>}
-              <strong>{completeLook.accessory?.name || "Optional Accessory"}</strong>
-            </div>
-          </div>
+          ) : (
+            <>
+              <div className="look-builder-head">
+                <div>
+                  <span className="look-kicker">YOUR CURATED EDIT</span>
+                  <h3>Styled around your choice.</h3>
+                  <p>Don&apos;t love a piece? Swap it anytime — your look updates instantly.</p>
+                </div>
+                <div className="look-save-badge">
+                  <span>SMART COMBO</span>
+                  <strong>Save ₹{comboSavings.toLocaleString("en-IN")}</strong>
+                </div>
+              </div>
 
-          <div className="look-buttons">
-            <button type="button" onClick={() => setSelectorRole("top")}>
-              Change Top
-            </button>
-            <button type="button" onClick={() => setSelectorRole("bottom")}>
-              Change Bottom
-            </button>
-            <button type="button" onClick={() => setSelectorRole("footwear")}>
-              Change Footwear
-            </button>
-            <button type="button" onClick={() => setSelectorRole("accessory")}>
-              Change Accessory
-            </button>
-          </div>
+              <div className="look-items">
+                {[
+                  ["top", "TOP"],
+                  ["bottom", "BOTTOM"],
+                  ["footwear", "FOOTWEAR"],
+                  ["accessory", "ACCESSORY"],
+                ].map(([role, label], index) => {
+                  const product = completeLook[role];
+                  return (
+                    <React.Fragment key={role}>
+                      {index > 0 && <div className="look-plus">+</div>}
+                      <div className="look-item">
+                        <span>{label}</span>
+                        {product ? (
+                          <button
+                            type="button"
+                            className="look-product-preview-trigger"
+                            onClick={() => openOccasionPreview(product)}
+                            aria-label={`Preview ${product.name}`}
+                          >
+                            <img src={resolveCatalogImage(product)} alt={product.name} />
+                            <strong>{product.name}</strong>
+                          </button>
+                        ) : (
+                          <button type="button" className="look-empty" onClick={() => setSelectorRole(role)}>
+                            <span>＋</span>
+                            <small>Add {label.toLowerCase()}</small>
+                          </button>
+                        )}
+                        <button type="button" className="look-change-btn" onClick={() => setSelectorRole(role)}>
+                          Change {label.toLowerCase()} →
+                        </button>
+                      </div>
+                    </React.Fragment>
+                  );
+                })}
+              </div>
 
-<div className="look-totals">
+              <div className="look-offer-banner">
+                <div>
+                  <span className="look-offer-kicker">A LITTLE MORE STYLE. A LOT MORE VALUE.</span>
+                  <h3>Complete the edit &amp; unlock your combo price.</h3>
+                  <p>Buy separately: <strong>₹{separateLookTotal.toLocaleString("en-IN")}</strong></p>
+                </div>
+                <div className="look-offer-price">
+                  <span>CURATED COMBO</span>
+                  <strong>₹{comboLookPrice.toLocaleString("en-IN")}</strong>
+                  <small>You save ₹{comboSavings.toLocaleString("en-IN")}</small>
+                </div>
+              </div>
 
-  <div className="look-total selected-total">
-    <span>BUY SEPARATELY</span>
-    <strong>₹5,000</strong>
-  </div>
-
-  <div className="look-total complete-total">
-    <span>BUY COMPLETE LOOK</span>
-    <strong>₹4,000</strong>
-  </div>
-
-</div>
-          <div className="look-purchase-actions">
-            <button type="button" className="secondary-btn" disabled={!selectedLook.length} onClick={() => buyProducts(selectedLook)}>
-              Buy Selected Items →
-            </button>
-            <button type="button" className="primary-btn shop-look-btn" onClick={() => buyProducts(Object.values(completeLook).filter(Boolean))}>
-              Buy Complete Look →
-            </button>
-            <button type="button" className="secondary-btn" onClick={openLookPreview}>
-              Preview Full Look
-            </button>
-          </div>
+              <div className="look-purchase-actions">
+                <button
+                  type="button"
+                  className="secondary-btn"
+                  disabled={!selectedLook.length}
+                  onClick={() => buyProducts(selectedLook)}
+                >
+                  Buy My Selection →
+                </button>
+                <button
+                  type="button"
+                  className="primary-btn shop-look-btn"
+                  onClick={() => buyProducts(completeLookProducts)}
+                >
+                  Unlock Complete Look · ₹{comboLookPrice.toLocaleString("en-IN")}
+                </button>
+                <button type="button" className="secondary-btn" onClick={openLookPreview}>
+                  Preview Full Look
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </section>
 
@@ -924,53 +1039,137 @@ function BefittingStylePage() {
 
         <div className="occasion-results">
           {occasionProducts.map((product) => (
-            <article className="mini-product" key={product.id || product.name}>
+            <button
+              type="button"
+              className="mini-product"
+              key={product.id || product.name}
+              onClick={() => openOccasionPreview(product)}
+            >
               <img src={product.image} alt={product.name} />
               <div>
                 <span>{product.category || product.type}</span>
                 <h3>{product.name}</h3>
                 <strong>₹{product.price}</strong>
+                <small>View preview →</small>
               </div>
-            </article>
+            </button>
           ))}
         </div>
       </section>
 
       <section className="style-assistant">
         <div className="assistant-copy">
-          <span className="eyebrow">VEYRAA STYLE ASSIST</span>
-          <h2>Not sure what to wear? Let your style profile guide you.</h2>
+          <span className="eyebrow">VEYRAA STYLE ASSISTANT</span>
+          <h2>Your personal fashion concierge.</h2>
+          <p>Ask naturally. Type it, speak it, or ask Veyraa to style something for you.</p>
         </div>
 
         <div className="assistant-panel">
-          <div className="prompt-stack">
-            {promptSuggestions.map((prompt) => (
-              <button key={prompt} type="button" className={assistPrompt === prompt ? "prompt-btn active" : "prompt-btn"} onClick={() => setAssistPrompt(prompt)}>
-                {prompt}
-              </button>
+          <div className="assistant-brand">
+            <div className="assistant-avatar">✦</div>
+            <div>
+              <strong>Veyraa AI</strong>
+              <span><i /> Online · Personal Style Assistant</span>
+            </div>
+            <button
+              type="button"
+              className={isSpeaking ? "assistant-stop-speech active" : "assistant-stop-speech"}
+              onClick={() => {
+                if (typeof window !== "undefined" && "speechSynthesis" in window) {
+                  window.speechSynthesis.cancel();
+                }
+                setIsSpeaking(false);
+              }}
+              disabled={!isSpeaking}
+            >
+              {isSpeaking ? "Stop voice" : "Voice ready"}
+            </button>
+          </div>
+
+          <div className="assistant-chat">
+            {assistantMessages.map((message, index) => (
+              <div
+                className={`assistant-message ${message.role === "user" ? "user" : "ai"}`}
+                key={`${message.role}-${index}`}
+              >
+                <div className="assistant-bubble">
+                  <p>{message.text}</p>
+                  {message.role === "assistant" && (
+                    <button
+                      type="button"
+                      className="speak-message"
+                      onClick={() => speakAssistantReply(message.text)}
+                    >
+                      🔊 Listen
+                    </button>
+                  )}
+                </div>
+
+                {message.role === "assistant" && message.products?.length > 0 && (
+                  <div className="assistant-products">
+                    {message.products.map((product) => (
+                      <button
+                        type="button"
+                        key={`${product.audience}-${product.id || product.name}`}
+                        onClick={() => openProduct(product)}
+                      >
+                        <img src={product.image} alt={product.name} />
+                        <span>{product.name}</span>
+                        <strong>₹{product.price}</strong>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
 
-
-
-          <div className="assistant-response">
-            <div className="assistant-header">
-              <span>AI Styling Guide</span>
-              <strong>{assistResult?.label || selectedOccasion}</strong>
-            </div>
-            <p>
-{assistResult?.text ||
-  `Based on your ${selectedAudience || "All"} profile, ${String(
-    selectedFit || "Regular"
-  ).toLowerCase()} fit and ${String(
-    selectedVibe || "Everyday Chic"
-  ).toLowerCase()} mood, we suggest a refined look with soft layers, elegant tailoring and a fresh color pairing.`}
-            </p>
-            <button type="button" className="primary-btn" onClick={() => setAssistResult(assistPrompts[assistPrompt] || assistPrompts["Help me complete this look"])}>
-              Get Style Suggestions →
+          <div className="assistant-quick-actions">
+            <button type="button" onClick={() => quickAssistantPrompt("What should I wear for a wedding?")}>
+              Wedding edit
             </button>
-            {matchingAssistProducts.length > 0 && <div className="assistant-products">{matchingAssistProducts.map((product) => <button type="button" key={`${product.audience}-${product.id}`} onClick={() => openProduct(product)}><img src={product.image} alt={product.name} /><span>{product.name}</span></button>)}</div>}
+            <button type="button" onClick={() => quickAssistantPrompt("Show me something for a festival")}>
+              Festival edit
+            </button>
+            <button type="button" onClick={() => quickAssistantPrompt("What can I wear for a casual day out?")}>
+              Casual edit
+            </button>
           </div>
+
+          <form
+            className="assistant-composer"
+            onSubmit={(event) => {
+              event.preventDefault();
+              sendAssistantMessage(assistantInput);
+            }}
+          >
+            <button
+              type="button"
+              className={isListening ? "assistant-mic listening" : "assistant-mic"}
+              onClick={startAssistantVoice}
+              aria-label="Speak to Veyraa AI"
+              title="Speak to Veyraa AI"
+            >
+              {isListening ? "●" : "🎙"}
+            </button>
+
+            <input
+              value={assistantInput}
+              onChange={(event) => setAssistantInput(event.target.value)}
+              placeholder="Ask Veyraa anything… e.g. What will suit me for a wedding?"
+              aria-label="Ask Veyraa Style Assistant"
+            />
+
+            <button type="submit" className="assistant-send" aria-label="Send">
+              →
+            </button>
+          </form>
+
+          <small className="assistant-note">
+            {isListening
+              ? "Listening… speak naturally."
+              : "Tip: Chrome and Edge support voice input. Your browser may ask for microphone permission the first time."}
+          </small>
         </div>
       </section>
 
@@ -1022,6 +1221,108 @@ function BefittingStylePage() {
 
       <Footer />
 
+      {occasionPreview && (
+        <div
+          className="befitting-overlay"
+          role="presentation"
+          onClick={() => setOccasionPreview(null)}
+        >
+          <section
+            className="occasion-preview-dialog"
+            role="dialog"
+            aria-modal="true"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="overlay-close"
+              onClick={() => setOccasionPreview(null)}
+              aria-label="Close product preview"
+            >
+              ×
+            </button>
+
+            <div className="occasion-preview-image">
+              <img src={occasionPreview.image} alt={occasionPreview.name} />
+            </div>
+
+            <div className="occasion-preview-content">
+              <span className="preview-category">{occasionPreview.category || occasionPreview.type}</span>
+              <h2>{occasionPreview.name}</h2>
+              <div className="preview-price-row">
+                <strong>₹{occasionPreview.price}</strong>
+                {(occasionPreview.oldPrice || occasionPreview.originalPrice) && (
+                  <del>₹{occasionPreview.oldPrice || occasionPreview.originalPrice}</del>
+                )}
+              </div>
+              <p>
+                A Veyraa pick for your {selectedOccasion.toLowerCase()} edit,
+                selected for your {selectedAudience.toLowerCase()} profile.
+              </p>
+
+              <div className="preview-fit-note">
+                <span>✓</span>
+                <div>
+                  <strong>Find your perfect fit</strong>
+                  <small>Choose your size before adding this piece to your look.</small>
+                </div>
+              </div>
+
+              <div className="preview-size-block">
+                <div>
+                  <strong>Select size</strong>
+                  <button type="button" onClick={() => openProduct(occasionPreview)}>Size guide →</button>
+                </div>
+                <div className="preview-size-options">
+                  {previewSizes.map((size) => (
+                    <button
+                      type="button"
+                      key={size}
+                      className={occasionPreviewSize === size ? "active" : ""}
+                      onClick={() => setOccasionPreviewSize(size)}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="occasion-preview-actions">
+                <button
+                  type="button"
+                  className="secondary-btn"
+                  onClick={() => toggleWishlist(occasionPreview)}
+                >
+                  ♡ Wishlist
+                </button>
+                <button
+                  type="button"
+                  className="secondary-btn"
+                  onClick={() => addToCart({ ...occasionPreview, selectedSize: occasionPreviewSize })}
+                >
+                  Add to Cart
+                </button>
+                <button
+                  type="button"
+                  className="primary-btn"
+                  onClick={() => buyNow({ ...occasionPreview, selectedSize: occasionPreviewSize })}
+                >
+                  Buy Now →
+                </button>
+              </div>
+
+              <button
+                type="button"
+                className="preview-full-product"
+                onClick={() => openProduct(occasionPreview)}
+              >
+                View full product details, sizes &amp; fit →
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
+
       {selectorRole && (
         <div className="befitting-overlay" role="presentation" onClick={() => setSelectorRole(null)}>
           <section className="look-selector-dialog" role="dialog" aria-modal="true" onClick={(event) => event.stopPropagation()}>
@@ -1031,9 +1332,29 @@ function BefittingStylePage() {
             </div>
             <div className="selector-grid">
               {getRoleProducts(recommendationPool, selectorRole).slice(0, 12).map((product) => (
-                <button type="button" key={`${product.audience}-${product.id}`} className="selector-product" onClick={() => selectLookProduct(product)}>
-                  <img src={product.image} alt={product.name} /><strong>{product.name}</strong><span>₹{product.price}</span>
-                </button>
+                <article
+                  key={`${product.audience}-${product.id}`}
+                  className="selector-product"
+                >
+                  <button
+                    type="button"
+                    className="selector-product-main"
+                    onClick={() => openOccasionPreview(product)}
+                    aria-label={`Preview ${product.name}`}
+                  >
+                    <img src={product.image} alt={product.name} />
+                    <span className="selector-product-type">{product.category || product.type}</span>
+                    <strong>{product.name}</strong>
+                    <span className="selector-product-price">₹{product.price}</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="selector-select-btn"
+                    onClick={() => selectLookProduct(product)}
+                  >
+                    Use this piece →
+                  </button>
+                </article>
               ))}
             </div>
           </section>

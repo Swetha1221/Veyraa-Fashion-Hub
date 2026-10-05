@@ -8,7 +8,20 @@ export const kidsProducts = [
   // GIRLS
   // =========================
 
- 
+  {
+    id: "girl001",
+    name: "Princess Floral Summer Frock",
+    gender: "Girls",
+    category: "frocks",
+    type: "Frocks",
+    material: "Cotton",
+    colour: "Pink",
+    price: 1199,
+    oldPrice: 1699,
+    rating: 4.8,
+    badge: "BESTSELLER",
+    image: "/kids/frock1.webp",
+  },
   {
     id: "girl002",
     name: "Princess Party Frock",
@@ -190,6 +203,106 @@ export const kidsProducts = [
     rating: 4.8,
     badge: "POPULAR",
     image: "/kids/yellowgirl.jpg",
+  },
+
+  // GIRLS FOOTWEAR & ACCESSORIES
+  {
+    id: "girl015",
+    name: "Girls Princess Sparkling Ballet Flats",
+    gender: "Girls",
+    category: "footwear",
+    type: "Footwear",
+    material: "Synthetic",
+    colour: "Pink",
+    price: 999,
+    oldPrice: 1499,
+    rating: 4.8,
+    badge: "PARTY",
+    image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=700&q=85",
+  },
+  {
+    id: "girl016",
+    name: "Girls Pastel Casual Slip-On Sneakers",
+    gender: "Girls",
+    category: "footwear",
+    type: "Footwear",
+    material: "Canvas",
+    colour: "Pink",
+    price: 899,
+    oldPrice: 1299,
+    rating: 4.7,
+    badge: "TRENDING",
+    image: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=700&q=85",
+  },
+  {
+    id: "girl017",
+    name: "Girls Cute Flower Slide Slippers",
+    gender: "Girls",
+    category: "footwear",
+    type: "Slippers",
+    material: "EVA",
+    colour: "Yellow",
+    price: 599,
+    oldPrice: 899,
+    rating: 4.6,
+    badge: "COMFORT",
+    image: "https://images.unsplash.com/photo-1603808033192-082d6919d3e1?auto=format&fit=crop&w=700&q=85",
+  },
+  {
+    id: "girl018",
+    name: "Kids Digital Pastel LED Watch",
+    gender: "Girls",
+    category: "accessories",
+    type: "Watches",
+    material: "Silicone",
+    colour: "Purple",
+    price: 799,
+    oldPrice: 1199,
+    rating: 4.7,
+    badge: "POPULAR",
+    image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=700&q=85",
+  },
+  {
+    id: "girl019",
+    name: "Girls Mini Floral Shoulder Bag",
+    gender: "Girls",
+    category: "accessories",
+    type: "Bags",
+    material: "PU Leather",
+    colour: "Pink",
+    price: 699,
+    oldPrice: 1099,
+    rating: 4.6,
+    badge: "NEW",
+    image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=700&q=85",
+  },
+  {
+    id: "girl020",
+    name: "Girls Floral Hairband & Clips Set",
+    gender: "Girls",
+    category: "accessories",
+    type: "Accessories",
+    material: "Fabric",
+    colour: "Pink",
+    price: 499,
+    oldPrice: 799,
+    rating: 4.8,
+    badge: "BESTSELLER",
+    image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=700&q=85",
+  },
+  {
+    id: "girl021",
+    name: "Girls Heart Frame UV Sunglasses",
+    gender: "Girls",
+    category: "accessories",
+    type: "Sunglasses",
+    material: "Acetate",
+    colour: "Pink",
+    price: 599,
+    oldPrice: 899,
+    rating: 4.5,
+    badge: "TRENDING",
+    image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=700&q=85",
   },
 
   // =========================
@@ -392,6 +505,120 @@ export const kidsProducts = [
     badge: "POPULAR",
     image: "/kids/yeelowboy.jpg",
   },
+
+  // BOYS FOOTWEAR & ACCESSORIES
+  {
+    id: "boy015",
+    name: "Boys Active Sports Running Sneakers",
+    gender: "Boys",
+    category: "footwear",
+    type: "Footwear",
+    material: "Mesh",
+    colour: "Blue",
+    price: 999,
+    oldPrice: 1499,
+    rating: 4.8,
+    badge: "ACTIVE",
+    image: "https://images.unsplash.com/photo-1514989940723-e8e51635b782?auto=format&fit=crop&w=700&q=85",
+  },
+  {
+    id: "boy016",
+    name: "Boys Casual Canvas Slip-on Shoes",
+    gender: "Boys",
+    category: "footwear",
+    type: "Footwear",
+    material: "Canvas",
+    colour: "Black",
+    price: 899,
+    oldPrice: 1299,
+    rating: 4.6,
+    badge: "POPULAR",
+    image: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=700&q=85",
+  },
+  {
+    id: "boy017",
+    name: "Boys Dinosaur Comfort Slide Slippers",
+    gender: "Boys",
+    category: "footwear",
+    type: "Slippers",
+    material: "EVA",
+    colour: "Green",
+    price: 599,
+    oldPrice: 899,
+    rating: 4.7,
+    badge: "COMFORT",
+    image: "https://images.unsplash.com/photo-1582588678413-dbf45f4823e9?auto=format&fit=crop&w=700&q=85",
+  },
+  {
+    id: "boy018",
+    name: "Boys Traditional Ethnic Jutti / Slippers",
+    gender: "Boys",
+    category: "footwear",
+    type: "Slippers",
+    material: "Silk Blend",
+    colour: "Gold",
+    price: 799,
+    oldPrice: 1199,
+    rating: 4.7,
+    badge: "TRADITIONAL",
+    image: "https://images.unsplash.com/photo-1607522370275-f14206abe5d3?auto=format&fit=crop&w=700&q=85",
+  },
+  {
+    id: "boy019",
+    name: "Boys Adventure Digital Sports Watch",
+    gender: "Boys",
+    category: "accessories",
+    type: "Watches",
+    material: "Silicone",
+    colour: "Black",
+    price: 799,
+    oldPrice: 1199,
+    rating: 4.6,
+    badge: "TRENDING",
+    image: "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=700&q=85",
+  },
+  {
+    id: "boy020",
+    name: "Kids School & Travel Backpack",
+    gender: "Boys",
+    category: "accessories",
+    type: "Bags",
+    material: "Polyester",
+    colour: "Blue",
+    price: 1199,
+    oldPrice: 1699,
+    rating: 4.8,
+    badge: "BESTSELLER",
+    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=85",
+  },
+  {
+    id: "boy021",
+    name: "Boys Embroidered Cotton Baseball Cap",
+    gender: "Boys",
+    category: "accessories",
+    type: "Caps",
+    material: "Cotton",
+    colour: "Black",
+    price: 499,
+    oldPrice: 799,
+    rating: 4.5,
+    badge: "NEW",
+    image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=700&q=85",
+  },
+  {
+    id: "boy022",
+    name: "Boys Cool Aviator Sunglasses",
+    gender: "Boys",
+    category: "accessories",
+    type: "Sunglasses",
+    material: "Metal",
+    colour: "Silver",
+    price: 599,
+    oldPrice: 899,
+    rating: 4.6,
+    badge: "POPULAR",
+    image: "https://images.unsplash.com/photo-1508296695146-257a814070b4?auto=format&fit=crop&w=700&q=85",
+  },
 ];
 
 const genderCategories = {
@@ -402,6 +629,8 @@ const genderCategories = {
     ["casual-dresses", "Casual Dresses"],
     ["jeans", "Jeans"],
     ["ethnic-wear", "Ethnic Wear"],
+    ["footwear", "Footwear & Slippers"],
+    ["accessories", "Accessories & Bags"],
   ],
 
   Boys: [
@@ -414,6 +643,8 @@ const genderCategories = {
     ["ethnic-wear", "Ethnic Wear"],
     ["nightwear", "Nightwear"],
     ["formal-wear", "Formal Wear"],
+    ["footwear", "Footwear & Slippers"],
+    ["accessories", "Accessories & Bags"],
   ],
 };
 
@@ -832,16 +1063,20 @@ function KidsCategory() {
                         key={product.id}
                       >
 
-                        <div className="kids-product-image">
+                        <div
+                          className="kids-product-image"
+                          onClick={() => {
+                            window.location.href = `/products/${encodeURIComponent(product.id)}?catalog=Kids`;
+                          }}
+                          style={{ cursor: "pointer" }}
+                        >
 
                           <img
                             src={product.image}
                             alt={product.name}
+                            loading="lazy"
                             onError={(e) => {
-                              console.error(
-                                "Kids image not found:",
-                                product.image
-                              );
+                              e.currentTarget.src = product.gender === "Boys" ? "/kids/casualboy.jpg" : "/kids/frock2.jpg";
                             }}
                           />
 
@@ -857,9 +1092,10 @@ function KidsCategory() {
                                 ? "kids-wishlist active"
                                 : "kids-wishlist"
                             }
-                            onClick={() =>
-                              toggleWishlist(product)
-                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleWishlist(product);
+                            }}
                           >
                             {isWishlisted
                               ? "♥"
@@ -874,7 +1110,12 @@ function KidsCategory() {
                             {product.gender}
                           </span>
 
-                          <h3>
+                          <h3
+                            onClick={() => {
+                              window.location.href = `/products/${encodeURIComponent(product.id)}?catalog=Kids`;
+                            }}
+                            style={{ cursor: "pointer" }}
+                          >
                             {product.name}
                           </h3>
 
@@ -903,12 +1144,30 @@ function KidsCategory() {
                             ADD TO CART
                           </button>
 
-                          <button
-                            className="kids-tryon-btn"
-                            onClick={() => openTryOn(product)}
+                          <a
+                            className="add-cart-btn"
+                            href={`/products/${encodeURIComponent(product.id)}?catalog=Kids`}
+                            style={{
+                              display: "block",
+                              textAlign: "center",
+                              textDecoration: "none",
+                              marginTop: "6px",
+                              background: "#f0f5f2",
+                              color: "#1e3a2f",
+                              border: "1px solid #c9dcd2",
+                            }}
                           >
-                            ✦ VIRTUAL TRY-ON
-                          </button>
+                            VIEW PRODUCT →
+                          </a>
+
+                          {!["accessories", "footwear"].includes(product.category) && !["Watches", "Caps", "Bags", "Sunglasses", "Slippers"].includes(product.type) && (
+                            <button
+                              className="kids-tryon-btn"
+                              onClick={() => openTryOn(product)}
+                            >
+                              ✦ VIRTUAL TRY-ON
+                            </button>
+                          )}
 
                         </div>
 

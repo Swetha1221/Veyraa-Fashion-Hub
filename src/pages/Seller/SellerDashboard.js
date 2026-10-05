@@ -48,10 +48,47 @@ const orders = [
   ["#VY10301", "Aditi Rao", kidsProducts.find((p) => /dress|set/i.test(p.name)) || catalog[6], 1, 1299, "Delivered"],
 ].map(([id, customer, product, qty, amount, status]) => ({ id, customer, product, qty, amount, status }));
 
+const returnRequests = [
+  {
+    id: "#VY10278",
+    orderId: "#VY10278",
+    customer: "Divya Krishnan",
+    product: catalog.find((p) => /saree/i.test(p.name)) || catalog[0],
+    qty: 1,
+    amount: 2499,
+    reason: "Product size does not fit",
+    requestedOn: "28 Sep 2026",
+    status: "Pending",
+  },
+  {
+    id: "#VY10281",
+    orderId: "#VY10281",
+    customer: "Nandhini S",
+    product: catalog.find((p) => /kurti/i.test(p.name)) || catalog[1],
+    qty: 1,
+    amount: 1199,
+    reason: "Received a different product",
+    requestedOn: "27 Sep 2026",
+    status: "Approved",
+  },
+  {
+    id: "#VY10283",
+    orderId: "#VY10283",
+    customer: "Riya Menon",
+    product: catalog.find((p) => /lehenga/i.test(p.name)) || catalog[2],
+    qty: 1,
+    amount: 5499,
+    reason: "Product damaged on delivery",
+    requestedOn: "26 Sep 2026",
+    status: "Pending",
+  },
+];
+
 const nav = [
   ["", "⌂", "Home", "home"],
   ["ORDERS", "▣", "All Orders", "orders"],
   ["", "◷", "Pending Orders", "pending"],
+  ["", "↩", "Returns", "returns"],
   ["PRODUCTS", "◇", "All Products", "products"],
   ["", "▤", "Inventory", "inventory"],
   ["", "₹", "Pricing & Offers", "pricing"],
@@ -61,6 +98,7 @@ const nav = [
   ["", "!", "Restock Nudge", "restock"],
   ["ACCOUNT", "◎", "Seller Performance", "performance"],
   ["", "⚙", "Settings", "settings"],
+  ["", "◆", "Seller Plans", "seller-plans"],
 ];
 
 function ProductPreview({ product, close, onImageError }) {
@@ -145,6 +183,319 @@ function OrderPreview({ order, close }) {
   );
 }
 
+function ReturnCasePreview({ request, close, onStatusChange }) {
+  if (!request) return null;
+  const isPending = request.status === "Pending";
+  const isApproved = request.status === "Approved";
+
+  return (
+    <div className="sv-modal-bg sv-return-modal-bg" onClick={close}>
+      <div className="sv-return-modal" onClick={(e) => e.stopPropagation()}>
+        <button className="sv-x" onClick={close}>×</button>
+
+        <div className="sv-return-modal-head">
+          <div>
+            <small className="sv-kicker">RETURN CASE PREVIEW</small>
+            <h2>{request.id}</h2>
+            <p>Review customer return details, product information and seller resolution status.</p>
+          </div>
+          <span className={`sv-return-pill ${request.status.toLowerCase()}`}>{request.status}</span>
+        </div>
+
+        <div className="sv-return-customer">
+          <div className="sv-return-avatar">{request.customer.charAt(0)}</div>
+          <div>
+            <strong>{request.customer}</strong>
+            <small>Customer return request · Order {request.orderId}</small>
+          </div>
+          <div className="sv-return-customer-value">
+            <small>RETURN VALUE</small>
+            <b>{money(request.amount)}</b>
+          </div>
+        </div>
+
+        <div className="sv-return-product-card">
+          <img src={request.product?.image} alt={request.product?.name || "Product"} />
+          <div>
+            <small>RETURNED PRODUCT</small>
+            <h3>{request.product?.name}</h3>
+            <p>{request.product?.audience || "Fashion"} · {request.product?.type || request.product?.category || "Product"}</p>
+          </div>
+          <span>Qty {request.qty}</span>
+        </div>
+
+        <div className="sv-return-detail-grid">
+          <div><small>RETURN ID</small><b>{request.id}</b></div>
+          <div><small>ORDER ID</small><b>{request.orderId}</b></div>
+          <div><small>REQUESTED ON</small><b>{request.requestedOn}</b></div>
+          <div><small>CASE TYPE</small><b>Customer Return</b></div>
+          <div className="wide"><small>RETURN REASON</small><b>{request.reason}</b></div>
+          <div><small>CURRENT STATUS</small><b>{request.status}</b></div>
+        </div>
+
+        <div className="sv-return-resolution">
+          <small className="sv-kicker">RETURN RESOLUTION</small>
+          <h3>Case handling</h3>
+          <p>Review the return information before taking the next seller-side operational action.</p>
+          <div className="sv-return-actions">
+            {isPending && <>
+              <button className="sv-primary" onClick={() => onStatusChange(request.id, "Approved")}>Approve Return</button>
+              <button className="sv-return-secondary" onClick={() => onStatusChange(request.id, "Reviewed")}>Mark Reviewed</button>
+            </>}
+            {isApproved && <span className="sv-return-success">✓ Return approved for processing</span>}
+            {request.status === "Reviewed" && <span className="sv-return-reviewed">✓ Seller review completed</span>}
+            <button className="sv-outline" onClick={close}>Close Preview</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+const SELLER_FEATURES = {
+  sellerCommission: "Seller Commission",
+  sellerSubscription: "Seller Subscription Plans",
+  sponsoredProducts: "Sponsored Products",
+  featuredPlacement: "Featured Placement",
+  sponsoredSearch: "Sponsored Search",
+  marketingCampaigns: "Marketing Campaigns",
+  catalogueService: "Professional Catalogue Service",
+  fulfilment: "Veyraa Fulfilment & Delivery",
+  advancedAnalytics: "Advanced Seller Analytics",
+  verifiedBadge: "Veyraa Verified Seller Badge",
+  promotionalEngine: "Seller Promotional Engine",
+  brandPartnerships: "Brand Partnership Campaigns",
+  creatorCommerce: "Creator & Influencer Commerce",
+  miniStorefront: "Seller Mini-Storefront",
+  marketIntelligence: "Veyraa Market Intelligence",
+  inventoryDemand: "Inventory & Demand Intelligence",
+  preOrder: "Pre-Order & Demand Reservation",
+  deadStock: "Dead-Stock Recovery Marketplace",
+  premiumSupport: "Premium Seller Support",
+  giftRegistry: "Seer Varisai & Function Gift Registry",
+  sareeServices: "Saree Ready-to-Wear Services",
+  buyback: "Pattu Buyback & Restoration",
+  rental: "Function Saree & Jewellery Rental",
+};
+
+/*
+ * Subscription mapping is intentionally derived from the seller-applicable
+ * items in the user's 26-feature revenue model.
+ *
+ * #13 Veyraa Plus is customer-side, so it is not a Seller Plan entitlement.
+ * #23 and #24 were not defined in the supplied feature list, so they are
+ * intentionally not invented here.
+ */
+const SELLER_PLANS = {
+  basic: {
+    key: "basic",
+    name: "Basic",
+    price: 299,
+    subtitle: "Essential seller tools for starting and managing your Veyraa store.",
+    featureKeys: ["miniStorefront", "preOrder", "deadStock"],
+  },
+  business: {
+    key: "business",
+    name: "Business",
+    price: 599,
+    subtitle: "Advanced seller tools for growth, operations and customer reach.",
+    featureKeys: [
+      "miniStorefront", "preOrder", "deadStock",
+      "marketingCampaigns", "catalogueService", "fulfilment",
+      "advancedAnalytics", "promotionalEngine", "marketIntelligence",
+      "inventoryDemand",
+    ],
+  },
+  premium: {
+    key: "premium",
+    name: "Premium",
+    price: 999,
+    subtitle: "Premium seller visibility, trust, partnerships and support.",
+    featureKeys: [
+      "miniStorefront", "preOrder", "deadStock",
+      "marketingCampaigns", "catalogueService", "fulfilment",
+      "advancedAnalytics", "promotionalEngine", "marketIntelligence",
+      "inventoryDemand",
+      "sponsoredProducts", "featuredPlacement", "sponsoredSearch",
+      "verifiedBadge", "creatorCommerce", "brandPartnerships",
+      "premiumSupport",
+    ],
+  },
+};
+
+Object.values(SELLER_PLANS).forEach((plan) => {
+  plan.features = plan.featureKeys.map((key) => SELLER_FEATURES[key]);
+});
+
+function SellerPlanPreview({ plan, close, onChoose }) {
+  if (!plan) return null;
+
+  return (
+    <div className="sv-plan-modal-bg" onClick={close}>
+      <div className="sv-plan-preview" onClick={(e) => e.stopPropagation()}>
+        <button className="sv-plan-x" onClick={close}>×</button>
+        <div className="sv-plan-preview-top">
+          <small className="sv-kicker">SELLER PLAN PREVIEW</small>
+          <span className={`sv-plan-badge ${plan.key}`}>{plan.name}</span>
+          <h2>{plan.name} Plan</h2>
+          <p>{plan.subtitle}</p>
+          <div className="sv-plan-preview-price">
+            <strong>{money(plan.price)}</strong><span>/ month</span>
+          </div>
+        </div>
+        <div className="sv-plan-feature-list">
+          <div className="sv-plan-feature-head">
+            <strong>Included seller features</strong>
+            <span>{plan.features.length} features</span>
+          </div>
+          {plan.features.map((feature) => (
+            <div className="sv-plan-feature-row" key={feature}>
+              <b>✓</b><span>{feature}</span>
+            </div>
+          ))}
+        </div>
+        <button className="sv-primary sv-plan-choose" onClick={() => onChoose(plan)}>
+          Choose {plan.name} Plan
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function SellerPlanPayment({ plan, close, onSuccess }) {
+  const [method, setMethod] = useState("Google Pay");
+  const [payingNumber, setPayingNumber] = useState("");
+  const [upiId, setUpiId] = useState("");
+  const [demoPin, setDemoPin] = useState("");
+  const [processing, setProcessing] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [paymentRef, setPaymentRef] = useState("");
+  const [verificationId, setVerificationId] = useState("");
+
+  if (!plan) return null;
+
+  const createReference = () => {
+    const stamp = Date.now().toString().slice(-8);
+    const suffix = Math.random().toString(36).slice(2, 7).toUpperCase();
+    return `VYRA${stamp}${suffix}`;
+  };
+
+  const pay = () => {
+    const validNumber = /^\d{10}$/.test(payingNumber);
+    const validUpi = /^[^\s@]+@[^\s@]+$/.test(upiId.trim());
+    if (!validNumber || !validUpi || demoPin.trim().length < 4 || processing) return;
+
+    setProcessing(true);
+    window.setTimeout(() => {
+      setPaymentRef(createReference());
+      setVerificationId(`VY-${plan.key.slice(0, 3).toUpperCase()}-${Date.now().toString().slice(-6)}`);
+      setProcessing(false);
+      setSuccess(true);
+    }, 1200);
+  };
+
+  const finish = () => {
+    onSuccess(plan, {
+      paymentRef,
+      verificationId,
+      method,
+      payingNumber,
+      upiId,
+      paidAt: new Date().toLocaleString("en-IN"),
+    });
+    setSuccess(false);
+  };
+
+  return (
+    <div className="sv-plan-modal-bg" onClick={close}>
+      <div className="sv-plan-payment" onClick={(e) => e.stopPropagation()}>
+        <button className="sv-plan-x" onClick={close}>×</button>
+
+        {!success ? (
+          <>
+            <div className="sv-plan-payment-head">
+              <div className="sv-plan-payment-brand">
+                <span className="sv-plan-payment-brand-mark">V</span>
+                <div><b>Veyraa Secure Pay</b><small>Seller subscription checkout</small></div>
+              </div>
+              <div className="sv-plan-stepper">
+                <span className="done"><b>1</b> Plan</span><i></i>
+                <span className="current"><b>2</b> Pay</span><i></i>
+                <span><b>3</b> Activate</span>
+              </div>
+              <small className="sv-kicker">SECURE UPI CHECKOUT</small>
+              <h2>Pay & Activate {plan.name}</h2>
+              <p>Complete the payment details below. After successful confirmation, this seller session receives the selected plan entitlements.</p>
+            </div>
+
+            <div className="sv-plan-order-summary">
+              <div><span>{plan.name} Plan</span><small>Seller subscription · Monthly access</small></div>
+              <strong>{money(plan.price)}</strong>
+            </div>
+
+            <div className="sv-plan-checkout-section">
+              <div className="sv-plan-section-title"><span>01</span><div><b>Choose payment app</b><small>Select the UPI app you want to use</small></div></div>
+              <div className="sv-plan-methods">
+                {[["Google Pay", "G"], ["PhonePe", "P"], ["Paytm", "Pay"]].map(([item, mark]) => (
+                  <button key={item} className={method === item ? "active" : ""} onClick={() => setMethod(item)} type="button">
+                    <b>{mark}</b><span>{item}</span>{method === item && <em>✓</em>}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="sv-plan-checkout-section">
+              <div className="sv-plan-section-title"><span>02</span><div><b>Enter paying number</b><small>10-digit mobile number linked to the payment account</small></div></div>
+              <label className="sv-plan-field">
+                <span>Paying mobile number</span>
+                <div className="sv-plan-input-wrap"><input value={payingNumber} onChange={(e) => setPayingNumber(e.target.value.replace(/\D/g, "").slice(0, 10))} placeholder="9876543210" inputMode="numeric" autoComplete="tel" maxLength="10" /><b>+91</b></div>
+              </label>
+            </div>
+
+            <div className="sv-plan-checkout-section">
+              <div className="sv-plan-section-title"><span>03</span><div><b>Enter UPI details</b><small>Enter the UPI ID used for this seller-plan checkout</small></div></div>
+              <label className="sv-plan-field">
+                <span>{method} · UPI ID</span>
+                <div className="sv-plan-input-wrap"><input value={upiId} onChange={(e) => setUpiId(e.target.value)} placeholder="yourname@upi" autoComplete="off" /><b>UPI</b></div>
+              </label>
+            </div>
+
+            <div className="sv-plan-checkout-section">
+              <div className="sv-plan-section-title"><span>04</span><div><b>Confirm payment PIN</b><small>Enter a 4–6 digit demo PIN to confirm this front-end checkout</small></div></div>
+              <label className="sv-plan-field">
+                <span>Demo payment PIN</span>
+                <div className="sv-plan-input-wrap"><input type="password" value={demoPin} onChange={(e) => setDemoPin(e.target.value.replace(/\D/g, "").slice(0, 6))} placeholder="••••" inputMode="numeric" autoComplete="off" maxLength="6" /><b>PIN</b></div>
+              </label>
+            </div>
+
+            <div className="sv-plan-security-row"><span>🔒 Secure checkout</span><span>UPI details validated</span><span>✓ Instant activation</span></div>
+            <button className="sv-primary sv-plan-pay" onClick={pay} disabled={processing || !/^\d{10}$/.test(payingNumber) || !/^[^\s@]+@[^\s@]+$/.test(upiId.trim()) || demoPin.trim().length < 4}>
+              {processing ? <><span className="sv-plan-spinner"></span> Verifying payment...</> : <><span>Pay {money(plan.price)}</span><span>→</span></>}
+            </button>
+            <small className="sv-plan-payment-footnote">Demo transaction environment · no real funds are transferred.</small>
+          </>
+        ) : (
+          <div className="sv-plan-success">
+            <div className="sv-plan-success-top"><div className="sv-plan-success-icon">✓</div><span>PAYMENT SUCCESSFUL</span></div>
+            <h2>{plan.name} Plan is now active</h2>
+            <p>The selected seller subscription has been activated for this current seller session.</p>
+            <div className="sv-plan-success-amount"><small>AMOUNT PAID</small><strong>{money(plan.price)}</strong><span>{method} · +91 {payingNumber}</span></div>
+            <div className="sv-plan-success-grid">
+              <div><small>Transaction ID</small><b>{paymentRef}</b></div>
+              <div><small>Verification ID</small><b>{verificationId}</b></div>
+              <div><small>Plan status</small><b>✓ ACTIVE</b></div>
+              <div><small>Features enabled</small><b>{plan.features.length} / {plan.features.length}</b></div>
+            </div>
+            <div className="sv-plan-activation-note"><b>✓ Seller access updated</b><span>Plan-controlled functionality is now active inside the existing Seller Portal wherever the selected entitlement applies.</span></div>
+            <button className="sv-primary sv-plan-pay" onClick={finish}>Open Current Plan →</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function SellerDashboard() {
   const [page, setPage] = useState("home");
   const [preview, setPreview] = useState(null);
@@ -155,6 +506,19 @@ function SellerDashboard() {
   const [query, setQuery] = useState("");
   const [saved, setSaved] = useState(false);
   const [brokenImages, setBrokenImages] = useState(() => new Set());
+  const [sellerReturns, setSellerReturns] = useState(returnRequests);
+  const [returnFilter, setReturnFilter] = useState("All");
+  const [returnPreview, setReturnPreview] = useState(null);
+  const [activeSellerPlan, setActiveSellerPlan] = useState(null);
+  const [planPaymentDetails, setPlanPaymentDetails] = useState(null);
+  const [planPreview, setPlanPreview] = useState(null);
+  const [planPayment, setPlanPayment] = useState(null);
+  const [planServiceState, setPlanServiceState] = useState({});
+  const hasSellerFeature = (featureKey) => Boolean(activeSellerPlan?.featureKeys?.includes(featureKey));
+  const activatePlanService = (serviceKey) => {
+    setPlanServiceState((current) => ({ ...current, [serviceKey]: true }));
+  };
+  const isPlanServiceActive = (serviceKey) => Boolean(planServiceState[serviceKey]);
 
   const productKey = (p) => `${p.audience}-${p.id}-${p.name}`;
   const markImageBroken = (p) => {
@@ -194,6 +558,7 @@ function SellerDashboard() {
     home: ["SELLER HOME", "Seller Command Center"],
     orders: ["SELLER OPERATIONS", "All Orders"],
     pending: ["SELLER OPERATIONS", "Pending Orders"],
+    returns: ["CUSTOMER RETURNS", "Returns & Refunds"],
     products: ["CATALOGUE", "Product Catalogue"],
     inventory: ["INVENTORY CONTROL", "Inventory Intelligence"],
     pricing: ["COMMERCIAL CONTROL", "Pricing & Offers"],
@@ -203,6 +568,7 @@ function SellerDashboard() {
     restock: ["ACTIONABLE INTELLIGENCE", "Restock Nudge"],
     performance: ["SELLER PERFORMANCE", "Seller Performance"],
     settings: ["ACCOUNT", "Seller Settings"],
+    "seller-plans": ["SELLER SUBSCRIPTION", "Seller Plans"],
   }[page];
 
   const header = (
@@ -306,6 +672,88 @@ function SellerDashboard() {
     );
   };
 
+  const filteredReturns = sellerReturns.filter((request) => {
+    if (returnFilter === "All") return true;
+    return request.status === returnFilter;
+  });
+
+  const returnValue = sellerReturns.reduce((sum, request) => sum + Number(request.amount || 0), 0);
+
+  const updateReturnStatus = (id, status) => {
+    setSellerReturns((current) => current.map((request) => request.id === id ? { ...request, status } : request));
+    setReturnPreview((current) => current ? { ...current, status } : current);
+  };
+
+  const returnsPage = (
+    <section className="sv-return-page">
+      <div className="sv-return-intro">
+        <div>
+          <small className="sv-kicker">RETURN MANAGEMENT</small>
+          <h2>Customer Returns</h2>
+          <p>Review return requests, verify product details and manage seller-side resolution.</p>
+        </div>
+        <div className="sv-return-intro-badge"><span>●</span> Seller return desk</div>
+      </div>
+
+      <div className="sv-return-kpis">
+        <div className="sv-return-kpi">
+          <div className="sv-return-kpi-icon">↩</div>
+          <div><small>OPEN RETURNS</small><b>{sellerReturns.filter((r) => r.status === "Pending").length}</b><span>Awaiting seller action</span></div>
+        </div>
+        <div className="sv-return-kpi">
+          <div className="sv-return-kpi-icon amber">◷</div>
+          <div><small>PENDING REVIEW</small><b>{sellerReturns.filter((r) => r.status === "Pending").length}</b><span>Cases requiring review</span></div>
+        </div>
+        <div className="sv-return-kpi">
+          <div className="sv-return-kpi-icon green">✓</div>
+          <div><small>APPROVED</small><b>{sellerReturns.filter((r) => r.status === "Approved").length}</b><span>Approved return cases</span></div>
+        </div>
+        <div className="sv-return-kpi">
+          <div className="sv-return-kpi-icon rose">₹</div>
+          <div><small>RETURN VALUE</small><b>{money(returnValue)}</b><span>Total requested value</span></div>
+        </div>
+      </div>
+
+      <section className="sv-return-card">
+        <div className="sv-return-card-head">
+          <div>
+            <small className="sv-kicker">RETURN MANAGEMENT</small>
+            <h3>Recent Return Cases</h3>
+            <p>Customer return requests associated with your store.</p>
+          </div>
+          <div className="sv-return-head-meta"><span>{filteredReturns.length} cases</span><span className="sv-return-live"><i /> Live seller view</span></div>
+        </div>
+
+        <div className="sv-return-toolbar">
+          <div className="sv-return-tabs">
+            {["All", "Pending", "Approved", "Reviewed"].map((status) => (
+              <button key={status} className={returnFilter === status ? "active" : ""} onClick={() => setReturnFilter(status)}>{status}{status === "Pending" && <b>{sellerReturns.filter((r) => r.status === "Pending").length}</b>}</button>
+            ))}
+          </div>
+          <div className="sv-return-search">⌕ <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search return, order or customer..." /></div>
+        </div>
+
+        <div className="sv-return-list">
+          {filteredReturns.filter((request) => !query || `${request.id} ${request.orderId} ${request.customer} ${request.product?.name || ""} ${request.reason}`.toLowerCase().includes(query.toLowerCase())).map((request) => (
+            <div className="sv-return-row" key={request.id}>
+              <div className="sv-return-row-id"><strong>{request.id}</strong><small>Order {request.orderId}</small></div>
+              <div className="sv-return-row-customer"><div className="sv-return-avatar mini">{request.customer.charAt(0)}</div><span><strong>{request.customer}</strong><small>Customer return</small></span></div>
+              <div className="sv-return-row-product"><img src={request.product?.image} alt={request.product?.name || "Product"}/><span><strong>{request.product?.name}</strong><small>{request.product?.audience || "Fashion"} · Qty {request.qty}</small></span></div>
+              <div className="sv-return-row-reason"><small>REASON</small><strong>{request.reason}</strong></div>
+              <div className="sv-return-row-value"><small>VALUE</small><strong>{money(request.amount)}</strong><span>{request.requestedOn}</span></div>
+              <div className="sv-return-row-status"><span className={`sv-return-pill ${request.status.toLowerCase()}`}>{request.status}</span><button onClick={() => setReturnPreview(request)}>Open</button></div>
+            </div>
+          ))}
+          {!filteredReturns.length && <div className="sv-return-empty"><b>No return cases</b><span>There are no return requests in this status.</span></div>}
+        </div>
+      </section>
+
+      <div className="sv-return-note"><span>✓</span><div><strong>Seller action</strong><small>Return requests are isolated to this Seller Return Management page. Existing seller modules remain unchanged.</small></div></div>
+
+      <ReturnCasePreview request={returnPreview} close={() => setReturnPreview(null)} onStatusChange={updateReturnStatus} />
+    </section>
+  );
+
   const productsPage = (
     <section className="sv-panel">
       <div className="sv-panelhead"><div><p>Manage the same Women, Men and Kids products that customers see.</p></div><button className="sv-primary">＋ Add Product</button></div>
@@ -339,7 +787,8 @@ function SellerDashboard() {
       <div className="sv-price-summary"><div><small>Average Discount</small><b>31%</b><span>Across catalogue</span></div><div><small>Active Offers</small><b>{displayCatalog.length}</b><span>Customer-visible offers</span></div><div><small>Highest Discount</small><b>{Math.max(0, ...displayCatalog.map(discount))}%</b><span>Current catalogue</span></div></div>
       <div className="sv-tabs">{["All", "Women", "Men", "Kids"].map((g) => <button key={g} className={genderFilter === g ? "active" : ""} onClick={() => setGenderFilter(g)}>{g}</button>)}</div>
       <div className="sv-pricing-list">{displayCatalog.filter((p) => genderFilter === "All" || p.audience === genderFilter).map((p) => <div className="sv-pricing" key={`${p.audience}-${p.id}`}>
-        <img src={p.image} alt={p.name} onError={() => markImageBroken(p)} /><div><small>{p.audience} · {p.type || p.category}</small><h3>{p.name}</h3><span>★ {p.rating || "4.5"} · {p.sold} sold</span></div><div><small>MRP</small><b>{money(p.oldPrice)}</b></div><div><small>SELLING PRICE</small><b>{money(p.price)}</b></div><div><small>DISCOUNT</small><strong>{discount(p)}% OFF</strong></div><div><span className="active-offer">● ACTIVE</span><small>Customer-facing offer</small></div><button onClick={() => setPreview(p)}>View Product</button>
+        <img src={p.image} alt={p.name} onError={() => markImageBroken(p)} /><div><small>{p.audience} · {p.type || p.category}</small><h3>{p.name}</h3><span>★ {p.rating || "4.5"} · {p.sold} sold</span></div><div><small>MRP</small><b>{money(p.oldPrice)}</b></div><div><small>SELLING PRICE</small><b>{money(p.price)}</b></div><div><small>DISCOUNT</small><strong>{discount(p)}% OFF</strong></div><div><span className="active-offer">● ACTIVE</span><small>Customer-facing offer</small></div>
+        <button onClick={() => setPreview(p)}>View Product</button>
       </div>)}</div>
     </section>
   );
@@ -362,7 +811,8 @@ function SellerDashboard() {
   );
 
   const demand = (
-    <section className="sv-panel"><div className="sv-panelhead"><div><small className="sv-kicker">VEYRAA INTELLIGENCE</small><p>Products with stronger recent sales activity are surfaced using the same customer catalogue.</p></div></div><div className="sv-demand">{displayCatalog.slice(0,10).map((p,i)=><div key={`${p.audience}-${p.id}`}><b>0{i+1}</b><img src={p.image} alt={p.name} onError={() => markImageBroken(p)}/><span><strong>{p.name}</strong><small>{p.audience} · {p.type || p.category}</small></span><div className="spark">{[30,45,40,58,52,72,66,88].map((h,n)=><i key={n} style={{height:`${h + ((i*3)%10)}%`}}/>)}</div><em>+{18+i*3}%</em><button onClick={() => setPreview(p)}>View</button></div>)}</div></section>
+    <section className="sv-panel"><div className="sv-panelhead"><div><small className="sv-kicker">VEYRAA INTELLIGENCE</small><p>Products with stronger recent sales activity are surfaced using the same customer catalogue.</p></div></div>
+      <div className="sv-demand">{displayCatalog.slice(0,10).map((p,i)=><div key={`${p.audience}-${p.id}`}><b>0{i+1}</b><img src={p.image} alt={p.name} onError={() => markImageBroken(p)}/><span><strong>{p.name}</strong><small>{p.audience} · {p.type || p.category}</small></span><div className="spark">{[30,45,40,58,52,72,66,88].map((h,n)=><i key={n} style={{height:`${h + ((i*3)%10)}%`}}/>)}</div><em>+{18+i*3}%</em><button onClick={() => setPreview(p)}>View</button></div>)}</div></section>
   );
 
   const restock = (
@@ -394,14 +844,238 @@ function SellerDashboard() {
     <div className="sv-card"><div className="sv-title"><div><small>TOP PRODUCTS</small><h3>Best sellers from your catalogue</h3></div><button onClick={() => go("products")}>View all</button></div>{displayCatalog.slice(0,5).map((p)=><div className="sv-row" key={`${p.audience}-${p.id}`}><img src={p.image} alt="" onError={() => markImageBroken(p)}/><span><b>{p.name}</b><small>{p.audience} · {p.sold} sold · {p.stock} stock</small></span><strong>{money(p.price)}</strong></div>)}</div>
   </>;
 
-  const renderBody = page === "home" ? home : page === "orders" ? ordersPage(false) : page === "pending" ? ordersPage(true) : page === "products" ? productsPage : page === "inventory" ? inventory : page === "pricing" ? pricing : page === "payments" ? payments : page === "analytics" ? analytics : page === "demand" ? demand : page === "restock" ? restock : page === "performance" ? performance : settings;
+
+  const sellerPlanWorkspace = activeSellerPlan ? (
+    <div className="sv-plan-workspace">
+      <div className="sv-plan-workspace-head">
+        <div>
+          <small className="sv-kicker">ACTIVE PLAN ADD-ON</small>
+          <h3>{activeSellerPlan.name} Seller Services</h3>
+          <p>Only the services included in the paid plan are available here. Existing Seller Portal pages remain unchanged.</p>
+        </div>
+        <span>✓ {activeSellerPlan.name.toUpperCase()} ACTIVE</span>
+      </div>
+
+      <div className="sv-plan-service-grid">
+        {hasSellerFeature("miniStorefront") && (
+          <div className="sv-plan-service-card">
+            <small>SELLER MINI-STOREFRONT</small><h4>Dedicated seller storefront</h4>
+            <p>Storefront entitlement is active for your seller account.</p>
+            <button className="sv-outline" type="button" onClick={() => activatePlanService("miniStorefront")}>{isPlanServiceActive("miniStorefront") ? "Storefront Ready ✓" : "Storefront Active ✓"}</button>
+          </div>
+        )}
+
+        {hasSellerFeature("advancedAnalytics") && (
+          <div className="sv-plan-service-card">
+            <small>ADVANCED SELLER ANALYTICS</small><h4>Growth performance</h4>
+            <div className="sv-plan-mini-metrics"><b>{displayCatalog.reduce((n,p) => n + Number(p.sold || 0), 0)}<small>Units sold</small></b><b>{displayCatalog.length}<small>Products</small></b><b>4.8%<small>Conversion</small></b></div>
+            <button className="sv-outline" type="button" onClick={() => activatePlanService("advancedAnalytics")}>{isPlanServiceActive("advancedAnalytics") ? "Analytics Ready ✓" : "Analytics Enabled ✓"}</button>
+          </div>
+        )}
+
+        {hasSellerFeature("marketingCampaigns") && (
+          <div className="sv-plan-service-card">
+            <small>MARKETING CAMPAIGNS</small><h4>Campaign participation</h4>
+            <div className="sv-plan-chip-row">{["Festival Fashion", "New Arrivals", "Wedding Season"].map((x) => <button key={x} type="button" className="sv-plan-chip">{x}</button>)}</div>
+            <button className="sv-primary" type="button" onClick={() => activatePlanService("marketingCampaigns")}>{isPlanServiceActive("marketingCampaigns") ? "Campaign Joined ✓" : "Join Campaign"}</button>
+          </div>
+        )}
+
+        {hasSellerFeature("catalogueService") && (
+          <div className="sv-plan-service-card">
+            <small>PROFESSIONAL CATALOGUE SERVICE</small><h4>Catalogue assistance</h4>
+            <p>Request image editing, background cleanup, descriptions or size-chart preparation.</p>
+            <button className="sv-primary" type="button" onClick={() => activatePlanService("catalogueService")}>{isPlanServiceActive("catalogueService") ? "Service Requested ✓" : "Request Catalogue Service"}</button>
+          </div>
+        )}
+
+        {hasSellerFeature("fulfilment") && (
+          <div className="sv-plan-service-card">
+            <small>VEYRAA FULFILMENT & DELIVERY</small><h4>Fulfilment support</h4>
+            <p>Seller fulfilment service entitlement is available for activation.</p>
+            <button className="sv-outline" type="button" onClick={() => activatePlanService("fulfilment")}>{isPlanServiceActive("fulfilment") ? "Fulfilment Opted In ✓" : "Fulfilment Available ✓"}</button>
+          </div>
+        )}
+
+        {hasSellerFeature("promotionalEngine") && (
+          <div className="sv-plan-service-card">
+            <small>SELLER PROMOTIONAL ENGINE</small><h4>Offers & coupons</h4>
+            <div className="sv-plan-inline-form"><input placeholder="Coupon code" defaultValue="STYLE15" /><input placeholder="Discount %" defaultValue="15" /><button className="sv-primary" type="button" onClick={() => activatePlanService("promotionalEngine")}>{isPlanServiceActive("promotionalEngine") ? "Offer Draft Saved ✓" : "Create Offer"}</button></div>
+          </div>
+        )}
+
+        {hasSellerFeature("marketIntelligence") && (
+          <div className="sv-plan-service-card">
+            <small>VEYRAA MARKET INTELLIGENCE</small><h4>Market signals</h4>
+            <div className="sv-plan-signal"><span>Wedding wear demand</span><b>Rising</b></div>
+            <div className="sv-plan-signal"><span>Festive fashion</span><b>High interest</b></div>
+            <button className="sv-outline" type="button" onClick={() => activatePlanService("marketIntelligence")}>{isPlanServiceActive("marketIntelligence") ? "Signal Reviewed ✓" : "Intelligence Active ✓"}</button>
+          </div>
+        )}
+
+        {hasSellerFeature("inventoryDemand") && (
+          <div className="sv-plan-service-card">
+            <small>INVENTORY & DEMAND INTELLIGENCE</small><h4>Replenishment signals</h4>
+            <div className="sv-plan-signal"><span>Low-stock products</span><b>{lowStock.length}</b></div>
+            <div className="sv-plan-signal"><span>Demand signal</span><b>Rising</b></div>
+            <button className="sv-outline" type="button" onClick={() => activatePlanService("inventoryDemand")}>{isPlanServiceActive("inventoryDemand") ? "Replenishment Reviewed ✓" : "Demand Intelligence Active ✓"}</button>
+          </div>
+        )}
+
+        {hasSellerFeature("sponsoredProducts") && (
+          <div className="sv-plan-service-card">
+            <small>SPONSORED PRODUCTS</small><h4>Product promotion</h4>
+            <p>Select a catalogue product to use for a sponsored placement.</p>
+            <select defaultValue=""><option value="" disabled>Select product</option>{displayCatalog.slice(0,12).map((p) => <option key={`${p.audience}-${p.id}`} value={p.id}>{p.name}</option>)}</select>
+            <button className="sv-primary" type="button" onClick={() => activatePlanService("sponsoredProducts")}>{isPlanServiceActive("sponsoredProducts") ? "Sponsored Product Active ✓" : "Activate Sponsored Product"}</button>
+          </div>
+        )}
+
+        {hasSellerFeature("featuredPlacement") && (
+          <div className="sv-plan-service-card">
+            <small>FEATURED PLACEMENT</small><h4>Premium marketplace visibility</h4>
+            <p>Your premium plan includes eligibility for featured seller/product placements.</p>
+            <button className="sv-primary" type="button" onClick={() => activatePlanService("featuredPlacement")}>{isPlanServiceActive("featuredPlacement") ? "Placement Requested ✓" : "Request Featured Placement"}</button>
+          </div>
+        )}
+
+        {hasSellerFeature("sponsoredSearch") && (
+          <div className="sv-plan-service-card">
+            <small>SPONSORED SEARCH</small><h4>Search visibility</h4>
+            <div className="sv-plan-inline-form"><input placeholder="Search keyword" defaultValue="silk saree" /><button className="sv-primary" type="button" onClick={() => activatePlanService("sponsoredSearch")}>{isPlanServiceActive("sponsoredSearch") ? "Search Promotion Active ✓" : "Promote Search"}</button></div>
+          </div>
+        )}
+
+        {hasSellerFeature("verifiedBadge") && (
+          <div className="sv-plan-service-card sv-plan-verified-card">
+            <small>VEYRAA VERIFIED SELLER BADGE</small><h4>Seller verification entitlement</h4>
+            <div className="sv-plan-verified-status"><b>✓</b><span><strong>Verified Badge Active</strong><small>Verification ID: {planPaymentDetails?.verificationId || "Session verified"}</small></span></div>
+            <p>The paid Premium subscription has enabled the seller verification badge entitlement for this session.</p>
+          </div>
+        )}
+
+        {hasSellerFeature("creatorCommerce") && (
+          <div className="sv-plan-service-card"><small>CREATOR & INFLUENCER COMMERCE</small><h4>Creator campaign access</h4><p>Seller is eligible to request creator/influencer promotion campaigns.</p><button className="sv-primary" type="button" onClick={() => activatePlanService("creatorCommerce")}>{isPlanServiceActive("creatorCommerce") ? "Creator Request Sent ✓" : "Request Creator Campaign"}</button></div>
+        )}
+
+        {hasSellerFeature("brandPartnerships") && (
+          <div className="sv-plan-service-card"><small>BRAND PARTNERSHIP CAMPAIGNS</small><h4>Partnership access</h4><p>Premium sellers can submit interest for relevant fashion and lifestyle partnership campaigns.</p><button className="sv-outline" type="button" onClick={() => activatePlanService("brandPartnerships")}>{isPlanServiceActive("brandPartnerships") ? "Interest Submitted ✓" : "Submit Interest"}</button></div>
+        )}
+
+        {hasSellerFeature("premiumSupport") && (
+          <div className="sv-plan-service-card"><small>PREMIUM SELLER SUPPORT</small><h4>Priority assistance</h4><p>Priority onboarding, catalogue, campaign and operational support is available.</p><button className="sv-primary" type="button" onClick={() => activatePlanService("premiumSupport")}>{isPlanServiceActive("premiumSupport") ? "Priority Request Open ✓" : "Open Priority Support"}</button></div>
+        )}
+
+        {hasSellerFeature("preOrder") && (
+          <div className="sv-plan-service-card"><small>PRE-ORDER & DEMAND RESERVATION</small><h4>Pre-order access</h4><p>Upcoming products can be prepared for demand reservation through the seller plan.</p><button className="sv-outline" type="button" onClick={() => activatePlanService("preOrder")}>{isPlanServiceActive("preOrder") ? "Pre-order Workspace Ready ✓" : "Pre-order Access Active ✓"}</button></div>
+        )}
+
+        {hasSellerFeature("deadStock") && (
+          <div className="sv-plan-service-card"><small>DEAD-STOCK RECOVERY MARKETPLACE</small><h4>Slow-stock recovery</h4><p>Eligible slow-moving inventory can be submitted for recovery marketplace participation.</p><button className="sv-outline" type="button" onClick={() => activatePlanService("deadStock")}>{isPlanServiceActive("deadStock") ? "Recovery Submission Ready ✓" : "Recovery Access Active ✓"}</button></div>
+        )}
+      </div>
+    </div>
+  ) : null;
+
+  const sellerPlansPage = (
+    <section className="sv-plan-page">
+      <div className="sv-plan-hero">
+        <div className="sv-plan-hero-content">
+          <small className="sv-kicker">SELLER SUBSCRIPTION</small>
+          <h2>Choose the plan that grows with your store.</h2>
+          <p>Compare seller capabilities, review every included feature and activate the plan you need through a secure UPI-style checkout.</p>
+          <div className="sv-plan-hero-points"><span>✓ Instant plan activation</span><span>✓ Feature access status</span><span>✓ Seller verification ID</span></div>
+        </div>
+        {activeSellerPlan ? (
+          <div className="sv-plan-active-mini">
+            <span>CURRENT PLAN</span>
+            <strong>{activeSellerPlan.name}</strong>
+            <small>{money(activeSellerPlan.price)} / month</small>
+            <b>✓ ACTIVE</b>
+          </div>
+        ) : (
+          <div className="sv-plan-hero-badge"><span>SELLER ACCESS</span><strong>3 plans</strong><small>Basic · Business · Premium</small></div>
+        )}
+      </div>
+
+      {activeSellerPlan && planPaymentDetails && (
+        <div className="sv-plan-current-panel">
+          <div className="sv-plan-current-panel-main">
+            <div className="sv-plan-current-icon">✓</div>
+            <div><small>YOUR CURRENT PLAN</small><h3>{activeSellerPlan.name} Seller Plan</h3><p>Payment confirmed · {planPaymentDetails.method} · {planPaymentDetails.upiId}</p></div>
+          </div>
+          <div className="sv-plan-current-meta"><div><small>VERIFICATION ID</small><b>{planPaymentDetails.verificationId}</b></div><div><small>TRANSACTION ID</small><b>{planPaymentDetails.paymentRef}</b></div><div><small>STATUS</small><b>● ACTIVE</b></div></div>
+        </div>
+      )}
+
+      <div className="sv-plan-grid">
+        {Object.values(SELLER_PLANS).map((plan) => {
+          const isActive = activeSellerPlan?.key === plan.key;
+          return (
+            <article className={`sv-plan-card ${plan.key} ${isActive ? "active" : ""}`} key={plan.key}>
+              {isActive && <div className="sv-plan-current">CURRENT PLAN · ACTIVE</div>}
+              <div className="sv-plan-card-top">
+                <div><span className={`sv-plan-badge ${plan.key}`}>{plan.name}</span><span className="sv-plan-monthly">MONTHLY SUBSCRIPTION</span></div>
+                <div className="sv-plan-price"><strong>{money(plan.price)}</strong><small>/ month</small></div>
+              </div>
+              <p>{plan.subtitle}</p>
+              <div className="sv-plan-count"><b>{plan.features.length}</b> seller features included</div>
+              <div className="sv-plan-card-features">
+                {plan.features.map((feature) => <span key={feature}>✓ <b>{feature}</b></span>)}
+              </div>
+              <button className={isActive ? "sv-outline sv-plan-card-btn" : "sv-primary sv-plan-card-btn"} onClick={() => setPlanPreview(plan)}>
+                {isActive ? "View Current Plan" : `Review ${plan.name} Plan`}
+              </button>
+            </article>
+          );
+        })}
+      </div>
+
+      {activeSellerPlan ? (
+        <div className="sv-plan-access">
+          <div className="sv-plan-access-head">
+            <div><small className="sv-kicker">ACTIVE FEATURE ACCESS</small><h3>{activeSellerPlan.name} Plan · All Features Enabled</h3><p>Every feature included in your current plan is shown below with an active status.</p></div>
+            <span>✓ ACTIVE ACCESS</span>
+          </div>
+          <div className="sv-plan-access-grid">
+            {activeSellerPlan.features.map((feature) => <div key={feature}><b>✓</b><span>{feature}</span><em>Enabled</em></div>)}
+          </div>
+        </div>
+      ) : (
+        <div className="sv-plan-empty"><div className="sv-plan-empty-icon">◆</div><b>No seller plan is active yet.</b><span>Select a plan above, review all features and complete the UPI-style checkout to activate your seller access.</span></div>
+      )}
+
+      {sellerPlanWorkspace}
+
+      <SellerPlanPreview plan={planPreview} close={() => setPlanPreview(null)} onChoose={(plan) => { setPlanPreview(null); setPlanPayment(plan); }} />
+      <SellerPlanPayment plan={planPayment} close={() => setPlanPayment(null)} onSuccess={(plan, payment) => {
+        setActiveSellerPlan(plan);
+        setPlanPaymentDetails(payment);
+        setPlanPayment(null);
+        setPlanServiceState({});
+        window.__VEYRAA_SELLER_PLAN__ = { key: plan.key, name: plan.name, featureKeys: plan.featureKeys, payment };
+        window.dispatchEvent(new CustomEvent("veyraa:seller-plan-updated", { detail: { plan, payment } }));
+      }} />
+    </section>
+  );
+
+    const renderBody = page === "home" ? home : page === "orders" ? ordersPage(false) : page === "pending" ? ordersPage(true) : page === "returns" ? returnsPage : page === "products" ? productsPage : page === "inventory" ? inventory : page === "pricing" ? pricing : page === "payments" ? payments : page === "analytics" ? analytics : page === "demand" ? demand : page === "restock" ? restock : page === "performance" ? performance : page === "seller-plans" ? sellerPlansPage : settings;
 
   return <div className="seller-app">
     <aside className="seller-sidebar"><div className="sv-brand"><b>V</b><span>VEYRAA<small>SELLER CENTER</small></span></div><div className="sv-store"><b>VF</b><span><strong>Veyraa Fashion Store</strong><small>Verified Seller</small></span><i>●</i></div><nav>{nav.map(([section,icon,label,key]) => <React.Fragment key={key}>{section && <label>{section}</label>}<button className={page === key ? "active" : ""} onClick={() => go(key)}><span>{icon}</span><em>{label}</em>{label.includes("Orders") && <b>{key === "orders" ? 8 : 5}</b>}</button></React.Fragment>)}</nav><div className="sv-health"><span>Account Health <b>92 / 100</b></span><i /></div></aside>
     <main className="seller-main">{header}<div className="sv-content">{renderBody}</div></main>
     <ProductPreview product={preview} close={() => setPreview(null)} onImageError={(product) => { markImageBroken(product); setPreview(null); }} />
     <OrderPreview order={orderPreview} close={() => setOrderPreview(null)} />
-    <button className="sv-logout">↪ Logout</button>
+    <button className="sv-logout" onClick={() => {
+      setActiveSellerPlan(null);
+      setPlanPaymentDetails(null);
+      setPlanPreview(null);
+      setPlanPayment(null);
+      setPlanServiceState({});
+      delete window.__VEYRAA_SELLER_PLAN__;
+      window.dispatchEvent(new CustomEvent("veyraa:seller-plan-updated", { detail: null }));
+      setPage("home");
+    }}>↪ Logout</button>
   </div>;
 }
 
