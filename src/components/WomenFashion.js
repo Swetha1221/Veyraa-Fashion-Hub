@@ -1181,10 +1181,6 @@ function WomenCategory() {
      QUICK VIEW
      ===================================================== */
 
-  const openQuickView = (product) => {
-    setQuickProduct(product);
-  };
-
   const closeQuickView = () => {
     setQuickProduct(null);
   };
@@ -1371,14 +1367,6 @@ function WomenCategory() {
   /* =====================================================
      CURRENT TITLE
      ===================================================== */
-
-  const currentTitle =
-    selectedCategory === "all"
-      ? "Women's Fashion"
-      : categories.find(
-        ([id]) =>
-          id === selectedCategory
-      )?.[1];
 
   /* =====================================================
      JSX

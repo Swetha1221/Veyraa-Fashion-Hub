@@ -146,7 +146,6 @@ function ProductDetail() {
 
   const sizes = useMemo(() => getSizes(product), [product]);
   const showSize = sizes.length > 0;
-  const oneSizeLabel = isOneSize(product) ? "One Size" : "One Size / Standard";
   const image = resolveImage(product);
   const price = Number(product?.price) || 0;
   const oldPrice = Number(product?.oldPrice || product?.originalPrice || price) || price;

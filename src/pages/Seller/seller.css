@@ -4,11 +4,11 @@
 
 
 
-/\* =========================================================
+/* =========================================================
 
    V2 DETAIL + CHART + SETTINGS REFINEMENTS
 
-   ========================================================= \*/
+   ========================================================= */
 
 .sv-panelhead>div{min-width:0}
 
@@ -128,7 +128,7 @@
 
 
 
-/\* Final precision fixes: page title is already in the sticky header. \*/
+/* Final precision fixes: page title is already in the sticky header. */
 
 .sv-panelhead-clean{margin-top:-2px;margin-bottom:16px;align-items:center}
 
@@ -136,11 +136,11 @@
 
 
 
-/\* =========================================================
+/* =========================================================
 
    FINAL ORDER / PREVIEW REFINEMENTS
 
-   ========================================================= \*/
+   ========================================================= */
 
 .sv-order-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:-3px 0 18px}
 
@@ -210,7 +210,7 @@
 
 
 
-/\* Keep only the single page title in the sticky header. \*/
+/* Keep only the single page title in the sticky header. */
 
 .sv-panelhead-clean{align-items:center}
 
@@ -258,7 +258,7 @@
 
 
 
-/\* =========================================================
+/* =========================================================
 
    SELLER RETURNS PAGE ONLY
 
@@ -266,7 +266,7 @@
 
    Existing seller page styles above are unchanged.
 
-   ========================================================= \*/
+   ========================================================= */
 
 .sv-return-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:-3px 0 18px}
 
@@ -296,13 +296,13 @@
 
 
 
-/\* =========================================================
+/* =========================================================
 
    ENHANCED SELLER RETURNS PAGE — RETURNS PAGE ONLY
 
    Existing seller modules are intentionally untouched.
 
-   ========================================================= \*/
+   ========================================================= */
 
 .sv-return-page{min-width:0}
 
@@ -344,7 +344,7 @@
 
 
 
-/\* Return preview — intentionally scoped to the Seller Returns page \*/
+/* Return preview — intentionally scoped to the Seller Returns page */
 
 .sv-return-modal-bg{background:rgba(13,14,18,.58);backdrop-filter:blur(7px)}
 

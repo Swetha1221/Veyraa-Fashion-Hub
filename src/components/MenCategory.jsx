@@ -578,7 +578,7 @@ function MenCategory() {
   const [sortBy, setSortBy] = useState("featured");
 
   const [wishlist, setWishlist] = useState([]);
-  const [cart, setCart] = useState([]);
+  const [, setCart] = useState([]);
   const [tryOnProduct, setTryOnProduct] = useState(null);
   const [tryOnImage, setTryOnImage] = useState(null);
   const [cameraOpen, setCameraOpen] = useState(false);
@@ -1364,7 +1364,7 @@ function MenCategory() {
 
                   <img
                     src={tryOnImage}
-                    alt="Your uploaded photo"
+                    alt="Your upload"
                   />
 
                   <span>YOUR PHOTO</span>
