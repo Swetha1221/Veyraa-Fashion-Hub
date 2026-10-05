@@ -71,11 +71,15 @@ function Footer() {
             >
 
               {["◎", "f", "p", "▶", "in"].map((icon, index) => (
-                <a
+                <button
                   key={index}
-                  href="#"
+                  type="button"
+                  disabled
                   aria-label="Social media"
                   style={{
+                    background: "transparent",
+                    padding: 0,
+                    fontFamily: "inherit",
                     width: "36px",
                     height: "36px",
                     border: "1px solid rgba(255,255,255,0.25)",
@@ -90,7 +94,7 @@ function Footer() {
                   }}
                 >
                   {icon}
-                </a>
+                </button>
               ))}
 
             </div>
@@ -130,7 +134,7 @@ function Footer() {
             ].map((item) => (
               <a
                 key={item}
-                href="#"
+                href={`/${item.toLowerCase()}`}
                 style={{
                   display: "block",
                   marginBottom: "14px",
@@ -428,39 +432,54 @@ function Footer() {
             }}
           >
 
-            <a
-              href="#"
+            <button
+              type="button"
+              disabled
               style={{
+                background: "transparent",
+                border: 0,
+                padding: 0,
+                font: "inherit",
                 color: "#807679",
                 textDecoration: "none",
               }}
             >
               Privacy Policy
-            </a>
+            </button>
 
             <span>|</span>
 
-            <a
-              href="#"
+            <button
+              type="button"
+              disabled
               style={{
+                background: "transparent",
+                border: 0,
+                padding: 0,
+                font: "inherit",
                 color: "#807679",
                 textDecoration: "none",
               }}
             >
               Terms of Service
-            </a>
+            </button>
 
             <span>|</span>
 
-            <a
-              href="#"
+            <button
+              type="button"
+              disabled
               style={{
+                background: "transparent",
+                border: 0,
+                padding: 0,
+                font: "inherit",
                 color: "#807679",
                 textDecoration: "none",
               }}
             >
               Cookies
-            </a>
+            </button>
 
           </div>
 

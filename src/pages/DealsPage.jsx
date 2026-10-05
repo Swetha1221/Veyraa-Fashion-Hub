@@ -5,7 +5,6 @@ import "./DealsPage.css";
 
 import {
   getUnifiedCatalog,
-  resolveCatalogImage,
   addToCart,
   toggleWishlist,
 } from "../data/unifiedCatalog";

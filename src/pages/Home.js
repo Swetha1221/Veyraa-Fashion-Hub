@@ -4,21 +4,11 @@ import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import CategorySection from "../components/CategorySection";
 import ProductCategories from "../components/ProductCategories";
-import DiscoverySection from "../components/DiscoverySection";
-
-import ProductSection from "../components/ProductSection";
-
-import DealComposer from "../components/DealComposer";
 import Footer from "../components/Footer";
 
 import {
   categories,
   productTypes,
-  discovery,
-  aiFeatures,
-  products,
-  look,
-  deal,
 } from "../data/homeData";
 
 function Home() {

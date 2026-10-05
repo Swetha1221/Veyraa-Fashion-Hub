@@ -311,19 +311,6 @@ function BefittingStylePage() {
     return ranked.slice(0, 4);
   }, [recommendationPool, selectedOccasion]);
 
-  const styleMatch = useMemo(() => {
-    const baseStyles = selectedStyles.length ? selectedStyles.slice(0, 2).join(" + ") : "Contemporary";
-    const colorMood = selectedColors.length ? selectedColors.slice(0, 2).join(" + ") : "Pastel + Neutral";
-    const score = Math.min(97, 78 + selectedStyles.length * 3 + selectedColors.length * 2 + (selectedFit ? 3 : 0));
-
-    return {
-      score,
-      style: baseStyles,
-      colorMood,
-      fit: selectedFit || "Regular",
-    };
-  }, [selectedColors, selectedFit, selectedStyles]);
-
   const completeLook = useMemo(() => {
     const hasAnchorProduct = Object.values(lookSelections).some(Boolean);
 

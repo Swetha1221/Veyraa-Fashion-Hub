@@ -12,6 +12,7 @@ import { products as menProducts } from "../../components/MenCategory";
 import { kidsProducts } from "../../components/KidsCategory";
 
 const money = (value) => `₹${Number(value || 0).toLocaleString("en-IN")}`;
+const productKey = (product) => `${product.audience}-${product.id}-${product.name}`;
 const discount = (p) => {
   const oldPrice = Number(p.oldPrice || 0);
   const price = Number(p.price || 0);
@@ -520,7 +521,6 @@ function SellerDashboard() {
   };
   const isPlanServiceActive = (serviceKey) => Boolean(planServiceState[serviceKey]);
 
-  const productKey = (p) => `${p.audience}-${p.id}-${p.name}`;
   const markImageBroken = (p) => {
     if (!p) return;
     setBrokenImages((previous) => {
@@ -529,7 +529,10 @@ function SellerDashboard() {
       return next;
     });
   };
-  const displayCatalog = catalog.filter((p) => p.image && !brokenImages.has(productKey(p)));
+  const displayCatalog = useMemo(
+    () => catalog.filter((product) => product.image && !brokenImages.has(productKey(product))),
+    [brokenImages]
+  );
 
   const lowStock = displayCatalog.filter((p) => p.stock <= 10);
   const outOfStock = displayCatalog.filter((p) => p.stock === 0);
@@ -546,7 +549,7 @@ function SellerDashboard() {
       const searchMatch = !q || `${p.name} ${p.type || ""} ${p.category || ""} ${p.audience}`.toLowerCase().includes(q);
       return stockMatch && genderMatch && searchMatch;
     });
-  }, [filter, genderFilter, query, brokenImages]);
+  }, [filter, genderFilter, query, displayCatalog]);
 
   const go = (next) => {
     setPage(next);
