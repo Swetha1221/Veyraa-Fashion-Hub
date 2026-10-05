@@ -143,7 +143,9 @@ const placeOrder = async () => {
     );
 
     // Send order confirmation email
-    await emailjs.send(
+    let confirmationEmailSent = false;
+    try {
+      await emailjs.send(
       process.env.REACT_APP_EMAILJS_SERVICE_ID,
       process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
       {
@@ -158,7 +160,11 @@ const placeOrder = async () => {
       {
         publicKey: process.env.REACT_APP_EMAILJS_PUBLIC_KEY,
       }
-    );
+      );
+      confirmationEmailSent = true;
+    } catch {
+      confirmationEmailSent = false;
+    }
 
     // Mark confirmation email as successfully sent
     const updatedOrders =
@@ -168,7 +174,7 @@ const placeOrder = async () => {
       order.id === orderId
         ? {
             ...order,
-            confirmationEmailSent: true,
+            confirmationEmailSent,
           }
         : order
     );
@@ -179,16 +185,14 @@ const placeOrder = async () => {
     localStorage.removeItem("veyraaCart");
 
     alert(
-      `Order placed successfully!\n\nOrder ID: ${orderId}\nConfirmation email sent to ${customer.email}`
+      `Order placed successfully!\n\nOrder ID: ${orderId}\n${confirmationEmailSent ? `Confirmation email sent to ${customer.email}` : "The confirmation email could not be sent. Your order is saved; do not place it again."}`
     );
 
     // Go to My Orders
     window.location.href = "/my-orders";
   } catch (error) {
-    console.error("Order confirmation email failed:", error);
-
     alert(
-      "Your order was saved, but the confirmation email could not be sent. Please try again."
+      "Your order could not be completed. Check My Orders before trying again."
     );
 
     setIsPlacingOrder(false);

@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { usePortalPage } from "../../routing";
 import "./admin.css";
 import "./admin-polish.css";
 import "./admin-modal-fix.css";
@@ -489,7 +490,7 @@ function trustLabel(score) {
    ========================================================= */
 
 export default function AdminDashboard() {
-  const [page, setPage] = useState("dashboard");
+  const [page, setPage] = usePortalPage("admin");
   const [search, setSearch] = useState("");
   const [selectedSetting, setSelectedSetting] = useState(null);
 

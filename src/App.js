@@ -1,4 +1,5 @@
 import "./App.css";
+import { usePathname } from "./routing";
 
 // =====================================================
 // CUSTOMER PAGES
@@ -52,7 +53,7 @@ import {
 } from "./pages/PortalLogin";
 
 function App() {
-  const path = window.location.pathname;
+  const path = usePathname();
 
   // =====================================================
   // SELLER PORTAL

@@ -3,6 +3,19 @@ import "./MenCategory.css";
 
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import { usePathname } from "../routing";
+
+const productCategories = {
+  shirts: ["Shirts", /\bshirt\b/i],
+  kurtas: ["Kurtas", /\bkurta\b/i],
+  sherwanis: ["Sherwanis", /\bsherwani\b/i],
+  blazers: ["Blazers", /\bblazer\b/i],
+};
+
+const categories = [
+  "All", "Western Wear", "Indian Wear", "Ethnic Wear", "Formal Wear",
+  "Casual Wear", "Sportswear", "Nightwear", "Footwear", "Accessories",
+];
 
 export const products = [
   // WESTERN WEAR - 4
@@ -553,23 +566,11 @@ export const products = [
 
 
 function MenCategory() {
+  const pathname = usePathname();
 
   /* =========================
      MEN PRODUCTS
   ========================= */
-
-  const categories = [
-    "All",
-    "Western Wear",
-    "Indian Wear",
-    "Ethnic Wear",
-    "Formal Wear",
-    "Casual Wear",
-    "Sportswear",
-    "Nightwear",
-    "Footwear",
-    "Accessories",
-  ];
 
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedMaterial, setSelectedMaterial] = useState("All");
@@ -583,6 +584,12 @@ function MenCategory() {
   const [tryOnImage, setTryOnImage] = useState(null);
   const [cameraOpen, setCameraOpen] = useState(false);
   const [cameraStream, setCameraStream] = useState(null);
+
+  useEffect(() => {
+    const slug = pathname.split("/")[2] || "";
+    const category = categories.find((item) => item.toLowerCase().replace(/\s+/g, "-") === slug);
+    setSelectedCategory(productCategories[slug]?.[0] || category || "All");
+  }, [pathname]);
   /* =========================
      LOAD WISHLIST + CART
   ========================= */
@@ -795,7 +802,10 @@ function MenCategory() {
     let result = products.filter((product) => {
       const categoryMatch =
         selectedCategory === "All" ||
-        product.category === selectedCategory;
+        product.category === selectedCategory ||
+        Object.values(productCategories).some(([label, pattern]) =>
+          label === selectedCategory && pattern.test(product.type || product.name)
+        );
 
       const materialMatch =
         selectedMaterial === "All" ||

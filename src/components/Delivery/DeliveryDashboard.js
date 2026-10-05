@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { usePortalPage } from "../../routing";
 import "./DeliveryDashboard.css";
 
 const deliveriesSeed = [
@@ -174,7 +175,7 @@ function PageTitle({ eyebrow, title, description, action }) {
 }
 
 export default function DeliveryDashboard() {
-  const [page, setPage] = useState("dashboard");
+  const [page, setPage] = usePortalPage("delivery");
   const [deliveries, setDeliveries] = useState(deliveriesSeed);
   const [selected, setSelected] = useState(null);
   const [search, setSearch] = useState("");

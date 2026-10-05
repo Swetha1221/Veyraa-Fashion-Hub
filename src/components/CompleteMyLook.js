@@ -400,7 +400,7 @@ function CompleteMyLook({ actions }) {
 
   const mainType = detectMainType(main);
 
-  const roles = getLookRoles(main);
+  const roles = useMemo(() => getLookRoles(main), [main]);
 
   const recommendations = useMemo(() => {
     const used = [
@@ -425,7 +425,7 @@ function CompleteMyLook({ actions }) {
         };
       })
       .filter((item) => item.product);
-  }, [mainId, main]);
+  }, [main, roles]);
 
   const pieces = [
     main,
