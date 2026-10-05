@@ -81,7 +81,7 @@ function resolveCatalogImage(product) {
 function fallbackImageFor(product) {
   const gender = String(product?.gender || "Women").toLowerCase();
   if (gender === "men") return "/men/formalshirt.jpg";
-  if (gender === "kids") return "/kids/kids-01.jpg";
+  if (gender === "kids") return "/kids/frock7.jpg";
   return "/women/saree-01.jpg";
 }
 

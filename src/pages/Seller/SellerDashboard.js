@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import "./seller.css";
+import { usePortalPage } from "../../routing";
 
 /* =========================================================
    IMPORTANT
@@ -498,7 +499,7 @@ function SellerPlanPayment({ plan, close, onSuccess }) {
 }
 
 function SellerDashboard() {
-  const [page, setPage] = useState("home");
+  const [page, setPage] = usePortalPage("seller");
   const [preview, setPreview] = useState(null);
   const [orderPreview, setOrderPreview] = useState(null);
   const [filter, setFilter] = useState("All");
@@ -1078,6 +1079,7 @@ function SellerDashboard() {
       delete window.__VEYRAA_SELLER_PLAN__;
       window.dispatchEvent(new CustomEvent("veyraa:seller-plan-updated", { detail: null }));
       setPage("home");
+      window.dispatchEvent(new CustomEvent("veyraa:portal-logout", { detail: "seller" }));
     }}>↪ Logout</button>
   </div>;
 }

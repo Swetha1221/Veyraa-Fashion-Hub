@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./PortalLogin.css";
 
 const PORTAL_INFO = {
@@ -37,6 +37,20 @@ function PortalLogin({ role, children }) {
   const [error, setError] = useState("");
 
   const account = PORTAL_INFO[role] || PORTAL_INFO.seller;
+
+  useEffect(() => {
+    const handleLogout = (event) => {
+      if (event.detail !== role) return;
+      sessionStorage.removeItem(storageKey);
+      setAuthenticated(false);
+      setUsername("");
+      setPassword("");
+      setError("");
+      setShowPassword(false);
+    };
+    window.addEventListener("veyraa:portal-logout", handleLogout);
+    return () => window.removeEventListener("veyraa:portal-logout", handleLogout);
+  }, [role, storageKey]);
 
   const login = (e) => {
     e.preventDefault();

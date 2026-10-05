@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import { getPathname } from "../routing";
 
 import { products as womenProducts } from "../components/WomenFashion";
 import { products as menProducts } from "../components/MenCategory";
@@ -2522,7 +2523,7 @@ function FitProfile({ actions }) {
 
 function AIFeaturePage() {
   const path =
-    window.location.pathname;
+    getPathname();
 
   const feature =
     features[path] ||
