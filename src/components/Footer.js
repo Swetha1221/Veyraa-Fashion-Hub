@@ -152,7 +152,7 @@ function Footer() {
 
 
           {/* ================= CONTACT ================= */}
-          <div>
+          <div id="contact">
 
             <h3
               style={{

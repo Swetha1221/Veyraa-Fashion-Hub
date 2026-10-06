@@ -2,6 +2,22 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Netlify deployment
+
+The existing Netlify build command is `npm run build` and the publish directory is `build`.
+Create React App copies `public/_redirects` into that directory. Its SPA rewrite serves
+the application for direct links and refreshes without replacing existing public assets.
+The application uses its existing pathname dispatcher, not React Router.
+
+Checkout confirmation emails require `REACT_APP_EMAILJS_SERVICE_ID`,
+`REACT_APP_EMAILJS_TEMPLATE_ID`, and `REACT_APP_EMAILJS_PUBLIC_KEY` at build time,
+plus a working EmailJS service/template and an allowed production origin.
+Existing browser-based accounts, storage, portal sessions, and payment demonstrations
+are unchanged; deployment routing does not turn them into secure backend services.
+
+See [the route inventory and validation report](docs/netlify-production-audit.md)
+for the exact portal coverage, checks completed, and remaining production limitations.
+
 ## Available Scripts
 
 In the project directory, you can run:

@@ -998,20 +998,21 @@ function WomenCategory() {
      ===================================================== */
 
   useEffect(() => {
-    const path = window.location.pathname;
+    const syncCategory = () => {
+      const slug = window.location.pathname
+        .split("/")
+        .filter(Boolean)
+        .pop();
 
-    const slug = path
-      .split("/")
-      .filter(Boolean)
-      .pop();
+      const valid = categories.some(([id]) => id === slug);
 
-    const valid = categories.some(
-      ([id]) => id === slug
-    );
+      setSelectedCategory(valid ? slug : "all");
+    };
 
-    if (valid) {
-      setSelectedCategory(slug);
-    }
+    syncCategory();
+    window.addEventListener("popstate", syncCategory);
+
+    return () => window.removeEventListener("popstate", syncCategory);
   }, []);
 
   /* =====================================================

@@ -74,7 +74,7 @@ function PortalLogin({ role, children }) {
   if (authenticated) {
     return (
       <div className="portal-authenticated">
-        {children}
+        {React.cloneElement(children, { onLogout: logout })}
 
         <button
           className="portal-logout"

@@ -102,7 +102,7 @@ function Home() {
 
           </div>
 
-          <button className="locked-button">
+          <button className="locked-button" onClick={() => { window.location.href = "/deals"; }}>
             View Deals →
           </button>
 

@@ -497,7 +497,7 @@ function SellerPlanPayment({ plan, close, onSuccess }) {
   );
 }
 
-function SellerDashboard() {
+function SellerDashboard({ onLogout }) {
   const [page, setPage] = useState("home");
   const [preview, setPreview] = useState(null);
   const [orderPreview, setOrderPreview] = useState(null);
@@ -1078,6 +1078,7 @@ function SellerDashboard() {
       delete window.__VEYRAA_SELLER_PLAN__;
       window.dispatchEvent(new CustomEvent("veyraa:seller-plan-updated", { detail: null }));
       setPage("home");
+      onLogout?.();
     }}>↪ Logout</button>
   </div>;
 }

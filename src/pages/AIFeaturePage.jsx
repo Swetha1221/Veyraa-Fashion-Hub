@@ -2587,7 +2587,7 @@ function AIFeaturePage() {
 
         <a
           className="ai-back-link"
-          href="/#ai-fashion"
+          href="/"
         >
           ← Back to AI Fashion Studio
         </a>

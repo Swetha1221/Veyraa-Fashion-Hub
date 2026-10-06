@@ -400,14 +400,12 @@ function CompleteMyLook({ actions }) {
 
   const mainType = detectMainType(main);
 
-  const roles = getLookRoles(main);
-
   const recommendations = useMemo(() => {
     const used = [
       String(main?.id),
     ];
 
-    return roles
+    return getLookRoles(main)
       .map((role) => {
         const product = findCompatibleProduct(
           main,
@@ -425,7 +423,7 @@ function CompleteMyLook({ actions }) {
         };
       })
       .filter((item) => item.product);
-  }, [mainId, main]);
+  }, [main]);
 
   const pieces = [
     main,
