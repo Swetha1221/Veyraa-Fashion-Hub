@@ -107,12 +107,15 @@ function AccountSidebar({ isOpen, onClose }) {
     alert("Your Fit Profile has been saved successfully!");
   };
 
-  const handleLogout = () => {
-    logoutCustomer();
-    syncAllState();
-    setMode("login");
-  };
+ const handleLogout = () => {
+  logoutCustomer();
 
+sessionStorage.removeItem("veyraaCustomerSubscription");
+window.dispatchEvent(new Event("veyraa:customer-logout"));
+
+  syncAllState();
+  setMode("login");
+};
   const navigateTo = (url) => {
     onClose();
     window.location.href = url;

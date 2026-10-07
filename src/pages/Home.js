@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import CategorySection from "../components/CategorySection";
 import ProductCategories from "../components/ProductCategories";
+
 import Footer from "../components/Footer";
 
 import {
